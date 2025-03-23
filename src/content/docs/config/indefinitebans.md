@@ -54,6 +54,6 @@ visit [the GitHub page](https://github.com/plexusorg/IBConverter). This tool was
 you need to give it is your existing `indefinitebans.yml` file from TotalFreedomMod. You can download a compiled version
 below:
 
-- [IBConverter-Linux.zip](https://github.com/plexusorg/IBConverter/suites/6509280820/artifacts/242044369)
-- [IBConverter-Windows.zip](https://github.com/plexusorg/IBConverter/suites/6509280820/artifacts/242044371)
-- [IBConverter-Mac.zip](https://github.com/plexusorg/IBConverter/suites/6509280820/artifacts/242044370)
+- [IBConverter-Linux.zip](/IBConverter-Linux.zip)
+- [IBConverter-Windows.zip](/IBConverter-Windows.zip)
+- [IBConverter-Mac.zip](IBConverter-Mac.zip)
