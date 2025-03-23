@@ -13,7 +13,7 @@ export default defineConfig({
         logo: {
             src: './src/assets/plexlogo.png',
         },
-        favicon: './src/assets/favicon.ico',
+        favicon: '/favicon.ico',
         social: {
             github: 'https://github.com/plexusorg',
             discord: 'https://discord.plex.us.org',
