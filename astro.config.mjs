@@ -8,7 +8,6 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://plex.us.org',
-
     integrations: [starlight({
         title: 'Plex',
         logo: {
@@ -53,6 +52,17 @@ export default defineConfig({
         editLink: {
             baseUrl: 'https://github.com/plexusorg/docs/edit/master/',
         },
+        head: [
+            {
+                tag: 'script',
+                attrs: {
+                    src: '/1742503883/js/script.js',
+                    'data-domain': 'plex.us.org',
+                    'data-api': '/1742503883/api/event',
+                    defer: true,
+                },
+            },
+        ],
         plugins: [viewTransitions()],
     }), sitemap()],
     output: 'server',
