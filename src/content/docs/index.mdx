@@ -1,36 +1,54 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: Plex
+description: The official website and documentation for the Plex Minecraft Plugin
 template: splash
+editUrl: false
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Welcome to the website and documentation for Plex!
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/plexlogo.png
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Let's get started
+      link: /plex/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+    - text: Download
+      link: https://ci.plex.us.org/job/Plex/job/master/
+      icon: external
+      variant: minimal
+    - text: Javadoc
+      link: /javadoc/index.html
       icon: external
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## Why Plex?
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+<CardGrid>
+    <Card title="Performance Oriented" icon="rocket">
+        Plex was designed with performance in mind. Plex supports SQLite or MariaDB out of the box. Plex also uses Redis
+        for punishments instead of traditional YAML / JSON files.
+    </Card>
+    <Card title="Fully Customizable" icon="setting">
+        Plex is designed to be customizable to fit your server's needs. Almost all messages within the plugin can be
+        easily changed.
+    </Card>
+    <Card title="Permissions" icon="list-format">
+        Plex allows you to use integrate with a permission system and "fake op" players. This allows server owners to
+        have much more control over what is and isn't allowed. Any Vault-compatible permission plugin will integrate
+        with Plex and can be used instead of ranks.
+    </Card>
+    <Card title="Modular" icon="cloud-download">
+        Plex features a fully modular system. You can add or remove modules based on how your server is configured. If
+        you're using permissions, you likely won't need our command blocker, but you will if you use ranks.
+    </Card>
+    <Card title="Converters" icon="random">
+        We have written tools to convert your existing data from TotalFreedomMod to Plex. This will make your transition
+        even easier so you won't have to start fresh.
+    </Card>
+    <Card title="Quality Control" icon="sun">
+        Each release is tested to find bugs before you have to encounter them on your server. Plex's codebase was
+        designed for rapid progress and won't unexpectedly break.
+    </Card>
 </CardGrid>

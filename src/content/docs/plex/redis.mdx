@@ -1,0 +1,102 @@
+---
+title: Configuring Redis
+description: Learn how to configure a Redis server for Plex
+---
+import {Tabs, TabItem} from '@astrojs/starlight/components';
+
+This page will show you how to set up and configure Redis for Plex. This tutorial assumes a moderate amount of computer knowledge. Please note that setting up Redis is optional. It offers many performance improvements, but can be dangerous if improperly configured.
+
+## Using Pterodactyl
+If you are using Pterodactyl, setting up Redis is easy. You will need to download and add the Redis egg, which requires administrator privileges. If you are not an administrator, you may request an administrator to set up Redis for you.
+
+### Set up the Redis egg
+Right-click on [this link](/egg-redis-7.json) and click "Save As". Please ensure that the filename ends in .json
+
+On your Pterodactyl admin page, click on the "Nests" from the sidebar. Click the blue "Create New" button and enter "Databases" for the name.
+Then, click on the green "Import Egg" button. Import the `egg-redis-7.json` file you just downloaded and make sure the "Associated Nest" is set to "Databases".
+
+### Configure the allocations
+Click on the "Nodes" tab from the sidebar. Click on the node you would like to add Redis. Click on the "Allocation" tab. On the right, you will see a box that says "Assign New Allocations". For the IP Address, enter `172.18.0.1`, and for the port enter `6380`.
+
+:::danger
+Do ***NOT*** enter the public IP for the server under IP Address. If you do that, you will open up your Redis instance to the entire internet. Also, do ***NOT*** use port `6379` for Redis. Pterodactyl itself uses Redis and it will not work. You have been warned.
+:::
+
+### Add a new server
+Go to the Servers tab and click the "Create New" button. The Server Name can be whatever you like. Under "Allocation Management" > "Default Allocation", select the allocation you made for Redis. If you have done the above step correctly, you should see `172.18.0.1:6380` in the list. Redis does not need much memory, 256MB is plenty.
+To ensure Redis is actually used, you need to use the Redis egg. Under "Nest Configuration", select the "Databases" nest. Redis should be the only option under there.
+
+### Set the password
+The password for Redis is set under the "Service Variables" tab. Please change it from the default password. A good website to generate a secure password can be found here: [https://www.grc.com/passwords.htm](https://www.grc.com/passwords.htm).
+
+:::danger
+***DO NOT USE THE DEFAULT PASSWORD PROVIDED BY THE EGG.***
+:::
+
+### Configuration
+Once the Redis server has been installed, go to the "File Manager" tab and open `redis.conf`. You will need to change the bind address.
+
+```conf title="redis.conf"
+...
+################################## NETWORK #####################################
+
+# By default, if no "bind" configuration directive is specified, Redis listens
+# for connections from all the network interfaces available on the server.
+# It is possible to listen to just one or multiple selected interfaces using
+# the "bind" configuration directive, followed by one or more IP addresses.
+#
+# Examples:
+#
+# bind 192.168.1.100 10.0.0.1
+# bind 127.0.0.1 ::1
+#
+# ~~~ WARNING ~~~ If the computer running Redis is directly exposed to the
+# internet, binding to all the interfaces is dangerous and will expose the
+# instance to everybody on the internet. So by default we uncomment the
+# following bind directive, that will force Redis to listen only into
+# the IPv4 loopback interface address (this means Redis will be able to
+# accept connections only from clients running into the same computer it
+# is running).
+#
+# IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES
+# JUST COMMENT THE FOLLOWING LINE.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bind 172.18.0.1
+...
+```
+
+Find this block in your Redis configuration file and ensure bind is set to `172.18.0.1`. It is normally set to `127.0.0.1`, which will **not** work.
+
+### Plex Configuration
+Redis should be successfully set up! Now all you have to do is enter your credentials into the Plex configuration file.
+
+```yaml title="/plugins/Plex/config.yml"
+side:
+    enabled: true
+    auth: true
+    hostname: '172.18.0.1'
+    port: 6380
+    password: 'your_secure_password_here'
+```
+
+Replace `your_secure_password_here` with the password you made for Redis. Now, Plex will use Redis for storing punishment data. Note that the JSON files are still made as a backup no matter what.
+
+### Firewall Configuration
+If you are using a firewall, you may have to allow port `6380`. It is safe to allow connections from anywhere provided you have followed the documentation correctly.
+<Tabs>
+    <TabItem value="ufw" label="ufw" default>
+
+        ```bash
+        ufw allow 6380
+        ```
+
+    </TabItem>
+    <TabItem value="iptables" label="iptables">
+
+        ```bash
+        iptables -A INPUT -p tcp --dport 6380 -j ACCEPT
+        iptables -A OUTPUT -p tcp --dport 6380 -j ACCEPT
+        ```
+
+    </TabItem>
+</Tabs>
