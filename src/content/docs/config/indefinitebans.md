@@ -56,4 +56,4 @@ below:
 
 - [IBConverter-Linux.zip](/IBConverter-Linux.zip)
 - [IBConverter-Windows.zip](/IBConverter-Windows.zip)
-- [IBConverter-Mac.zip](IBConverter-Mac.zip)
+- [IBConverter-macOS.zip](/IBConverter-macOS.zip)

@@ -4,6 +4,7 @@ import {viewTransitions} from "astro-vtbot/starlight-view-transitions";
 import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
+import starlightLinksValidator from 'starlight-links-validator'
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,7 +20,7 @@ export default defineConfig({
             discord: 'https://discord.plex.us.org',
         },
         sidebar: [
-            {label: 'Introduction', link: '/docs/'},
+            {label: 'Introduction', link: '/docs'},
             {label: 'Versions', link: '/docs/versions'},
             {label: 'Compiling', link: '/docs/compiling'},
             {label: 'Permissions', link: '/docs/permissions'},
@@ -63,7 +64,7 @@ export default defineConfig({
                 },
             },
         ],
-        plugins: [viewTransitions()],
+        plugins: [starlightLinksValidator(), viewTransitions()],
     }), sitemap()],
     output: 'server',
     adapter: cloudflare(),
