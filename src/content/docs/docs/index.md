@@ -1,6 +1,7 @@
 ---
 title: Welcome to Plex
 description: An introduction to Plex
+prev: false
 ---
 
 Plex is a new freedom plugin. It is an alternative

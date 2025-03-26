@@ -5,6 +5,7 @@ import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator'
+import starlightUtils from "@lorenzo_lewis/starlight-utils";
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,6 +21,13 @@ export default defineConfig({
             discord: 'https://discord.plex.us.org',
         },
         sidebar: [
+            {
+                label: "leadingNavLinks",
+                items: [
+                    { label: "Javadocs", link: "/javadoc" },
+                    { label: "Downloads", link: "https://ci.plex.us.org/job/Plex/job/master/" },
+                ]
+            },
             {label: 'Introduction', link: '/docs'},
             {label: 'Versions', link: '/docs/versions'},
             {label: 'Compiling', link: '/docs/compiling'},
@@ -64,7 +72,11 @@ export default defineConfig({
                 },
             },
         ],
-        plugins: [starlightLinksValidator(), viewTransitions()],
+        plugins: [starlightUtils({
+            navLinks: {
+                leading: { useSidebarLabelled: "leadingNavLinks" }
+            }
+        }), starlightLinksValidator(), viewTransitions()],
     }), sitemap()],
     output: 'server',
     adapter: cloudflare(),
