@@ -1,7 +1,6 @@
 // @ts-check
 import {defineConfig} from 'astro/config';
 import {viewTransitions} from "astro-vtbot/starlight-view-transitions";
-import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator'
@@ -78,6 +77,4 @@ export default defineConfig({
             }
         }), starlightLinksValidator(), viewTransitions()],
     }), sitemap()],
-    output: 'server',
-    adapter: cloudflare(),
 });
