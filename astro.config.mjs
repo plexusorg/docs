@@ -15,10 +15,10 @@ export default defineConfig({
             src: './src/assets/plexlogo.png',
         },
         favicon: '/favicon.ico',
-        social: {
-            github: 'https://github.com/plexusorg',
-            discord: 'https://discord.plex.us.org',
-        },
+        social: [
+            { icon: 'github', label: 'GitHub', href: 'https://github.com/plexusorg' },
+            { icon: 'discord', label: 'Discord', href: 'https://discord.plex.us.org' },
+        ],
         sidebar: [
             {
                 label: "leadingNavLinks",
