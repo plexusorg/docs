@@ -11,20 +11,19 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.3.1",
-    "@astrojs/starlight": "^0.34.1",
+    "@astrojs/starlight": "^0.34.2",
     "@lorenzo_lewis/starlight-utils": "^0.3.2",
-    "astro": "^5.7.5",
+    "astro": "^5.7.10",
     "sharp": "^0.34.1",
     "starlight-links-validator": "^0.16.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
-      "sharp",
-      "workerd"
+      "sharp"
     ]
   },
   "devDependencies": {
-    "astro-vtbot": "^2.1.2"
+    "astro-vtbot": "^2.1.3"
   }
 }
