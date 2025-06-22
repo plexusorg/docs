@@ -82,7 +82,7 @@ modification) are defined by the server config and may vary.
 | guild sethome | plex.guilds.sethome | Sets the guild's home                                         |
 | guild setwarp | plex.guilds.setwarp | Creates a new warp at player's location with a specified name |
 | guild warps   | plex.guilds.warps   | Displays a clickable list of warps                            |
-| guild warp    | plex.guild.warp     | Warps to a specified guild warp                               |
+| guild warp    | plex.guilds.warp    | Warps to a specified guild warp                               |
 
 ## HTTPD Module
 
