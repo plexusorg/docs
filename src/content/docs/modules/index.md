@@ -12,6 +12,7 @@ Below is a list of official and supported modules
 | Name            | Versions |
 |-----------------|----------|
 | BukkitTelnet    | 1.5      |
+| FalseOp         | 1.5      |
 | HTTPD           | 1.5      |
 | LibsDisguises   | 1.5      |
 | NickMiniMessage | 1.5      |
