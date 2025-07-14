@@ -19,6 +19,9 @@ export default defineConfig({
             { icon: 'github', label: 'GitHub', href: 'https://github.com/plexusorg' },
             { icon: 'discord', label: 'Discord', href: 'https://discord.plex.us.org' },
         ],
+        customCss: [
+          './src/styles/custom.css',
+        ],
         sidebar: [
             {
                 label: "leadingNavLinks",
