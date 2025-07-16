@@ -496,9 +496,6 @@ Note that in the `parameters` section, this is how the world should actually be 
 bottom. In the example above, a world will generate with one grass layer, 32 layers of dirt, 16 layers of stone, and one
 layer of bedrock.
 
-For a list of Ranks and Titles, you can refer to the
-Javadocs: [Ranks](https://docs.plex.us.org/javadoc/server/dev/plex/rank/enums/Rank.html), [Title](https://docs.plex.us.org/javadoc/server/dev/plex/rank/enums/Title.html).
-
 The gamerule section is what gamerules are set for the world by default. The syntax is the official gamerule name, a
 semicolon, and either `true` or `false`.
 

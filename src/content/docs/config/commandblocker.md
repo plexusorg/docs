@@ -3,8 +3,7 @@ title: Command Blocker
 description: Instructions for how to use the command blocker within Plex
 ---
 
-Plex features an advanced command blocker with support for matching and RegEx statements. It is recommended that you use
-this only in conjunction with ranks. If you are using permissions, there is not as much of a need for a command blocker.
+Plex features an advanced command blocker with support for matching and RegEx statements. 
 
 ## Default file
 

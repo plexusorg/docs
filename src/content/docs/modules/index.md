@@ -1,20 +1,30 @@
 ---
 title: Introduction
-description: An introductory to all of the modules and versions available for Plex
+description: Discover all officially supported modules that extend Plex's functionality
 ---
 
-Plex has optional modules to add additional features to your server experience. Modules are placed in the
-`/plugins/Plex/modules` folder. They extend off of Plex and can add or change functionality. They are designed for
-server owners who may want a specific feature that's not built in to Plex.
+Plex's modular architecture allows server owners to customize their experience by adding optional features. These modules integrate seamlessly with the core plugin while maintaining stability and performance.
 
-Below is a list of official and supported modules
+## How Modules Work
+You can download modules from the CI Server. Simply place the downloaded module files in the `/plugins/Plex/modules/`
+directory. You can then run `/plex modules reload` in-game to load the new module in.
 
-| Name            | Versions |
-|-----------------|----------|
-| BukkitTelnet    | 1.5      |
-| FalseOp         | 1.5      |
-| HTTPD           | 1.5      |
-| LibsDisguises   | 1.5      |
-| NickMiniMessage | 1.5      |
-| NUSH            | 1.5      |
-| TFMExtras       | 1.5      |
+Once a module has been installed, you can update it to the latest build by running `/plex modules update`.
+
+## Officially Supported Modules
+
+Below is the complete list of Plex's official modules with their current versions:
+
+| Module Name         | Description                                                                       | Version |
+|---------------------|-----------------------------------------------------------------------------------|---------|
+| **BukkitTelnet**    | Automatically connect to BukkitTelnet with a permission node                      | 1.5     |
+| **FalseOp**         | Provides operator functionality                                                   | 1.5     |
+| **HTTPD**           | Web server integration that shows server data                                     | 1.5     |
+| **LibsDisguises**   | Administrative utilities for the LibsDisguises plugin                             | 1.5     |
+| **NickMiniMessage** | Nickname formatting for EssentialsX with MiniMessage                              | 1.5     |
+| **NUSH**            | Raid-prevention techniques to temporarily silence brand new players               | 1.5     |
+| **TFMExtras**       | A port of many additional TotalFreedomMod features that don't fit the core plugin | 1.5     |
+
+:::tip
+For optimal performance, ensure all modules match your Plex core version. You should keep Plex and your modules up to date.
+:::

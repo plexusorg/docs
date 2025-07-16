@@ -19,7 +19,7 @@ In `settings.gradle.kts`, you should change the name to the name of the module y
 convention of `Module-<name>`.
 
 You should also open the `build.gradle.kts` file and change the description to `Module-<name>` as well. You should also
-change the version from `1.0` to the current version of Plex available. If you are building against `1.5-SNAPSHOT`, you
+change the version from `1.0` to the current version of Plex available. If you are building against version `1.5`, you
 should set your version to that as well.
 
 You should also look for this block of code in your `build.gradle.kts file`:
