@@ -6,7 +6,7 @@ prev: false
 
 **Plex** is a next-generation freedom server plugin designed to deliver unparalleled flexibility, performance, and customization. As a modern alternative to *TotalFreedomMod*, Plex retains the core features that define a true freedom server while introducing powerful new enhancements that set it apart.
 
-#### **Why Choose Plex?**
+### **Why Choose Plex?**
 Plex is built from the ground up to offer a seamless, high-performance experience with a focus on customization and scalability. Whether you're running a small community or a large-scale freedom server, Plex provides the tools you need to create a unique and dynamic environment.
 
 ### **Key Features**
