@@ -111,10 +111,12 @@ public class ExampleModule extends PlexModule
 }
 ```
 
-The `"examplemodule/config.yml"` part refers to where the configuration file is stored relative to `/src/main/resources`.
+The `"examplemodule/config.yml"` part refers to where the configuration file is stored relative to
+`/src/main/resources`.
 The `"config.yml"` refers to where it should go inside the `/plugins/Plex/modules/Module-Example` folder.
 
 You can then call values from the configuration with the following:
+
 ```java
 ExampleModule.getModule().getConfig().getString("module.test-message");
 ```

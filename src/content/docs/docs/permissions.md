@@ -115,7 +115,6 @@ modification) are defined by the server config and may vary.
 
 ## TFMExtras Module
 
-
 | Command      | Permission                | Description                                                                                                                                                               |
 |--------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | admininfo    | plex.tfmextras.admininfo  | Information on how to apply for admin                                                                                                                                     |

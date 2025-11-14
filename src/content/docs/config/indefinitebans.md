@@ -3,13 +3,12 @@ title: Indefinite Bans
 description: Instructions for how to use indefinite bans within Plex
 ---
 
-Plex has an indefinite ban system. Indefinite bans are reserved for players who should not
-automatically be unbanned. Anyone who has access to the `indefbans.yml` file can add indefinite bans. If you are using
-Redis, all indefinite bans will be uploaded to Redis on startup. From that point on, indefinite bans will be fetched
-from Redis instead of the `indefbans.yml` file. **Redis is NOT required to use indefinite bans.** If you do not use
-Redis, Plex will fetch indefinite bans from the `indefbans.yml` file. No matter which medium you use, you will always
-add new entries to the `indefbans.yml` file. Note that there is no in-game command for adding or removing indefinite
-bans.
+Plex has an indefinite ban system. Indefinite bans are reserved for players who should not automatically be unbanned.
+Anyone who has access to the `indefbans.yml` file can add indefinite bans. If you are using Redis, all indefinite bans
+will be uploaded to Redis on startup. From that point on, indefinite bans will be fetched from Redis instead of the
+`indefbans.yml` file. **Redis is NOT required to use indefinite bans.** If you do not use Redis, Plex will fetch
+indefinite bans from the `indefbans.yml` file. No matter which medium you use, you will always add new entries to the
+`indefbans.yml` file. Note that there is no in-game command for adding or removing indefinite bans.
 
 ## Default file
 
@@ -50,8 +49,8 @@ do not affect the indefinite ban in any way.
 
 If you are switching from TotalFreedomMod to Plex, we have developed a tool called IBConverter to convert your existing
 indefinite bans into Plex's format. For more information on IBConverter,
-visit [the GitHub page](https://github.com/plexusorg/IBConverter). This tool was written in Rust. The only thing
-you need to give it is your existing `indefinitebans.yml` file from TotalFreedomMod. You can download a compiled version
+visit [the GitHub page](https://github.com/plexusorg/IBConverter). This tool was written in Rust. The only thing you
+need to give it is your existing `indefinitebans.yml` file from TotalFreedomMod. You can download a compiled version
 below:
 
 - [IBConverter-Linux.zip](/IBConverter-Linux.zip)

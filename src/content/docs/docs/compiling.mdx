@@ -2,21 +2,21 @@
 title: Compiling Plex
 description: A tutorial on how to compile Plex
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import {Tabs, TabItem} from '@astrojs/starlight/components';
 
-Plex is built using **Gradle**, making compilation simple with no manual dependency management required. If you prefer, pre-compiled builds are also available on the **[CI Server](https://ci.plex.us.org)**.
+Plex is built using Gradle, making compilation simple with no manual dependency management required. If you prefer, pre-compiled builds are also available on the [CI Server](https://ci.plex.us.org).
 
-## **Prerequisites**
+## Prerequisites
 
 Before compiling, ensure you meet the following requirements:
 
-**Java 21 (JDK 21)** – Plex requires **JDK 21** to compile. Older versions will result in errors.
-- If you don’t have Java installed, download it from **[Adoptium](https://adoptium.net/)**.
-- During installation, **enable the option to add JDK 21 to your system PATH** (if not selected by default).
+Java 21 (JDK 21) -- Plex requires JDK 21 to compile. Older versions will result in errors.
+- If you don’t have Java installed, download it from [Adoptium](https://adoptium.net/).
+- During installation, enable the option to add JDK 21 to your system PATH (if not selected by default).
 
-**(Optional) Git** – Recommended for cloning the repository and storing build information.
-- **Windows users**: Download Git from **[git-scm.com](https://git-scm.com)**.
-- **macOS/Linux users**: Git is typically pre-installed.
+(Optional) Git -- Recommended for cloning the repository and storing build information.
+- Windows users: Download Git from [git-scm.com](https://git-scm.com).
+- macOS/Linux users: Git is typically pre-installed.
 
 :::note
 If you prefer not to use Git, you can manually download the source code as a ZIP from the GitHub page.
@@ -24,9 +24,9 @@ If you prefer not to use Git, you can manually download the source code as a ZIP
 
 ---
 
-## **Compiling Plex**
+## Compiling Plex
 
-### **Download the Source Code**
+### Download the Source Code
 Clone the Plex repository using Git:
 
 ```bash
@@ -35,13 +35,13 @@ git clone https://github.com/plexusorg/Plex
 
 If you downloaded the source as a ZIP, extract it and navigate to the folder.
 
-### **Navigate to the Project Directory**
+### Navigate to the Project Directory
 
 ```bash
 cd Plex
 ```
 
-### **Run the Build Command**
+### Run the Build Command
 Plex includes Gradle (no separate installation needed). Run the appropriate command for your OS:
 
 <Tabs>
@@ -61,26 +61,25 @@ Plex includes Gradle (no separate installation needed). Run the appropriate comm
     </TabItem>
 </Tabs>
 
-### **Locate the Compiled JARs**
+### Locate the Compiled JARs
 After a successful build, the compiled files (`Plex-Server.jar` and `Plex-Proxy.jar`) will be in:
 
 ```
 build/libs/
 ```
 
----
 
-## **Running Plex**
 
-- **Java 21 is required** on your server to run Plex.
-- For best results, use a **Vault-compatible permissions plugin**.
-- Check **[Versions](/docs/versions)** for compatibility details.
+## Running Plex
 
----
+- Java 21 is required on your server to run Plex.
+- For best results, use a Vault-compatible permissions plugin.
+- Check [Versions](/docs/versions) for compatibility details.
 
-## **Troubleshooting**
 
-##### **Permission Denied (macOS/Linux)**
+## Troubleshooting
+
+### Permission Denied (macOS/Linux)
 If you encounter a `Permission denied` error, run:
 
 ```bash
@@ -91,5 +90,5 @@ This grants execution permissions to the Gradle wrapper.
 
 ---
 
-## **Need Help?**
+## Need Help?
 For further assistance, you can join our [Discord server](https://discord.plex.us.org) and ask for support there.

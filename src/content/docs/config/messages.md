@@ -4,7 +4,7 @@ description: All of the messages within the messages.yml file for Plex
 ---
 
 Almost all the messages inside of Plex are fully customizable. This page will document how to change messages in the
-```messages.yml``` file inside the Plex folder.
+`messages.yml` file inside the Plex folder.
 
 ## Default file
 

@@ -12,6 +12,7 @@ generation support has been added to the official API.
 
 | Plex Version | Minecraft Versions |
 |--------------|--------------------|
+| 1.6          | 1.21.10            |
 | 1.5          | 1.21.7 - 1.21.8    |
 | 1.4          | 1.20.4             |
 | 1.3          | 1.19.4 - 1.20.4    |
