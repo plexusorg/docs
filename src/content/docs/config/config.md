@@ -73,15 +73,23 @@ data:
 # By default this includes all mobs, as the mobpurge command can be used to purge mobs.
 entitywipe_list:
   - "ITEM_FRAME"
+  - "ALLAY"
+  - "ARMADILLO"
   - "AXOLOTL"
   - "BAT"
   - "BEE"
   - "BLAZE"
+  - "BOGGED"
+  - "BREEZE"
+  - "CAMEL"
+  - "CAMEL_HUSK"
   - "CAT"
   - "CAVE_SPIDER"
   - "CHICKEN"
   - "COD"
+  - "COPPER_GOLEM"
   - "COW"
+  - "CREAKING"
   - "CREEPER"
   - "DOLPHIN"
   - "DONKEY"
@@ -92,11 +100,13 @@ entitywipe_list:
   - "ENDERMITE"
   - "EVOKER"
   - "FOX"
+  - "FROG"
   - "GHAST"
   - "GIANT"
   - "GLOW_SQUID"
   - "GOAT"
   - "GUARDIAN"
+  - "HAPPY_GHAST"
   - "HOGLIN"
   - "HORSE"
   - "HUSK"
@@ -106,8 +116,10 @@ entitywipe_list:
   - "MAGMA_CUBE"
   - "MULE"
   - "MUSHROOM_COW"
+  - "NAUTILUS"
   - "OCELOT"
   - "PANDA"
+  - "PARCHED"
   - "PARROT"
   - "PHANTOM"
   - "PIG"
@@ -115,6 +127,7 @@ entitywipe_list:
   - "PIGLIN_BRUTE"
   - "PILLAGER"
   - "POLAR_BEAR"
+  - "PUFFERFISH"
   - "RABBIT"
   - "RAVAGER"
   - "SALMON"
@@ -124,11 +137,13 @@ entitywipe_list:
   - "SKELETON"
   - "SKELETON_HORSE"
   - "SLIME"
+  - "SNIFFER"
   - "SNOWMAN"
   - "SPIDER"
   - "SQUID"
   - "STRAY"
   - "STRIDER"
+  - "TADPOLE"
   - "TRADER_LLAMA"
   - "TROPICAL_FISH"
   - "TURTLE"
@@ -136,6 +151,7 @@ entitywipe_list:
   - "VILLAGER"
   - "VINDICATOR"
   - "WANDERING_TRADER"
+  - "WARDEN"
   - "WITCH"
   - "WITHER"
   - "WITHER_SKELETON"
@@ -143,9 +159,9 @@ entitywipe_list:
   - "ZOGLIN"
   - "ZOMBIE"
   - "ZOMBIE_HORSE"
+  - "ZOMBIE_NAUTILUS"
   - "ZOMBIE_VILLAGER"
   - "ZOMBIFIED_PIGLIN"
-  - "PUFFERFISH"
 
 # Automatically wipe the specified entities
 autowipe:
@@ -169,6 +185,14 @@ blocked_entities:
   - "ENDER_DRAGON"
   - "MINECART_TNT"
 
+# These commands will be blocked when a player is muted or when chat is toggled off.
+block_on_mute:
+  - me
+  - say
+  - msg
+  - reply
+  - mail
+
 # Limit entities per chunk
 entity_limit:
   # Is the mob limit enabled?
@@ -181,19 +205,23 @@ entity_limit:
 # See https://docs.plex.us.org/docs/customization/config#worlds for documentation
 # These gamerules apply to all worlds on the server
 global_gamerules:
-  - "doWeatherCycle;true"
-  - "doDaylightCycle;true"
-  - "doMobSpawning;false"
-  - "keepInventory;true"
-  - "doFireTick;false"
-  - "doMobLoot;false"
-  - "mobGriefing;false"
-  - "doTileDrops;false"
-  - "commandBlockOutput;false"
-  - "naturalRegeneration;true"
-  - "announceAdvancements;false"
-  - "showDeathMessages;false"
-  - "sendCommandFeedback;false"
+  - "advance_weather;true"
+  - "advance_time;true"
+  - "spawn_mobs;false"
+  - "spawn_monsters;false"
+  - "spawn_patrols;false"
+  - "spawn_phantoms;false"
+  - "spawn_wandering_traders;false"
+  - "spawn_wardens;false"
+  - "keep_inventory;true"
+  - "mob_drops;false"
+  - "mob_griefing;false"
+  - "block_drops;false"
+  - "command_block_output;false"
+  - "natural_health_regeneration;true"
+  - "show_advancement_messages;false"
+  - "show_death_messages;false"
+  - "send_command_feedback;false"
 
 worlds:
   flatlands:
@@ -203,8 +231,8 @@ worlds:
       message: "<red>You do not have permission to modify this world."
     gameRules:
       # The gamerules here override the global gamerules
-      - "doWeatherCycle;false"
-      - "doDaylightCycle;false"
+      - "advance_weather;false"
+      - "advance_time;false"
     parameters:
       grass_block: 1
       dirt: 32
@@ -219,8 +247,8 @@ worlds:
       permission: "plex.world.adminworld.modify"
       message: "<red>You do not have permission to modify this world."
     gameRules:
-      - "doWeatherCycle;false"
-      - "doDaylightCycle;false"
+      - "advance_weather;false"
+      - "advance_time;false"
     parameters:
       grass_block: 1
       dirt: 32
@@ -235,8 +263,8 @@ worlds:
       permission: "plex.world.masterbuilderworld.modify"
       message: "<red>You do not have permission to modify this world."
     gameRules:
-      - "doWeatherCycle;false"
-      - "doDaylightCycle;false"
+      - "advance_weather;false"
+      - "advance_time;false"
     parameters:
       grass_block: 1
       dirt: 32
@@ -431,6 +459,10 @@ A list of blocks that should be blocked.
 ### blocked_entities
 
 A list of entities that should be blocked.
+
+### block_on_mute
+
+A list of commands that are blocked when a player is muted or when chat is toggled off.
 
 ## Entity limits
 
