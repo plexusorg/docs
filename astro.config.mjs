@@ -16,18 +16,18 @@ export default defineConfig({
         },
         favicon: '/favicon.ico',
         social: [
-            { icon: 'github', label: 'GitHub', href: 'https://github.com/plexusorg' },
-            { icon: 'discord', label: 'Discord', href: 'https://discord.plex.us.org' },
+            {icon: 'github', label: 'GitHub', href: 'https://github.com/plexusorg'},
+            {icon: 'discord', label: 'Discord', href: 'https://discord.plex.us.org'},
         ],
         customCss: [
-          './src/styles/custom.css',
+            './src/styles/custom.css',
         ],
         sidebar: [
             {
                 label: "leadingNavLinks",
                 items: [
-                    { label: "Javadocs", link: "/javadoc" },
-                    { label: "Downloads", link: "https://ci.plex.us.org/job/Plex/job/master/" },
+                    {label: "Javadocs", link: "/javadoc"},
+                    {label: "Downloads", link: "https://ci.plex.us.org/job/Plex/job/master/"},
                 ]
             },
             {label: 'Introduction', link: '/docs'},
@@ -41,7 +41,6 @@ export default defineConfig({
                     {label: 'Configuration', link: '/config/config'},
                     {label: 'Indefinite Bans', link: '/config/indefinitebans'},
                     {label: 'Messages', link: '/config/messages'},
-                    {label: 'Command Blocker', link: '/config/commandblocker'},
                 ]
             },
             {
@@ -76,7 +75,7 @@ export default defineConfig({
         ],
         plugins: [starlightUtils({
             navLinks: {
-                leading: { useSidebarLabelled: "leadingNavLinks" }
+                leading: {useSidebarLabelled: "leadingNavLinks"}
             }
         }), starlightLinksValidator(), viewTransitions()],
     }), sitemap()],
