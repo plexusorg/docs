@@ -66,11 +66,13 @@ export default defineConfig({
             {
                 tag: 'script',
                 attrs: {
-                    src: '/1742503883/js/script.js',
-                    'data-domain': 'plex.us.org',
-                    'data-api': '/1742503883/api/event',
-                    defer: true,
+                    src: 'https://plex.us.org/1742503883/js/script.js',
+                    async: true,
                 },
+            },
+            {
+                tag: 'script',
+                content: 'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
             },
         ],
         plugins: [starlightUtils({
