@@ -1,6 +1,5 @@
 // @ts-check
 import {defineConfig} from 'astro/config';
-import {viewTransitions} from "astro-vtbot/starlight-view-transitions";
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator'
@@ -10,7 +9,7 @@ import starlightUtils from "@lorenzo_lewis/starlight-utils";
 export default defineConfig({
     site: 'https://plex.us.org',
     integrations: [starlight({
-        title: 'Plex',
+        title: 'Plex Docs',
         logo: {
             src: './src/assets/plexlogo.png',
         },
@@ -79,6 +78,6 @@ export default defineConfig({
             navLinks: {
                 leading: {useSidebarLabelled: "leadingNavLinks"}
             }
-        }), starlightLinksValidator(), viewTransitions()],
+        }), starlightLinksValidator()],
     }), sitemap()],
 });
