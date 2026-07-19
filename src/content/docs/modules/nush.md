@@ -3,39 +3,46 @@ title: NUSH
 description: An overview of the NUSH module for Plex
 ---
 
-The NUSH (New User Silent Hush) module prevents raids from happening on servers. When a new player joins, only admins
-and themselves can see their chat messages. Admins can then choose to allow a player to chat where everyone can see it.
-Alternatively, if they start spamming, they can be banned while regular players do not see their chat messages. You can
-also set an expiration so that after a certain amount of time, they will be allowed to chat globally regardless of
-manual intervention.
+The NUSH module helps you stop raids. When a new player joins, only staff and the player can see the player's chat
+messages. Staff can then let the player chat where everyone sees it. If the player spams, staff can ban the player, and
+regular players do not see the spam. You can also set a wait time, so a new player can chat with everyone after that time
+without staff action.
 
 ## Permissions
 
-The `plex.nush.use` permission will grant access to the NUSH command and all subcommands. The `plex.nush.view` command
-will allow people to view chat messages that are intercepted by NUSH. You would want to give both permissions to
-moderators and none to regular players.
+The `plex.nush.use` permission grants access to the NUSH command and all of its subcommands. The `plex.nush.view`
+permission lets a player see the chat messages that NUSH holds back. Give both permissions to your staff, and give
+neither to regular players.
 
 ## Commands
 
 ### nush on
 
-This turns the NUSH module on. New players will be subjected to a delay before their chat messages are globally seen.
+Turns NUSH on. New players wait before their chat messages reach everyone.
 
 ### nush off
 
-This turns the NUSH module off. This is the default state for the NUSH module. All new players will be able to chat
-normally.
+Turns NUSH off. This is the default state. All new players can chat normally.
 
 ### nush status
 
-This shows the status of NUSH. By default, it is turned off. You can check its status with this command.
+Shows whether NUSH is on or off.
 
-### nush time \<duration\>
+### nush time \<minutes\>
 
-This sets the time that players must wait before they can chat and their messages are seen. This gives admins enough
-time to react if they immediately spam when they join.
+Sets the wait time in minutes. A new player must wait this long before the player can chat with everyone. This gives
+staff time to react if the player spams on join.
 
 ### nush remove \<player\>
 
-This removes a player from the NUSH list. Only new players are added, but if they are a legitimate new player during a
-raid, you can remove them, and they will be able to chat normally.
+Removes a player from the NUSH list. NUSH adds new players automatically. If a real new player is caught during a raid,
+you can remove the player so the player can chat normally.
+
+## Configuration
+
+The module writes a `config.yml` file to its data folder with two options.
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| server.enabled | false | Whether NUSH is on. The `/nush on` and `/nush off` commands change this value. |
+| server.wait_time | 5 | The wait time in minutes for a new player. The `/nush time` command changes this value. |

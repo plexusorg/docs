@@ -71,15 +71,16 @@ Find this block in your Redis configuration file and ensure bind is set to `172.
 Redis should be successfully set up! Now all you have to do is enter your credentials into the Plex configuration file.
 
 ```yaml title="/plugins/Plex/config.yml"
-side:
-    enabled: true
-    auth: true
-    hostname: '172.18.0.1'
-    port: 6380
-    password: 'your_secure_password_here'
+data:
+    redis:
+        enabled: true
+        auth: true
+        hostname: '172.18.0.1'
+        port: 6380
+        password: 'your_secure_password_here'
 ```
 
-Replace `your_secure_password_here` with the password you made for Redis. Now, Plex will use Redis for storing punishment data. Note that the JSON files are still made as a backup no matter what.
+Replace `your_secure_password_here` with the password you made for Redis. Plex uses Redis for indefinite bans and for passing punishment and admin-chat messages between servers on your network. Plex stores player data and punishments in the SQL database, not in Redis.
 
 ### Firewall Configuration
 If you are using a firewall, you may have to allow port `6380`. It is safe to allow connections from anywhere provided you have followed the documentation correctly.

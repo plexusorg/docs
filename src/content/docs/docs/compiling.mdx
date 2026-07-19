@@ -1,48 +1,51 @@
 ---
 title: Compiling Plex
-description: A tutorial on how to compile Plex
+description: How to compile Plex from source
 ---
 import {Tabs, TabItem} from '@astrojs/starlight/components';
 
-Plex is built using Gradle, making compilation simple with no manual dependency management required. If you prefer, pre-compiled builds are also available on the [CI Server](https://ci.plex.us.org).
+Plex uses Gradle, so you do not manage dependencies by hand. If you do not want to build Plex yourself, you can download
+a pre-built JAR from the [CI server](https://ci.plex.us.org).
 
 ## Prerequisites
 
-Before compiling, ensure you meet the following requirements:
+You need the following before you compile Plex.
 
-Java 21 (JDK 21) -- Plex requires JDK 21 to compile. Older versions will result in errors.
-- If you don’t have Java installed, download it from [Adoptium](https://adoptium.net/).
-- During installation, enable the option to add JDK 21 to your system PATH (if not selected by default).
+Java 25 (JDK 25). Plex needs JDK 25 to compile. Earlier Java versions cause errors.
+- If you do not have Java, download it from [Adoptium](https://adoptium.net/).
+- During installation, add JDK 25 to your system PATH if the installer does not do this for you.
 
-(Optional) Git -- Recommended for cloning the repository and storing build information.
-- Windows users: Download Git from [git-scm.com](https://git-scm.com).
-- macOS/Linux users: Git is typically pre-installed.
+Git (optional). Git is useful for cloning the repository. Plex also uses Git to read the build number.
+- Windows users can download Git from [git-scm.com](https://git-scm.com).
+- macOS and Linux users usually have Git already.
 
 :::note
-If you prefer not to use Git, you can manually download the source code as a ZIP from the GitHub page.
+If you do not want to use Git, you can download the source code as a ZIP file from the GitHub page.
 :::
 
 ---
 
-## Compiling Plex
+## Compile Plex
 
-### Download the Source Code
-Clone the Plex repository using Git:
+### Download the source code
+
+Clone the Plex repository with Git.
 
 ```bash
 git clone https://github.com/plexusorg/Plex
 ```
 
-If you downloaded the source as a ZIP, extract it and navigate to the folder.
+If you downloaded the source as a ZIP file, extract it and open the folder.
 
-### Navigate to the Project Directory
+### Open the project directory
 
 ```bash
 cd Plex
 ```
 
-### Run the Build Command
-Plex includes Gradle (no separate installation needed). Run the appropriate command for your OS:
+### Run the build
+
+Plex includes the Gradle wrapper, so you do not install Gradle. Run the command for your system.
 
 <Tabs>
     <TabItem value="macOS/Linux" label="macOS/Linux" default>
@@ -61,34 +64,43 @@ Plex includes Gradle (no separate installation needed). Run the appropriate comm
     </TabItem>
 </Tabs>
 
-### Locate the Compiled JARs
-After a successful build, the compiled files (`Plex-Server.jar` and `Plex-Proxy.jar`) will be in:
+### Find the compiled JARs
+
+Plex is a multi-module project. After a successful build, the JAR files are in the root `build/libs/` folder.
 
 ```
 build/libs/
 ```
 
+You get three files. The version in each file name matches the build.
 
+| File | Purpose |
+|------|---------|
+| `Plex-<version>.jar` | The server plugin. Install this on your Paper server. |
+| `Plex-Velocity-<version>.jar` | The Velocity proxy plugin. Install this only if you run a Velocity proxy. |
+| `Plex-API-<version>.jar` | The module API library. Module authors compile against this. You do not install it on the server. |
 
-## Running Plex
+## Run Plex
 
-- Java 21 is required on your server to run Plex.
-- For best results, use a Vault-compatible permissions plugin.
-- Check [Versions](/docs/versions) for compatibility details.
+- Your server needs Java 25 to run Plex.
+- Use a Vault-compatible permissions plugin for the best results.
+- Plex needs a supported Minecraft version. See [Versions](/docs/versions) for the list.
 
+Copy `Plex-<version>.jar` into the `plugins` folder of your Paper server. Start the server once so Plex writes its
+configuration files.
 
 ## Troubleshooting
 
-### Permission Denied (macOS/Linux)
-If you encounter a `Permission denied` error, run:
+### Permission denied on macOS or Linux
+
+If you get a `Permission denied` error, make the Gradle wrapper executable.
 
 ```bash
 chmod a+x gradlew
 ```
 
-This grants execution permissions to the Gradle wrapper.
-
 ---
 
-## Need Help?
-For further assistance, you can join our [Discord server](https://discord.plex.us.org) and ask for support there.
+## Need help
+
+If you need more help, join our [Discord server](https://discord.plex.us.org) and ask for support.

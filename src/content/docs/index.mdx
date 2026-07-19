@@ -19,29 +19,27 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 ## Why Plex?
 
 <CardGrid>
-    <Card title="Performance Oriented" icon="rocket">
-        Plex was designed with performance in mind. Plex supports SQLite or MariaDB out of the box. Plex also supports
-        using Redis for punishments instead of traditional YAML / JSON files.
+    <Card title="Performance oriented" icon="rocket">
+        Plex is built for performance. It stores player data in SQLite, MariaDB, or PostgreSQL. It can also use Redis for
+        indefinite bans instead of flat files.
     </Card>
-    <Card title="Fully Customizable" icon="setting">
-        Plex is designed to be customizable to fit your server's needs. You can customize almost all of the messages and
-        the chat format. It's also easy to create as many custom worlds as you desire.
+    <Card title="Fully customizable" icon="setting">
+        Plex fits your server. You can change almost every message and the chat format. You can also create as many
+        custom worlds as you need.
     </Card>
     <Card title="Permissions" icon="list-format">
-        Plex allows you to use integrate with a permission system and "fake op" players. This allows server owners to
-        have much more control over what is and isn't allowed. Any Vault-compatible permission plugin will integrate
-        with Plex.
+        Plex works with any Vault-compatible permissions plugin. Use permission nodes to control what each player can do,
+        and give players fake op when you need to.
     </Card>
     <Card title="Modular" icon="cloud-download">
-        Plex features a fully modular plugin system. You can add or remove modules based on your server needs. We have
-        many additions such as adding a modern HTTPD server using modules.
+        Plex has a module system. Add or remove modules to fit your server. Modules can add large features, such as a
+        web dashboard through HTTPD.
     </Card>
     <Card title="Converters" icon="random">
-        We have written tools to convert your existing data from TotalFreedomMod to Plex. This will make your transition
-        even easier so you won't have to start fresh.
+        Plex includes tools to convert your TotalFreedomMod data, so you do not start from scratch when you move to Plex.
     </Card>
-    <Card title="Quality Control" icon="sun">
-        Every release undergoes rigorous testing to catch bugs before they reach your server. Plex's codebase is built
-        for stability and rapid development, ensuring consistent performance without unexpected breaks.
+    <Card title="Quality control" icon="sun">
+        Every release is tested to catch bugs before they reach your server. The codebase is built for stability and fast
+        development.
     </Card>
 </CardGrid>

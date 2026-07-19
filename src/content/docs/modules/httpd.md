@@ -3,37 +3,54 @@ title: HTTPD
 description: An overview of the HTTPD module for Plex
 ---
 
-The HTTPD module sets up a basic web server to display information from Plex.
+The HTTPD module runs a web server inside Plex. It serves a web dashboard and a JSON API. Staff can view server data and
+manage players from a browser.
 
-## Endpoints
+## What it does
 
-The endpoints are what allow you to query the server and see information. All endpoints are formatted in JSON.
+The dashboard shows live server data and admin tools:
+- The online player list and server statistics, which update live.
+- A player view with inventory. Staff can view and edit a player's inventory.
+- Punishment history and punishment lookup by name or UUID.
+- The indefinite ban list.
+- A command reference, built from the commands that are registered on the server.
+- Schematic upload and download for WorldEdit and FastAsyncWorldEdit.
 
-### /api/commands
+Staff can also issue punishments from the web. From the player view, staff can ban, mute, tempban, tempmute, and freeze
+a player, and clear a player's inventory. Plex records these punishments the same way as in-game punishments, with the
+web as the source.
 
-This endpoint shows a list of registered commands on the server. It is an automatically generated help page. It is up to
-plugin authors to provide accurate information about their plugins and the commands they provide.
+## Access and login
 
-### /api/indefbans
+The HTTPD module does not use Bukkit permission nodes. Instead, it uses staff login.
 
-Displays a list of indefinite players in JSON format. This page is only accessible if your IP address is linked to your
-account in game. It will check if the player has the `plex.httpd.indefbans.access`.
+Some pages are public, such as the online player list and the command reference. The protected pages and all admin
+actions need a signed-in user with the staff flag on their linked account. HTTPD uses XenForo for login through OAuth2.
+A user signs in with their forum account, and HTTPD checks the staff flag from that account.
 
-### /api/list
+Login is off until you configure it. Set `authentication.enabled` to `true` and fill in your XenForo application
+details. Until you do this, the protected pages stay locked.
 
-This will display a list of online players in JSON format. This is accessible to everyone.
+## Configuration
 
-### /api/punishments
+The module writes a `config.yml` file to its data folder. The important settings are below.
 
-If you go this page, it will ask you to enter a UUID. When you enter a valid UUID in the search box, it will display
-that user's punishments in JSON format. An example URL would be `/api/punishments/78408086-1991-4c33-a571-d8fa325465b2`.
-If your IP is not registered to a user in game, it cannot determine if you have the necessary permissions. The player
-will need to have the `plex.httpd.punishments.access` to see IP addresses.
+| Key | Description |
+|-----|-------------|
+| server.port | The port that the web server listens on. The default is `27192`. |
+| server.bind-address | The address that the web server binds to. |
+| rate-limit.enabled | Turns rate limiting on or off. |
+| authentication.enabled | Turns staff login on or off. The default is `false`. |
+| authentication.provider.redirectUri | The OAuth2 redirect URL for your site. |
+| authentication.provider.xenforo.domain | The domain of your XenForo forum. |
+| authentication.provider.xenforo.clientId | The client ID of your XenForo OAuth2 application. |
+| authentication.provider.xenforo.clientSecret | The client secret of your XenForo OAuth2 application. |
+| authentication.provider.xenforo.sessionMinutes | How long a login session lasts, in minutes. |
 
-### /api/schematics/download
+## Requirements
 
-This page allows anyone to download schematics from the server. No permission is required to access the page.
+To use the schematic features, install WorldEdit or FastAsyncWorldEdit on your server. Without one of them, the schematic
+routes return an error.
 
-### /api/schematics/upload
-
-This page allows players who have the permission `plex.httpd.schematics.upload` in game to upload schematics.
+To use login, the web punishments, and the inventory tools, set `authentication.enabled` to `true` and configure a
+XenForo OAuth2 application.

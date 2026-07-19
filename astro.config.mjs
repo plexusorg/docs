@@ -47,15 +47,29 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                     {label: 'Introduction', link: '/modules'},
-                    {label: 'BukkitTelnet', link: '/modules/bukkittelnet'},
                     {label: 'FalseOp', link: '/modules/falseop'},
+                    {label: 'Guilds', link: '/modules/guilds'},
                     {label: 'HTTPD', link: '/modules/httpd'},
                     {label: 'LibsDisguises', link: '/modules/libsdisguises'},
                     {label: 'NickMiniMessage', link: '/modules/nickminimessage'},
                     {label: 'NUSH', link: '/modules/nush'},
+                    {label: 'TFMExtras', link: '/modules/tfmextras'},
                 ]
             },
-            {label: 'Creating a Module', link: '/docs/create_module'},
+            {
+                label: 'Creating a Module',
+                collapsed: true,
+                items: [
+                    {label: 'Introduction', link: '/docs/create_module'},
+                    {label: 'Project setup', link: '/docs/create_module/setup'},
+                    {label: 'Commands', link: '/docs/create_module/commands'},
+                    {label: 'Listeners', link: '/docs/create_module/listeners'},
+                    {label: 'Configuration and messages', link: '/docs/create_module/configuration'},
+                    {label: 'Libraries and storage', link: '/docs/create_module/libraries'},
+                    {label: 'The Plex API', link: '/docs/create_module/api'},
+                    {label: 'Build and install', link: '/docs/create_module/install'},
+                ]
+            },
             {label: 'Configuring Redis', link: '/docs/redis'},
         ],
         editLink: {

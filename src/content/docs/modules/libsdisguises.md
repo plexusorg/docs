@@ -3,19 +3,28 @@ title: LibsDisguises
 description: An overview of the LibsDisguises module for Plex
 ---
 
-The LibsDisguises module adds two new commands: `undisguiseall` and `disguisetoggle`.
+The LibsDisguises module adds admin controls for the LibsDisguises plugin. It adds two commands, and it checks disguises
+to keep them within safe limits. For example, it blocks fishing-hook disguises, and it caps disguise name length and
+size. This module needs the LibsDisguises plugin. If LibsDisguises is missing, the module does not start.
 
 ## Commands
 
-### undisguiseall
-
-The `undisguiseall` command disguises all non-admins. You can optionally add `-a` to undisguise all players including
-admins. If your server is using permissions, the permission to bypass being undisguised is `plex.libsdisguises.bypass`.
-This permission will not bypass `-a`, however. The permission to use the command itself is
-`plex.libsdisguises.undisguiseall`
-
 ### disguisetoggle
 
-The `disguisetoggle` command toggles LibsDisguises. It allows players with the `plex.libsdisguises.disguisetoggle`
-permission to toggle LibsDisguises. When LibsDisguises is disabled, all players are undisguised and no commands from
-LibsDisguises can be used until re-enabled.
+Alias: `dtoggle`. The permission is `plex.libsdisguises.disguisetoggle`. This command toggles LibsDisguises for the whole
+server. When LibsDisguises is off, all players are undisguised, and no one can use a LibsDisguises command until you turn
+it back on.
+
+### undisguiseall
+
+Aliases: `undisall`, `uall`. The permission is `plex.libsdisguises.undisguiseall`. This command undisguises players. Add
+`-a` to also undisguise players who have the bypass permission.
+
+## Permissions
+
+The module has two permission nodes that are not tied to a command.
+
+| Permission | Description |
+|------------|-------------|
+| plex.libsdisguises.bypass | Exempt a player from `/undisguiseall`. The `-a` flag ignores this permission. |
+| plex.libsdisguises.player | Keep the fake name and skin when disguised as another player. Without it, the disguise shows the real name and skin. |

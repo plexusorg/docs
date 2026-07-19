@@ -1,18 +1,18 @@
 ---
 title: Versions
-description: A list of versions compatible with Plex
+description: The Minecraft versions that Plex supports
 ---
 
-Plex builds against the latest Minecraft version available. A table has been provided below to help you determine which
-versions of Plex work with your version of Minecraft. Note that these are only the versions we have officially tested.
-Plex may or may not work with versions other than in this table. We only recommend using [Paper](https://papermc.io).
-Plex does have experimental support for Folia. The service system for Plex does support Folia, however world generation
-does not work. This is due to Folia having no API available to do so. We intend to add full support for Folia once world
-generation support has been added to the official API.
+Plex builds against the latest Minecraft version. Use the table below to find the Plex version that matches your
+Minecraft version. These are the versions that we test. Plex may work with other versions, but we do not test them. We
+recommend [Paper](https://papermc.io).
+
+Plex runs on Folia. The service system and the schedulers work on Folia. Custom world generation does not work on Folia,
+because Folia does not provide a world generation API. Full Folia support will come when that API is available.
 
 | Plex Version | Minecraft Versions |
 |--------------|--------------------|
-| 1.7-SNAPSHOT | 1.21.11            |
+| 2.0          | 26.1 - 26.2        |
 | 1.6          | 1.21.10            |
 | 1.5          | 1.21.7 - 1.21.8    |
 | 1.4          | 1.20.4             |

@@ -3,12 +3,12 @@ title: Messages
 description: All of the messages within the messages.yml file for Plex
 ---
 
-Almost all the messages inside of Plex are fully customizable. This page will document how to change messages in the
-`messages.yml` file inside the Plex folder.
+You can change almost every message in Plex. This page shows the `messages.yml` file. The file is at
+`/plugins/Plex/messages.yml`.
 
 ## Default file
 
-The default `messages.yml` file is below.
+Below is the default `messages.yml` file.
 
 ```yaml title="/plugins/Plex/messages.yml"
 # Plex Messages File
@@ -40,6 +40,7 @@ indefBanMessageReason: "<red>Your {0} is indefinitely banned! You may appeal at 
 playerNotFound: "<red>Player not found!"
 specifyPlayer: "<red>You must specify a player!"
 worldNotFound: "<red>World not found!"
+correctUsagePrefix: "<yellow>Correct Usage: "
 # This will always be used for punishments where the sanctioning administrator has not provided a reason. Will ignore MiniMessage tags.
 noReasonProvided: "No reason provided."
 # 0 - The world you have been teleported to
@@ -73,12 +74,6 @@ unlockedPlayer: "<aqua>{0} - Unlocking {1}"
 noPermissionNode: "<red>You must have the permission: {0} <red>to use this command!"
 noPermissionInGame: "<red>You must be in console to use this command!"
 noPermissionConsole: "<red>You must be in-game to use this command!"
-# 0 - The username of the name history
-nameHistoryTitle: "<gold>Name History of {0}"
-nameHistorySeparator: "<gold><strikethrough>-----------------------------"
-# 0 - The name
-# 1 - The date and time of the name change
-nameHistoryBody: "<gold>{0} <dark_gray>- <gold>{1}"
 # 0 - The gamemode
 gameModeSetTo: "<gray>Your gamemode has been set to {0}."
 # 0 - The player's name
@@ -91,33 +86,10 @@ playerSetOtherGameMode: "<gray>{0} set your gamemode to {1}."
 # 1 - The gamemode
 setEveryoneGameMode: "<aqua>{0} - Changing everyone's gamemode to {1}"
 consoleMustDefinePlayer: "<red>You must define a player since you are running this command from console."
-# 0 - The command sender
-# 1 - The player
-newAdminAdded: "<aqua>{0} - Adding {1} to the admin list"
-# 0 - The command sender
-# 1 - The player
-# 2 - The rank name
-adminReadded: "<aqua>{0} - Re-adding {1} to the admin list as rank: {2}"
-# 0 - The command sender
-# 1 - The player
-adminRemoved: "<red>{0} - Removing {1} from the admin list"
-# 0 - The command sender
-# 1 - The player
-# 2 - The rank
-adminSetRank: "<aqua>{0} - Setting {1}'s rank to {2}"
 # 0 - The world name
 teleportedToWorld: "<aqua>You have been teleported to the {0}."
 higherRankThanYou: "<red>This player is an admin or a higher rank than you."
-playerNotAdmin: "<red>That player is not an admin."
-playerIsAdmin: "<red>That player is already an admin."
-rankNotFound: "<red>The rank you entered was not found."
-rankMustBeHigherThanAdmin: "<red>The rank you entered must be higher than Admin."
 consoleOnly: "<red>This command can only be executed by the console."
-# 0 - Rank
-yourRank: "<aqua>Your rank is: {0}"
-# 0 - Player name
-# 1 - Rank
-otherRank: "<aqua>{0}'s rank is: {1}"
 # 0 - The command sender
 # 1 - The player
 banningPlayer: "<red>{0} - Banning {1}"
@@ -130,7 +102,6 @@ playerNotMuted: "<red>That player is not muted!"
 playerBanned: "<red>That player is already banned!"
 playerFrozen: "<red>That player is already frozen!"
 playerMuted: "<red>That player is already muted!"
-playerLockedUp: "<red>That player is already locked up!"
 muted: "<red>You are currently muted - STFU!"
 pvpDisabled: "<red>PVP has been disabled!"
 chatIsOff: "<red>Chat is currently toggled off!"
@@ -144,12 +115,21 @@ teleportedToWorldSpawn: "<aqua>Teleporting to the local spawn"
 toggleCommandSpy: "<gray>CommandSpy has been"
 enabled: "<gray>enabled."
 disabled: "<gray>disabled."
+# 0 - The player
+# 1 - The command
+commandSpyFormat: "<gray>{0}: {1}"
 # 0 - The admin / staff member
 # 1 - The player's group's prefix if any
 # 2 - The message
 adminChatFormat: '<dark_gray>[<blue>AdminChat<dark_gray>] <dark_red>{0} {1} <gray>» <gold>{2}'
 # 0 - Whether it was toggled on or off
 adminChatToggled: '<gray>AdminChat was toggled {0}'
+stateEnabled: "<green>enabled"
+stateDisabled: "<red>disabled"
+stateEnabledUnsafe: "<red>enabled"
+stateDisabledSafe: "<green>disabled"
+stateOn: "<green>on"
+stateOff: "<red>off"
 # 0 - Maximum length, configured in config.yml
 maximumPrefixLength: "<red>The maximum length for a tag may only be {0}."
 prefixCleared: "<aqua>Your prefix has been cleared."
@@ -160,6 +140,14 @@ prefixSetTo: "<aqua>Your prefix has been set to {0}"
 # 0 - The action (blocked / unblocked)
 # 1 - The amount of players
 blockeditSize: "<gray>{0} all block modification abilities for {1} players."
+blockeditListEntry: "<gray>- {0}"
+blockeditListNone: "<gray>- none"
+blockeditAllPlayers: "all players"
+blockeditAllNonAdmins: "all non-admins"
+blockeditBlockedAction: "Blocked"
+blockeditUnblockedAction: "Unblocked"
+blockeditBlockedState: "blocked"
+blockeditUnblockedState: "unblocked"
 # The action (blocked or restored)
 editsModified: "<gray>Your block modification abilities have been {0}."
 listOfPlayersBlocked: "<gray>The following have block modification abilities restricted:"
@@ -180,22 +168,19 @@ removedEntities: "<red>{0} - Removed {1} entities"
 # 1 - Number of entities removed
 # 2 - Entity type(s) removed
 removedEntitiesOfTypes: "<red>{0} - Removed {1} entities of type(s) {2}"
-# 0 - The command sender
-# 1 - Number of entities removed
-# 2 - Entity type removed
-removedEntitiesOfType: "<gray>Removed {1} {2}"
 # 0 - Entity type that is invalid
 invalidEntityType: "<gray>Notice: Entity type {0} is invalid!"
 noRemovedEntities: "<gray>No entities were removed."
 # 0 - Number of mobs removed
 # 1 - Type of mob removed
 amountOfMobsRemoved: "<gray>{0} {1} removed."
+mobSingular: "mob"
+mobPlural: "mobs"
 notAValidMob: "<red>That is not a valid mob."
 notAValidMobButValidEntity: "<red>That is a valid entity, but is not a valid mob."
 # 0 - The command sender
 # 1 - Number of mobs removed
 removedMobs: "<red>{0} - Removed {1} mobs"
-autoWipeDisabled: "<gray>Item wiping is currently disabled in the config!"
 # 0 - The boolean for whether the limit is enabled or disabled
 mobLimitToggle: "<gray>The mob limit has been {0}"
 # 0 - The amount that the mob limit has been set to
@@ -208,7 +193,8 @@ mobLimitSet: "<gray>The mob limit has been set to: <em><white>{0}"
 mobLimitStatus: "<gray>({0}<gray>) <em><white>{1} <reset><gray>/ <em><white>{2} <reset><gray>per chunk (<em><white>Chunk<gray>: <reset>{3}, {4}<gray>)"
 # 0 - The max set limit in config
 mobLimitCeiling: "<gray>The limit you have entered is too high. Defaulting to the ceiling value from config"
-commandBlocked: "<gray>That command is blocked."
+mobLimitEnabled: "<green>Enabled"
+mobLimitDisabled: "<red>Disabled"
 # 0 - The command sender
 # 1 - The message being said
 sayMessage: "<blue>[Server: {0}] {1}"
@@ -225,6 +211,28 @@ removedNote: "<green>Removed note with ID: {0}"
 # 0 - The number of notes cleared
 clearedNotes: "<green>Cleared {0} notes."
 invalidToggle: "<red>That is not a valid toggle."
+toggleAvailable: "<gray>Available toggles:"
+# 0 - The toggle name
+# 1 - The toggle status
+toggleListItem: "<gray>  - {0}<gray> ({1}<gray>)"
+# 0 - The toggle name
+# 1 - The toggle status
+toggleCommandResult: "<gray>Toggled {0}<gray> ({1}<gray>)"
+# 0 - The toggle name
+toggleToggled: "<gray>Toggled {0}."
+toggleMenuTitle: "<green><bold>Toggles"
+toggleExplosions: "Explosions"
+toggleExplosionsLower: "explosions"
+toggleFluidSpread: "Fluid spread"
+toggleFluidSpreadLower: "fluid spread"
+toggleDrops: "Drops"
+toggleDropsLower: "drops"
+toggleRedstone: "Redstone"
+toggleRedstoneLower: "redstone"
+togglePvp: "PVP"
+togglePvpLower: "PVP"
+toggleChat: "Chat"
+toggleChatLower: "chat"
 specifyLoginMessage: "<red>Please specify a login message."
 # 0 - The login message
 setOwnLoginMessage: "<gray>Your login message is now:<newline><gray>> <reset>{0}"
@@ -235,7 +243,7 @@ removedOwnLoginMessage: "<gray>Your login message has been removed."
 # 0 - The player
 removedOtherLoginMessage: "<gray>You removed {0}'s login message."
 nameRequired: "<red>Policy requires that you must state your player name in your login message. You can either do this by inserting your name or %player%."
-rankRequired: "<red>Policy requires that you must state your rank in your login message. You can do this by using %rank% in your login message."
+playerHasNoLoginMessage: "<red>This player does not have a login message."
 # 0 - The material name
 # 1 - The players who have the material in their inventory
 playersWithMaterial: "<gray>Players with {0} in their inventory: {1}"
@@ -282,6 +290,7 @@ smittenQuietly: "<gray>Smitten {0} quietly."
 # 0 - The reason for being smitten
 smitten: "<red>You've been smitten. Reason: <yellow>{0}"
 nukerKickMessage: "Please turn off your nuker!"
+nukerTempbanReason: "You are temporarily banned for five minutes for using a Nuker."
 antiSpamMessage: "<gray>Please refrain from spamming messages."
 # 0 - The player
 banExpiredBroadcast: "Plex - Automatically unbanning {0}"
@@ -293,18 +302,72 @@ commandNotFound: "<red>That command could not be found!"
 # 0 - The command
 # 1 - A list of aliases found
 commandAliases: "<aqua>Aliases for {0} are: {1}"
+# 0 - Number of activities found to rollback
+prismRollbackMessage: "<gray>Rolled back {0} activities"
+# 0 - Error message returned from Prism
+prismRollbackError: "<red>Rollback failed: {0}"
+prismNoResult: "<gray>No activities have been rolled back"
+punishmentMenuTitle: "<aqua><bold>Punishments"
+# 0 - The player
+punishedPlayerMenuTitle: "<red><bold>Punishments - {0}"
+punishmentPlayerNotFound: '<red>This player does not exist. Try doing /punishments \<player> instead.'
+# 0 - The amount of active bans
+# 1 - The active ban list
+activeBansList: "<gold>Active Bans ({0}): <yellow>{1}"
+# 0 - The amount of players unbanned
+unbannedPlayers: "<gold>Unbanned {0} players."
+updateUpToDate: "<green>Plex is up to date on the {0} channel."
+# 0 - The version
+# 1 - The channel
+updateAvailable: "<red>Plex {0} is available on the {1} channel."
+updateRunCommand: "<red>Run: /plex update"
+# 0 - The file name
+updateDownloading: "<green>Downloading latest JAR file: {0}"
+updateDownloaded: "<green>New JAR file downloaded and verified successfully."
+# 0 - The directory path
+updateDirectoryFailed: "<red>Unable to create update directory: {0}"
+# 0 - The artifact name
+updateDownloadFailed: "<red>Something went wrong while downloading {0}. Please check the log for more information."
+# 0 - The channel
+updateMetadataNotFound: "<red>No compatible update is available on the {0} channel."
+# 0 - The Plex version
+# 1 - The channel
+# 2 - The supported Minecraft versions
+# 3 - The running Minecraft version
+updateRequiresMinecraftVersion: "<yellow>No Plex build exists for Minecraft {3}. Plex {0} on the {1} channel supports Minecraft: {2}."
+# 0 - The Plex version
+# 1 - The channel
+# 2 - The oldest supported Minecraft version
+# 3 - The running Minecraft version
+# 4 - The supported Minecraft versions
+updateRequiresNewerMinecraft: "<yellow>Your server is running Minecraft {3}, which is older than any version supported by Plex {0} on the {1} channel (oldest supported: {2}). Supported versions: {4}."
+# 0 - The Plex version
+# 1 - The channel
+# 2 - The newest supported Minecraft version
+# 3 - The running Minecraft version
+# 4 - The supported Minecraft versions
+updateUnsupportedNewerMinecraft: "<yellow>No Plex build exists yet for Minecraft {3}. Plex {0} on the {1} channel supports up to Minecraft {2}. Supported versions: {4}."
+# 0 - The error message
+updateMetadataError: "<red>There was an error checking update metadata: {0}"
+moduleUpdateDisabled: "<yellow>Skipping {0}; module updates are disabled."
+moduleRestartRequired: "<yellow>Module changes applied. Restart the server if module commands do not appear or disappear."
 ```
 
 ## MiniMessage
 
-The `messages.yml` file uses MiniMessage for coloring messages. For example, writing `<aqua>`, will color the text aqua.
-This is not like HTML, and you should not close the tag (`</aqua>`). There are some special functions as well, such as
-`<rainbow>`. The default color will be gray. For a complete guide on using MiniMessage,
-visit: [https://docs.advntr.dev/minimessage/format.html](https://docs.advntr.dev/minimessage/format.html).
+The `messages.yml` file uses MiniMessage for colors. For example, `<aqua>` colors the text aqua. This is not like HTML,
+so you do not close the tag with `</aqua>`. MiniMessage also has special tags, such as `<rainbow>`. The default color is
+gray. For the full MiniMessage guide, see
+[https://docs.advntr.dev/minimessage/format.html](https://docs.advntr.dev/minimessage/format.html).
+
+Numbers in braces, such as `{0}` and `{1}`, are replacement values. Plex fills each one with a value, such as a player
+name or a number. The comment above each message explains what each value holds.
+
+Modules can ship their own message files. A module reads its own `messages.yml` first, then falls back to the Plex
+messages for any key that it does not define.
 
 ## Troubleshooting
 
-If you receive `No message.` when executing a command, it is likely you need to regenerate your `messages.yml` file. The
-default configuration file is also available
-on [GitHub](https://raw.githubusercontent.com/PlexDevelopment/Plex/master/src/main/resources/messages.yml). As of Plex
-0.6 (Beta 6), your `messages.yml` file should automatically update with new entries.
+If a command shows `No message.`, your `messages.yml` file may be missing a key. Plex adds missing keys to your file when
+it starts, so a restart usually fixes this. You can also compare your file with the default file on
+[GitHub](https://raw.githubusercontent.com/plexusorg/Plex/master/server/src/main/resources/messages.yml).
