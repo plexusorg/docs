@@ -1,0 +1,346 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import {
+    CHANNEL_LABELS,
+    CHANNELS,
+    displayName,
+    findProject,
+    formatDate,
+    formatSize,
+    jenkinsUrl,
+    loadBuildHistory,
+    type VersionBuilds,
+} from '../../lib/downloads';
+
+export const prerender = false;
+
+const slug = Astro.params.project ?? '';
+const project = findProject(slug);
+
+if (!project) {
+    return new Response('Not found', {
+        status: 404,
+        headers: {'content-type': 'text/plain; charset=utf-8'},
+    });
+}
+
+let versions: VersionBuilds[] = [];
+let failed = false;
+try {
+    versions = (await loadBuildHistory(project)).filter((entry) => entry.builds.length > 0);
+} catch {
+    failed = true;
+}
+
+// Channels the project actually publishes. Stable comes first, so it is also the default tab.
+const availableChannels = CHANNELS.filter((channel) =>
+    versions.some((entry) => entry.builds.some((build) => build.channel === channel)));
+
+const requestedChannel = Astro.url.searchParams.get('channel') ?? '';
+const activeChannel = availableChannels.includes(requestedChannel)
+    ? requestedChannel
+    : availableChannels[0] ?? null;
+
+const shown = activeChannel === null
+    ? versions
+    : versions
+        .map((entry) => ({...entry, builds: entry.builds.filter((build) => build.channel === activeChannel)}))
+        .filter((entry) => entry.builds.length > 0);
+
+const name = displayName(project.name);
+const ci = jenkinsUrl(project);
+const emptyMessage = activeChannel
+    ? `No ${CHANNEL_LABELS[activeChannel].toLowerCase()} builds are recorded for ${name} yet.`
+    : `No builds are recorded for ${name} yet.`;
+---
+
+<StarlightPage frontmatter={{title: `${name} builds`, description: `Every recorded build of ${name}.`, tableOfContents: false, prev: false, next: false}}>
+    <div id="plex-builds" class="not-content">
+        <a class="bd-back" href="/downloads">
+            <svg
+                class="bd-back-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="m15 18-6-6 6-6"/>
+            </svg>
+            All downloads
+        </a>
+
+        <p class="bd-lede">
+            Every build comes from the <a href={ci}>Plexus CI</a>. The newest build is at the top.
+        </p>
+
+        {!failed && availableChannels.length > 1 && (
+            <nav class="bd-tabs" aria-label="Build channel">
+                {availableChannels.map((channel) => (
+                    <a
+                        class="bd-tab"
+                        href={`?channel=${channel}`}
+                        aria-current={channel === activeChannel ? 'page' : undefined}
+                    >{CHANNEL_LABELS[channel]}</a>
+                ))}
+            </nav>
+        )}
+
+        {failed ? (
+            <p class="bd-note">
+                The build data did not load. Use <a href={ci}>Jenkins</a> to get the files.
+            </p>
+        ) : shown.length === 0 ? (
+            <p class="bd-note">{emptyMessage}</p>
+        ) : shown.map((entry) => (
+            <section class="bd-version" aria-label={`Version ${entry.version}`}>
+                <h2 class="bd-version-title">{entry.version}</h2>
+                <div class="bd-table-wrap">
+                    <table class="bd-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Build</th>
+                                <th scope="col">Published</th>
+                                <th scope="col">Size</th>
+                                <th scope="col"><span class="bd-hidden">Download</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {entry.builds.map((build) => (
+                                <tr>
+                                    <th scope="row" class="bd-build">#{build.buildNumber}</th>
+                                    <td class="bd-nowrap">{formatDate(build.publishedAt)}</td>
+                                    <td class="bd-nowrap">{formatSize(build.size) ?? '—'}</td>
+                                    <td class="bd-cell-action">
+                                        <a
+                                            class="bd-download"
+                                            href={build.downloadUrl}
+                                            title={build.sha256 ? `SHA-256 ${build.sha256}` : undefined}
+                                            aria-label={`Download ${name} build ${build.buildNumber}`}
+                                        >
+                                            Download
+                                            <svg
+                                                class="bd-download-icon"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                aria-hidden="true"
+                                            >
+                                                <path d="M12 4v11"/>
+                                                <path d="m7 11 5 5 5-5"/>
+                                                <path d="M5 20h14"/>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        ))}
+    </div>
+</StarlightPage>
+
+<style>
+    #plex-builds {
+        --bd-surface: var(--sl-color-gray-6);
+        --bd-edge: var(--sl-color-gray-5);
+        --bd-fog: var(--sl-color-gray-3);
+        --bd-paper: var(--sl-color-white);
+        --bd-steel: var(--sl-color-text-accent);
+    }
+
+    #plex-builds a:focus-visible {
+        outline: 2px solid var(--bd-steel);
+        outline-offset: 2px;
+    }
+
+    .bd-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .bd-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: var(--sl-text-sm);
+        color: var(--bd-fog);
+        text-decoration: none;
+        transition: color 150ms ease;
+    }
+
+    .bd-back:hover {
+        color: var(--bd-paper);
+    }
+
+    .bd-back-icon {
+        width: 0.9rem;
+        height: 0.9rem;
+    }
+
+    .bd-lede {
+        margin: 0.75rem 0 0;
+        max-width: 42rem;
+        color: var(--bd-fog);
+        text-wrap: pretty;
+    }
+
+    .bd-lede a,
+    .bd-note a {
+        color: var(--bd-steel);
+        text-decoration: none;
+        transition: color 150ms ease;
+    }
+
+    .bd-lede a:hover,
+    .bd-note a:hover {
+        color: var(--bd-paper);
+    }
+
+    .bd-note {
+        margin: 2rem 0 0;
+        padding: 1rem;
+        border: 1px solid var(--bd-edge);
+        border-radius: 0.375rem;
+        background: var(--bd-surface);
+        font-size: var(--sl-text-sm);
+        color: var(--bd-fog);
+    }
+
+    .bd-version {
+        margin-top: 2.5rem;
+    }
+
+    .bd-version-title {
+        margin: 0;
+        font-size: var(--sl-text-xl);
+        font-weight: 500;
+        line-height: var(--sl-line-height-headings);
+        color: var(--bd-paper);
+    }
+
+    .bd-table-wrap {
+        margin-top: 1rem;
+        overflow-x: auto;
+        border: 1px solid var(--bd-edge);
+        border-radius: 0.5rem;
+        background: var(--bd-surface);
+    }
+
+    .bd-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--sl-text-sm);
+    }
+
+    .bd-table th,
+    .bd-table td {
+        padding: 0.85rem 1.25rem;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .bd-table thead th {
+        font-weight: 400;
+        font-size: var(--sl-text-xs);
+        color: var(--bd-fog);
+        border-bottom: 1px solid var(--bd-edge);
+        white-space: nowrap;
+    }
+
+    .bd-table tbody tr + tr th,
+    .bd-table tbody tr + tr td {
+        border-top: 1px solid var(--bd-edge);
+    }
+
+    .bd-table tbody td {
+        color: var(--bd-fog);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .bd-build {
+        font-weight: 600;
+        color: var(--bd-paper);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .bd-nowrap {
+        white-space: nowrap;
+    }
+
+    .bd-tabs {
+        display: flex;
+        gap: 1.75rem;
+        margin-top: 2rem;
+        border-bottom: 1px solid var(--bd-edge);
+    }
+
+    .bd-tab {
+        margin-bottom: -1px;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid transparent;
+        font-size: var(--sl-text-sm);
+        color: var(--bd-fog);
+        text-decoration: none;
+        transition: color 150ms ease, border-color 150ms ease;
+    }
+
+    .bd-tab:hover {
+        color: var(--bd-paper);
+    }
+
+    .bd-tab[aria-current='page'] {
+        color: var(--bd-paper);
+        border-bottom-color: var(--bd-steel);
+    }
+
+    .bd-cell-action {
+        text-align: right;
+    }
+
+    .bd-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--bd-steel);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 150ms ease;
+    }
+
+    .bd-download:hover {
+        color: var(--bd-paper);
+    }
+
+    .bd-download-icon {
+        width: 1rem;
+        height: 1rem;
+        transition: transform 150ms ease;
+    }
+
+    .bd-download:hover .bd-download-icon {
+        transform: translateY(1px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .bd-download-icon {
+            transition: none;
+        }
+
+        .bd-download:hover .bd-download-icon {
+            transform: none;
+        }
+    }
+</style>

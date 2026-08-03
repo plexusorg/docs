@@ -1,108 +1,108 @@
 ---
-const {project} = Astro.props;
+import {CHANNEL_LABELS, displayName, formatDate, jenkinsUrl, projectPath} from '../lib/downloads';
 
-const API_BASE = 'https://updater.plex.us.org';
+const {project, featured = false, channel} = Astro.props;
 
-const dateFormat = new Intl.DateTimeFormat('en-US', {dateStyle: 'medium', timeZone: 'UTC'});
+const build = project.error ? null : project.channels?.[channel];
+const label = (CHANNEL_LABELS[channel] ?? channel).toLowerCase();
 
-function displayName(name) {
-    return name.replace(/^Module-/, '');
-}
-
-function jenkinsUrl() {
-    return project.jenkins ?? `https://ci.plex.us.org/job/${project.name}/`;
-}
-
-function formatDate(iso) {
-    const date = new Date(iso);
-    return Number.isNaN(date.getTime()) ? iso : dateFormat.format(date);
-}
-
-function formatSize(bytes) {
-    if (typeof bytes !== 'number' || bytes <= 0) {
-        return null;
+function cardMeta(entry) {
+    const parts = [];
+    if (entry.minecraftVersions?.length) {
+        parts.push(`Minecraft ${entry.minecraftVersions.join(', ')}`);
     }
-    if (bytes < 1024 * 1024) {
-        return `${(bytes / 1024).toFixed(0)} KB`;
-    }
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-function metaLine(build) {
-    const parts = [formatDate(build.publishedAt)];
-    if (build.minecraftVersions?.length) {
-        parts.push(`MC ${build.minecraftVersions.join(', ')}`);
-    }
-    if (build.requiredApiCompatibility) {
-        parts.push(`API v${build.requiredApiCompatibility}`);
-    }
-    const size = formatSize(build.size);
-    if (size) {
-        parts.push(size);
-    }
+    parts.push(`Build ${entry.buildNumber}`, formatDate(entry.publishedAt));
     return parts.join(' · ');
 }
+
+const downloadLabel = build
+    ? `Download ${displayName(project.name)} ${build.version} (${label})`
+    : undefined;
+const shaTitle = build?.sha256 ? `SHA-256 ${build.sha256}` : undefined;
 ---
 
-<header class="dl-card-header">
-    <h3>{displayName(project.name)}</h3>
-    <a class="dl-ci" href={jenkinsUrl()}>CI</a>
-</header>
-
-{project.error ? (
-    <p class="dl-error">
-        Could not load build data for this project.
-        Use <a href={jenkinsUrl()}>Jenkins</a> directly.
-    </p>
-) : (
-    <>
-        <div class="dl-channels">
-            {['stable', 'dev'].map((channel) => {
-                const build = project.channels[channel];
-                if (!build) {
-                    return channel === 'stable'
-                        ? (
-                            <div class="dl-channel dl-missing">
-                                <span class="dl-badge">stable</span>
-                                <span class="dl-meta">No stable build yet</span>
-                            </div>
-                        )
-                        : null;
-                }
-                return (
-                    <div class="dl-channel">
-                        <div class="dl-channel-info">
-                            <p class="dl-version">
-                                <span class={`dl-badge dl-badge-${channel}`}>{channel}</span>
-                                {build.version}
-                                <a class="dl-buildno" href={`https://github.com/plexusorg/${project.name}/commit/${build.commit}`}>build {build.buildNumber}</a>
-                            </p>
-                            <p class="dl-meta">{metaLine(build)}</p>
-                            {build.sha256 && (
-                                <p class="dl-sha">
-                                    SHA-256 <code>{build.sha256.slice(0, 12)}…</code>
-                                    <button type="button" class="dl-copy" data-sha={build.sha256}>Copy</button>
-                                </p>
-                            )}
-                        </div>
-                        <a class="dl-button" href={build.downloadUrl}>Download</a>
-                    </div>
-                );
-            })}
-        </div>
-        {project.index?.versions?.length > 0 && (
-            <details class="dl-history">
-                <summary>Previous builds</summary>
-                {project.index.versions.map((version) => (
-                    <div class="dl-history-version">
-                        <h4>{version}</h4>
-                        <div
-                            class="dl-history-list"
-                            data-builds-url={`${API_BASE}/api/v1/projects/${project.name}/versions/${version}/builds.json`}
-                        >Loading…</div>
-                    </div>
-                ))}
-            </details>
+{featured ? (
+    <div class="dl-featured">
+        {project.error ? (
+            <p class="dl-note">
+                The build data did not load. Use <a href={jenkinsUrl(project)}>Jenkins</a> to get the files.
+            </p>
+        ) : build ? (
+            <a class="dl-card" href={build.downloadUrl} title={shaTitle} aria-label={downloadLabel}>
+                <span class="dl-card-main">
+                    <span class="dl-version">{build.version}</span>
+                    <span class="dl-card-meta">{cardMeta(build)}</span>
+                </span>
+                <span class="dl-card-action">
+                    Download
+                    <svg
+                        class="dl-card-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M12 4v11"/>
+                        <path d="m7 11 5 5 5-5"/>
+                        <path d="M5 20h14"/>
+                    </svg>
+                </span>
+            </a>
+        ) : (
+            <p class="dl-card-empty">No {label} build yet</p>
         )}
-    </>
+    </div>
+) : (
+    <li class="dl-row">
+        <div class="dl-row-main">
+            <span class="dl-module-name">{displayName(project.name)}</span>
+            {project.error ? (
+                <span class="dl-row-note">
+                    The build data did not load. Use <a href={jenkinsUrl(project)}>Jenkins</a>.
+                </span>
+            ) : (
+                <div class="dl-actions">
+                    {build ? (
+                        <a class="dl-action" href={build.downloadUrl} title={shaTitle} aria-label={downloadLabel}>
+                            <span class="dl-action-version">{build.version}</span>
+                            <svg
+                                class="dl-action-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M12 4v11"/>
+                                <path d="m7 11 5 5 5-5"/>
+                                <path d="M5 20h14"/>
+                            </svg>
+                        </a>
+                    ) : (
+                        <span class="dl-action-empty">No {label} build yet</span>
+                    )}
+                    <a class="dl-more" href={projectPath(project.name, channel)}>
+                        All builds
+                        <svg
+                            class="dl-more-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                    </a>
+                </div>
+            )}
+        </div>
+    </li>
 )}
