@@ -1,0 +1,108 @@
+---
+const {project} = Astro.props;
+
+const API_BASE = 'https://updater.plex.us.org';
+
+const dateFormat = new Intl.DateTimeFormat('en-US', {dateStyle: 'medium', timeZone: 'UTC'});
+
+function displayName(name) {
+    return name.replace(/^Module-/, '');
+}
+
+function jenkinsUrl() {
+    return project.jenkins ?? `https://ci.plex.us.org/job/${project.name}/`;
+}
+
+function formatDate(iso) {
+    const date = new Date(iso);
+    return Number.isNaN(date.getTime()) ? iso : dateFormat.format(date);
+}
+
+function formatSize(bytes) {
+    if (typeof bytes !== 'number' || bytes <= 0) {
+        return null;
+    }
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(0)} KB`;
+    }
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function metaLine(build) {
+    const parts = [formatDate(build.publishedAt)];
+    if (build.minecraftVersions?.length) {
+        parts.push(`MC ${build.minecraftVersions.join(', ')}`);
+    }
+    if (build.requiredApiCompatibility) {
+        parts.push(`API v${build.requiredApiCompatibility}`);
+    }
+    const size = formatSize(build.size);
+    if (size) {
+        parts.push(size);
+    }
+    return parts.join(' · ');
+}
+---
+
+<header class="dl-card-header">
+    <h3>{displayName(project.name)}</h3>
+    <a class="dl-ci" href={jenkinsUrl()}>CI</a>
+</header>
+
+{project.error ? (
+    <p class="dl-error">
+        Could not load build data for this project.
+        Use <a href={jenkinsUrl()}>Jenkins</a> directly.
+    </p>
+) : (
+    <>
+        <div class="dl-channels">
+            {['stable', 'dev'].map((channel) => {
+                const build = project.channels[channel];
+                if (!build) {
+                    return channel === 'stable'
+                        ? (
+                            <div class="dl-channel dl-missing">
+                                <span class="dl-badge">stable</span>
+                                <span class="dl-meta">No stable build yet</span>
+                            </div>
+                        )
+                        : null;
+                }
+                return (
+                    <div class="dl-channel">
+                        <div class="dl-channel-info">
+                            <p class="dl-version">
+                                <span class={`dl-badge dl-badge-${channel}`}>{channel}</span>
+                                {build.version}
+                                <a class="dl-buildno" href={`https://github.com/plexusorg/${project.name}/commit/${build.commit}`}>build {build.buildNumber}</a>
+                            </p>
+                            <p class="dl-meta">{metaLine(build)}</p>
+                            {build.sha256 && (
+                                <p class="dl-sha">
+                                    SHA-256 <code>{build.sha256.slice(0, 12)}…</code>
+                                    <button type="button" class="dl-copy" data-sha={build.sha256}>Copy</button>
+                                </p>
+                            )}
+                        </div>
+                        <a class="dl-button" href={build.downloadUrl}>Download</a>
+                    </div>
+                );
+            })}
+        </div>
+        {project.index?.versions?.length > 0 && (
+            <details class="dl-history">
+                <summary>Previous builds</summary>
+                {project.index.versions.map((version) => (
+                    <div class="dl-history-version">
+                        <h4>{version}</h4>
+                        <div
+                            class="dl-history-list"
+                            data-builds-url={`${API_BASE}/api/v1/projects/${project.name}/versions/${version}/builds.json`}
+                        >Loading…</div>
+                    </div>
+                ))}
+            </details>
+        )}
+    </>
+)}

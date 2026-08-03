@@ -1,0 +1,336 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+export const prerender = false;
+
+const API_BASE = 'https://updater.plex.us.org';
+const CHANNELS = ['stable', 'dev'];
+
+const PROJECTS = [
+    {name: 'Plex', jenkins: 'https://ci.plex.us.org/job/Plex/job/master/'},
+    {name: 'Module-FalseOp'},
+    {name: 'Module-Guilds'},
+    {name: 'Module-HTTPD'},
+    {name: 'Module-LibsDisguises'},
+    {name: 'Module-NickMiniMessage'},
+    {name: 'Module-NUSH'},
+    {name: 'Module-TFMExtras'},
+];
+
+async function fetchJson(path) {
+    const response = await fetch(`${API_BASE}/${path}`, {
+        signal: AbortSignal.timeout(5000),
+        // @ts-ignore -- cf is Workers-specific; ignored by astro dev
+        cf: {cacheTtl: 60, cacheEverything: true},
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status} for ${path}`);
+    }
+    return await response.json();
+}
+
+function latestPointerPath(index, channel) {
+    const pointers = index.latest?.[channel];
+    if (!pointers) {
+        return null;
+    }
+    if (index.kind === 'plex') {
+        return pointers['minecraft'] ?? null;
+    }
+    let bestKey = null;
+    let bestApi = -1;
+    for (const key of Object.keys(pointers)) {
+        const match = key.match(/^api\/(\d+)$/);
+        if (match && Number(match[1]) > bestApi) {
+            bestApi = Number(match[1]);
+            bestKey = key;
+        }
+    }
+    return bestKey ? pointers[bestKey] : null;
+}
+
+async function loadProject(project) {
+    try {
+        const index = await fetchJson(`api/v1/projects/${project.name}.json`);
+        const channels = {};
+        await Promise.all(CHANNELS.map(async (channel) => {
+            const path = latestPointerPath(index, channel);
+            if (path) {
+                channels[channel] = await fetchJson(path);
+            }
+        }));
+        return {...project, index, channels};
+    } catch (error) {
+        return {...project, error: error instanceof Error ? error.message : String(error)};
+    }
+}
+
+const results = await Promise.all(PROJECTS.map(loadProject));
+const plex = results.find((result) => result.name === 'Plex');
+const modules = results.filter((result) => result.name !== 'Plex');
+---
+
+<StarlightPage frontmatter={{title: 'Downloads', description: 'Download stable and dev builds of Plex and its modules.', tableOfContents: false}}>
+    <div id="plex-downloads">
+        <p>
+            All builds come from the official <a href="https://ci.plex.us.org">Plex CI</a>.
+            The stable channel has release builds. The dev channel has the latest snapshot builds.
+        </p>
+
+        {plex && (
+            <section class="dl-section">
+                <article class="dl-card dl-featured">
+                    <ProjectCard project={plex}/>
+                </article>
+            </section>
+        )}
+
+        <section class="dl-section">
+            <h2>Modules</h2>
+            <div class="dl-grid">
+                {modules.map((project) => (
+                    <article class="dl-card">
+                        <ProjectCard project={project}/>
+                    </article>
+                ))}
+            </div>
+        </section>
+    </div>
+</StarlightPage>
+
+<script>
+    document.querySelectorAll('#plex-downloads .dl-copy').forEach((button) => {
+        button.addEventListener('click', async () => {
+            const sha = button.getAttribute('data-sha');
+            if (!sha) {
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(sha);
+                button.textContent = 'Copied!';
+            } catch {
+                button.textContent = 'Failed';
+            }
+            setTimeout(() => {
+                button.textContent = 'Copy';
+            }, 1500);
+        });
+    });
+
+    function renderBuilds(container: Element, builds: any[]) {
+        container.textContent = '';
+        if (builds.length === 0) {
+            container.textContent = 'No builds recorded.';
+            return;
+        }
+        const list = document.createElement('ul');
+        for (const build of builds) {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = build.downloadUrl;
+            link.textContent = `Build ${build.buildNumber}`;
+            item.append(link);
+
+            const meta = document.createElement('span');
+            const date = build.publishedAt ? new Date(build.publishedAt) : null;
+            const parts = [build.version];
+            if (date && !Number.isNaN(date.getTime())) {
+                parts.push(new Intl.DateTimeFormat('en-US', {dateStyle: 'medium', timeZone: 'UTC'}).format(date));
+            }
+            if (build.commit) {
+                parts.push(String(build.commit).slice(0, 7));
+            }
+            meta.textContent = ` — ${parts.join(' — ')}`;
+            item.append(meta);
+            list.append(item);
+        }
+        container.append(list);
+    }
+
+    document.querySelectorAll('#plex-downloads details.dl-history').forEach((details) => {
+        details.addEventListener('toggle', () => {
+            if (!(details instanceof HTMLDetailsElement) || !details.open || details.dataset.loaded === 'true') {
+                return;
+            }
+            details.dataset.loaded = 'true';
+            details.querySelectorAll('.dl-history-list').forEach(async (list) => {
+                const url = list.getAttribute('data-builds-url');
+                if (!url) {
+                    return;
+                }
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(String(response.status));
+                    }
+                    const data = await response.json();
+                    renderBuilds(list, Array.isArray(data.builds) ? data.builds : []);
+                } catch {
+                    list.textContent = 'Could not load build history.';
+                }
+            });
+        });
+    });
+</script>
+
+<style is:global>
+    #plex-downloads .dl-section {
+        margin-top: 1.5rem;
+    }
+
+    #plex-downloads .dl-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    #plex-downloads .dl-card {
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 0.5rem;
+        background: var(--sl-color-gray-6);
+        padding: 1rem 1.25rem;
+    }
+
+    #plex-downloads .dl-featured {
+        border-color: var(--sl-color-accent);
+    }
+
+    #plex-downloads .dl-card-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    #plex-downloads .dl-card-header h3 {
+        margin: 0;
+    }
+
+    #plex-downloads .dl-ci {
+        font-size: var(--sl-text-sm);
+    }
+
+    #plex-downloads .dl-channel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    #plex-downloads .dl-channel-info p {
+        margin: 0.15rem 0;
+    }
+
+    #plex-downloads .dl-version {
+        font-weight: 600;
+        color: var(--sl-color-white);
+    }
+
+    #plex-downloads .dl-buildno {
+        font-weight: 400;
+        font-size: var(--sl-text-sm);
+        margin-inline-start: 0.35rem;
+    }
+
+    #plex-downloads .dl-badge {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 0.05rem 0.6rem;
+        font-size: var(--sl-text-xs);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background: var(--sl-color-gray-5);
+        color: var(--sl-color-white);
+        margin-inline-end: 0.4rem;
+    }
+
+    #plex-downloads .dl-badge-stable {
+        background: var(--sl-color-green-low);
+        color: var(--sl-color-green-high);
+    }
+
+    #plex-downloads .dl-badge-dev {
+        background: var(--sl-color-orange-low);
+        color: var(--sl-color-orange-high);
+    }
+
+    #plex-downloads .dl-meta {
+        font-size: var(--sl-text-sm);
+        color: var(--sl-color-gray-3);
+    }
+
+    #plex-downloads .dl-sha {
+        font-size: var(--sl-text-xs);
+        color: var(--sl-color-gray-3);
+    }
+
+    #plex-downloads .dl-sha code {
+        font-size: inherit;
+    }
+
+    #plex-downloads .dl-copy {
+        margin-inline-start: 0.4rem;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 0.25rem;
+        background: transparent;
+        color: var(--sl-color-gray-2);
+        font-size: var(--sl-text-xs);
+        padding: 0.05rem 0.4rem;
+        cursor: pointer;
+    }
+
+    #plex-downloads .dl-copy:hover {
+        border-color: var(--sl-color-gray-3);
+    }
+
+    #plex-downloads .dl-button {
+        flex-shrink: 0;
+        border-radius: 999px;
+        padding: 0.4rem 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        background: var(--sl-color-text-accent);
+        color: var(--sl-color-black);
+    }
+
+    #plex-downloads .dl-button:hover {
+        opacity: 0.85;
+    }
+
+    #plex-downloads .dl-missing {
+        opacity: 0.7;
+    }
+
+    #plex-downloads .dl-error {
+        color: var(--sl-color-red-high);
+        font-size: var(--sl-text-sm);
+    }
+
+    #plex-downloads .dl-history {
+        margin-top: 1rem;
+        font-size: var(--sl-text-sm);
+    }
+
+    #plex-downloads .dl-history summary {
+        cursor: pointer;
+        color: var(--sl-color-gray-2);
+    }
+
+    #plex-downloads .dl-history-version h4 {
+        margin: 0.75rem 0 0.25rem;
+        font-size: var(--sl-text-sm);
+    }
+
+    #plex-downloads .dl-history-list ul {
+        margin: 0.25rem 0 0;
+        padding-inline-start: 1.25rem;
+    }
+
+    #plex-downloads .dl-history-list li {
+        margin: 0.15rem 0;
+    }
+</style>

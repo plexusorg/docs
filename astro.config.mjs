@@ -27,7 +27,7 @@ export default defineConfig({
                 label: "leadingNavLinks",
                 items: [
                     {label: "Javadocs", link: "/javadoc"},
-                    {label: "Downloads", link: "https://ci.plex.us.org/job/Plex/job/master/"},
+                    {label: "Downloads", link: "/downloads"},
                 ]
             },
             {label: 'Introduction', link: '/docs'},
