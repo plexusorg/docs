@@ -5,8 +5,7 @@ description: Add a configuration file and a message file to a Plex module
 
 ## Configuration files
 
-To ship a configuration file, put the default file in `src/main/resources`. A common location is a folder named after
-your module, such as `src/main/resources/examplemodule/config.yml`.
+To ship a configuration file, put the default file in `src/main/resources`.
 
 Create a `ModuleConfig` in your main class. The first path is the resource inside the JAR. The second path is where the
 file goes inside the module data folder.
@@ -24,7 +23,7 @@ public class ExampleModule extends PlexModule
     @Override
     public void enable()
     {
-        config = new ModuleConfig(this, "examplemodule/config.yml", "config.yml");
+        config = new ModuleConfig(this, "config.yml", "config.yml");
         config.load();
     }
 
@@ -49,11 +48,11 @@ value. Use `set(path, value)` and `save()` to write changes back to disk.
 
 ## Messages
 
-Keep user-facing text in a message file, so server owners can change it. Put the default file in `src/main/resources`, for
-example `src/main/resources/examplemodule/messages.yml`. Plex message files use
+Keep user-facing text in a message file, so server owners can change it. Put the default file in `src/main/resources`.
+Plex message files use
 [MiniMessage](https://docs.advntr.dev/minimessage/format) formatting. Use `{0}`, `{1}`, and so on for replacement values.
 
-```yaml title="src/main/resources/examplemodule/messages.yml"
+```yaml title="src/main/resources/messages.yml"
 welcome: "<gray>Welcome, <yellow>{0}</yellow>."
 featureDisabled: "<red>That feature is disabled."
 ```
@@ -64,7 +63,7 @@ Load the file in `enable()` with `loadMessages`. Plex copies it to `plugins/Plex
 @Override
 public void enable()
 {
-    loadMessages("examplemodule/messages.yml");
+    loadMessages("messages.yml");
 }
 ```
 
