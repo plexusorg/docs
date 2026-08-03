@@ -1,3 +1,11 @@
 {
-  "name": "plex-docs"
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "plex-docs",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2026-07-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  }
 }
