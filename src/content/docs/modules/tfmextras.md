@@ -14,25 +14,46 @@ fall into a few groups.
 Admin and player tools:
 - `admininfo` shows how to apply for admin.
 - `autoclear <player>` toggles whether a player has their inventory cleared when they join.
-- `autoteleport` teleports you at random, or toggles auto-teleport on join for a named player.
+- `autoteleport` teleports you at random. `autoteleport <player>` toggles auto-teleport on join for a named player.
 - `clearchat` clears the chat.
+- `effect give <player> <effect> [seconds|infinite] [amplifier] [hideParticles]` gives a potion effect.
+- `effect clear [player] [effect]` clears one potion effect or all of them.
+- `emf <player>` strikes a player with lightning and kills them.
 - `enchant` enchants the item in your hand.
 
 Fun commands:
 - `cake` gives a cake to everyone.
 - `cartsit` sits you in the nearest minecart.
 - `clownfish` gives a clownfish that knocks players back.
+- `cookie` gives a cookie to everyone.
 - `expel` pushes away nearby players.
 - `jumppads` enables jump pads for you or another player.
-- `orbit <player>` launches a player upward at speed.
+- `orbit <player> [power]` keeps a player floating upward in survival mode until you run `orbit <player> stop`.
+- `paintball [color]` gives snowballs that paint whatever they hit. The paint fades after a few seconds.
 - `randomfish` spawns a random fish.
+- `rocket <player>` launches a player upward on a trail of flames, sets off a firework at the top, and lets the player
+  fall slowly.
+- `trail` toggles a rainbow trail under your feet that fades behind you.
+
+Player effects:
+- `cage <player> [outer] [inner]` traps a player in a cage of glass, or of the blocks you name. The player cannot move
+  or teleport out. `cage <player> off` removes the cage. Blocks that fall, flow, or explode are not allowed.
+- `disco <player> [seconds]` turns the floor under a player into a dance floor that changes color to music. It lasts
+  10 seconds unless you give a time. `disco <player> stop` ends it early.
+- `gravity <player> <low|normal|high|value>` changes how fast a player falls. `reset` restores the normal value.
+- `size <player> <scale>` makes a player larger or smaller, from 0.1 to 10. `reset` restores the normal size.
 
 Cleanup commands:
 - `cloudclear` clears lingering area-effect clouds.
-- `eject <player>` removes all passengers from a player.
+- `eject` removes all passengers from you.
+
+The trail, paintball, cage, and disco commands only change blocks for a short time. Trail blocks and paintball splats
+fade on their own. A cage or a dance floor goes away when the command ends or the player leaves. The module puts every
+original block back, and it also does this when the module unloads. Size and gravity changes last until the player
+leaves the server or the module unloads.
 
 ## Configuration
 
 The module writes a `config.yml` file to its data folder. It controls the jump-pad strength, the admin-info text, the
-lists of players who are cleared or teleported on join, whether unsafe enchantments are allowed, and the clownfish
-settings.
+lists of players who are cleared or teleported on join, and the clownfish settings. The `fun` section sets how long trail blocks and paintball splats stay before they fade, and the longest disco
+a command can start.

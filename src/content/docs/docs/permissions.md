@@ -13,23 +13,19 @@ modification, come from the server config and change with your setup. World node
 |---------|------------|-------------|
 | adminchat | plex.adminchat | Talk privately with other admins |
 | adminworld | plex.adminworld | Teleport to the adminworld |
-| adventure | plex.gamemode.adventure | Set your own gamemode to adventure mode |
-| adventure (others) | plex.gamemode.adventure.others | Set another player's gamemode to adventure mode |
-| ban | plex.ban | Ban a player, offline or online |
-| banlist | plex.banlist | Manage the banlist |
-| bcastloginmessage | plex.broadcastloginmessage | Broadcast your login message for vanish support |
+| ban | plex.ban | Ban a player, offline or online. Add `-rb` to roll back their last day of block changes |
+| banip | plex.banip | Ban an IP address forever. You can give an IP or a player name |
+| banlist | plex.banlist | Show the active bans. Run `/banlist purge` from the console to unban everyone |
+| banname | plex.banname | Ban a username forever |
 | blockedit | plex.blockedit | Stop a player from modifying blocks |
 | commandspy | plex.commandspy | Spy on other players' commands |
 | consolesay | plex.consolesay | Show a message to everyone from the console |
-| creative | plex.gamemode.creative | Set your own gamemode to creative mode |
-| creative (others) | plex.gamemode.creative.others | Set another player's gamemode to creative mode |
 | entitywipe | plex.entitywipe | Remove entities that may cause lag, such as dropped items and boats |
 | flatlands | plex.flatlands | Teleport to the flatlands |
 | freeze | plex.freeze | Freeze a player |
-| gamemode | plex.gamemode | Change your own gamemode |
-| gamemode (others) | plex.gamemode.others | Change another player's gamemode |
 | kick | plex.kick | Kick a player |
 | list | plex.list | Show a list of online players |
+| list -d | plex.list | Show the list with display names |
 | list -v | plex.list.vanished | Show vanished players only |
 | localspawn | plex.localspawn | Teleport to the spawn of your current world |
 | lockup | plex.lockup | Lock up a player |
@@ -47,6 +43,7 @@ modification, come from the server config and change with your setup. World node
 | plex modules update | plex.modules.update | Update the modules |
 | plex modules install | plex.modules.install | Install a module by name |
 | plex modules uninstall | plex.modules.uninstall | Uninstall a module |
+| protect | plex.protect | Create and manage WorldGuard regions from flag presets. The command exists only when WorldGuard is installed |
 | punishments | plex.punishments | Open the punishments dialog |
 | rawsay | plex.rawsay | Show a raw message to everyone |
 | removeloginmessage | plex.removeloginmessage | Remove your own login message |
@@ -55,13 +52,9 @@ modification, come from the server config and change with your setup. World node
 | setloginmessage | plex.setloginmessage | Set your own login message |
 | setloginmessage -o | plex.setloginmessage.others | Set another player's login message |
 | smite | plex.smite | Smite a player |
-| spectator | plex.gamemode.spectator | Set your own gamemode to spectator mode |
-| spectator (others) | plex.gamemode.spectator.others | Set another player's gamemode to spectator mode |
-| survival | plex.gamemode.survival | Set your own gamemode to survival mode |
-| survival (others) | plex.gamemode.survival.others | Set another player's gamemode to survival mode |
 | tag | plex.tag | Set or clear your prefix |
 | tag clear | plex.tag.clear.others | Clear another player's prefix |
-| tempban | plex.tempban | Temporarily ban a player |
+| tempban | plex.tempban | Temporarily ban a player. Add `-rb` to roll back their last day of block changes |
 | tempmute | plex.tempmute | Temporarily mute a player |
 | toggle | plex.toggle | Toggle server features through a dialog |
 | unban | plex.ban | Unban a player, offline or online |
@@ -70,6 +63,19 @@ modification, come from the server config and change with your setup. World node
 | whohas | plex.whohas | List players with a specific item in their inventory |
 | whohas clear | plex.whohas.clear | Clear a specific item from all players' inventories |
 | world | plex.world | Teleport to a world |
+
+Plex has no game mode commands of its own. It also cancels every game mode change that a command makes, including the
+vanilla `/gamemode` command.
+
+Plex also uses these permission nodes that are not tied to a command.
+
+| Permission | Description |
+|------------|-------------|
+| plex.ban.bypass | Join the server while banned |
+| plex.gamemode.spectator.teleport | Teleport to a player while in spectator mode |
+| plex.mute.bypass | Chat and use blocked commands while chat is turned off |
+| plex.notes.notify | Get an alert when a player with notes joins |
+| plex.world.playerworlds | See and enter player worlds with `/world` |
 
 ## Guilds module
 
@@ -95,6 +101,8 @@ modification, come from the server config and change with your setup. World node
 | guild warps | plex.guilds.warps | Show a clickable list of guild warps |
 | guild world | plex.guilds.world | Teleport to the guild world |
 
+The command also works as `/guilds` and `/g`.
+
 ## HTTPD module
 
 The HTTPD module does not use Bukkit permission nodes. It controls access through staff login. A user who signs in and
@@ -113,13 +121,15 @@ The module also uses two permission nodes that are not tied to a command.
 | Permission | Description |
 |------------|-------------|
 | plex.libsdisguises.bypass | Exempt a player from `/undisguiseall`. The `-a` flag ignores this permission. |
-| plex.libsdisguises.player | Keep the fake name and skin when disguised as another player. Without it, the disguise shows the real name and skin. |
+| plex.libsdisguises.player | Keep the fake name when disguised as another player. Without it, the disguise shows the real name but keeps the fake skin. |
 
 ## NickMiniMessage module
 
 | Command | Permission | Description |
 |---------|------------|-------------|
 | nickmm | plex.nickmm | Change your nickname with MiniMessage formatting |
+
+The command also works as `/nickminimessage`.
 
 The module also uses two permission nodes that are not tied to a command.
 
@@ -146,24 +156,38 @@ The module also uses one permission node that is not tied to a command.
 |---------|------------|-------------|
 | admininfo | plex.tfmextras.admininfo | Show information on how to apply for admin |
 | autoclear | plex.tfmextras.autoclear | Toggle whether a player has their inventory cleared when they join |
-| autoteleport | plex.tfmextras.autotp | Teleport yourself at random, or toggle auto-teleport on join for a player |
+| autoteleport | plex.tfmextras.autotp | Teleport yourself at random |
+| cage | plex.tfmextras.cage | Trap a player in a cage until it is removed |
 | cake | plex.tfmextras.cake | Give a cake to everyone on the server |
 | cartsit | plex.tfmextras.cartsit | Sit in the nearest minecart, or eject the player in it |
 | clearchat | plex.tfmextras.clearchat | Clear the chat |
 | cloudclear | plex.tfmextras.cloudclear | Clear lingering area-effect clouds |
 | clownfish | plex.tfmextras.clownfish | Give a clownfish that knocks players back |
-| eject | plex.tfmextras.eject | Remove all passengers from a player |
+| cookie | plex.tfmextras.cookie | Give a cookie to everyone on the server |
+| disco | plex.tfmextras.disco | Turn the floor under a player into a dance floor |
+| effect clear | plex.tfmextras.effect.clear | Clear your own potion effects |
+| effect give | plex.tfmextras.effect.give | Give yourself a potion effect |
+| eject | plex.tfmextras.eject | Remove all passengers from yourself |
+| emf | plex.tfmextras.emf | Strike a player with lightning and kill them |
 | enchant | plex.tfmextras.enchant | Enchant the item in your hand |
-| emf | plex.tfmextras.emf | Make a player speak English |
 | expel | plex.tfmextras.expel | Push away nearby players |
+| gravity | plex.tfmextras.gravity | Change your own gravity for this session |
 | jumppads | plex.tfmextras.jumppads | Enable jump pads for yourself or another player |
-| orbit | plex.tfmextras.orbit | Launch a player upward at speed |
+| orbit | plex.tfmextras.orbit | Keep a player floating upward until you stop it |
+| paintball | plex.tfmextras.paintball | Give snowballs that paint what they hit for a few seconds |
 | randomfish | plex.tfmextras.randomfish | Spawn a random fish at your location |
+| rocket | plex.tfmextras.rocket | Launch a player into the sky on a rocket |
+| size | plex.tfmextras.size | Change your own size for this session |
+| trail | plex.tfmextras.trail | Toggle a rainbow trail that fades behind you |
 
 The module also uses these permission nodes that are not tied to a command.
 
 | Permission | Description |
 |------------|-------------|
-| plex.tfmextras.autotp.other | Toggle auto-teleport on join for another player |
+| plex.tfmextras.autotp.other | Toggle auto-teleport on join for a named player |
 | plex.tfmextras.clownfish.restrict | Restrict a player with `/clownfish restrict` |
+| plex.tfmextras.effect.clear.others | Clear another player's potion effects |
+| plex.tfmextras.effect.give.others | Give another player a potion effect |
+| plex.tfmextras.gravity.others | Change another player's gravity |
 | plex.tfmextras.jumppads.others | Set the jump-pad mode of another player |
+| plex.tfmextras.size.others | Change another player's size |

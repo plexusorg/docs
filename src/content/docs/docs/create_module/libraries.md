@@ -76,17 +76,20 @@ through `api().storage()`.
 a helper to build prefixed table names, a migration runner, and a JDBI handle for queries. Ship your schema as versioned
 SQL files and run them through `migrations()`, so the tables are created on first run and upgraded on later runs.
 
+Put the SQL files in your JAR under `db/migration/<dialect>/`, with one folder per dialect: `sqlite`, `mariadb`, and
+`postgres`. Name each file with a version and a short name, such as `001_create_tables.sql`. Write
+`{{table:local_name}}` in a script where you need a table name, and Plex replaces it with the prefixed name.
+
 For simple per-player values, `api().players().moduleData(this, uuid)` returns a small key-value store for one player,
 scoped to your module. It reads and writes strings, numbers, booleans, and JSON.
 
 ## Run tasks on a schedule
 
-Reach the scheduler through `api().scheduler()`. The scheduler is Folia-aware, so use it instead of the Bukkit scheduler
-when you need Folia support. It has methods for global tasks, asynchronous tasks, region tasks, and entity tasks, and an
-`asyncExecutor()` for `CompletableFuture` work.
+Plex has no scheduler API. Call Paper's schedulers directly and pass `plugin()` as the task owner. Pass every retained
+or delayed task to `ownTask(...)`, so module unload cancels it.
 
 ```java
-api().scheduler().runAsync(task -> {
-    // Runs off the main thread.
-});
+ownTask(Bukkit.getRegionScheduler().run(plugin(), location, task -> {
+    // Runs on the region that owns the location.
+}));
 ```

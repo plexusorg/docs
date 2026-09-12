@@ -10,8 +10,10 @@ EssentialsX on the server. If EssentialsX is missing, the module does not start.
 
 ### nickmm \<nickname\>
 
-The permission for the command is `plex.nickmm`. You can only run it in game. Run the command with the nickname that you
-want. You can use MiniMessage formatting.
+Alias: `nickminimessage`. The permission for the command is `plex.nickmm`. You can only run it in game. Run the command
+with the nickname that you want. You can use MiniMessage formatting.
+
+The nickname must be one word. The command ignores all text after the first space.
 
 Examples:
 - Rainbow nickname: `/nickmm <rainbow>MyNickname`
@@ -19,6 +21,9 @@ Examples:
 - Two colors: `/nickmm <red>My<blue>Nickname`
 
 You can read the full MiniMessage guide [here](https://docs.advntr.dev/minimessage/format.html).
+
+These tags do not work in a nickname. The module ignores them: `click`, `hover`, `insertion`, `obfuscated`, `newline`,
+`lang`, `key`, and `translate`. It also ignores the short forms `insert`, `obf`, and `br`.
 
 ## Permissions
 

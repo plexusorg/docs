@@ -20,23 +20,24 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid>
     <Card title="Performance oriented" icon="rocket">
-        Plex is built for performance. It stores player data in SQLite, MariaDB, or PostgreSQL. It can also use Redis for
-        indefinite bans instead of flat files.
+        Plex is built for performance. It stores player data in SQLite, MariaDB, or PostgreSQL. It can also use Redis to
+        share admin chat and punishment updates between the servers on your network.
     </Card>
     <Card title="Fully customizable" icon="setting">
         Plex fits your server. You can change almost every message and the chat format. You can also create as many
         custom worlds as you need.
     </Card>
     <Card title="Permissions" icon="list-format">
-        Plex works with any Vault-compatible permissions plugin. Use permission nodes to control what each player can do,
-        and give players fake op when you need to.
+        Plex works with any Vault-compatible permissions plugin. Use permission nodes to control what each player can do.
+        The FalseOp module can make players look like operators without giving them real op.
     </Card>
     <Card title="Modular" icon="cloud-download">
         Plex has a module system. Add or remove modules to fit your server. Modules can add large features, such as a
         web dashboard through HTTPD.
     </Card>
     <Card title="Converters" icon="random">
-        Plex includes tools to convert your TotalFreedomMod data, so you do not start from scratch when you move to Plex.
+        Moving from TotalFreedomMod? IBConverter turns your existing indefinite bans into Plex's format, so you do not
+        start from scratch.
     </Card>
     <Card title="Quality control" icon="sun">
         Every release is tested to catch bugs before they reach your server. The codebase is built for stability and fast

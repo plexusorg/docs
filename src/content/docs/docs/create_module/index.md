@@ -19,8 +19,8 @@ Plex loads every JAR in `plugins/Plex/modules/` at startup. For each module, Ple
 of your main class, and gives it a data folder, a logger, and the Plex API. Plex then drives the module through three
 lifecycle methods.
 
-1. `load()` runs first, for every module, before any module is enabled. Most modules do not need it.
-2. `enable()` runs next, for every module. Register your commands and listeners and read your configuration here.
+1. `load()` runs first, for every module, before any module is enabled. Register your commands and read your configuration here.
+2. `enable()` runs next, for every module. Register your listeners here.
 3. `disable()` runs at shutdown or reload. Plex unregisters your commands and listeners for you. Release any other resources here.
 
 You reach every supported feature through one method, `api()`. It returns the Plex API facade. From there you call
@@ -28,9 +28,9 @@ You reach every supported feature through one method, `api()`. It returns the Pl
 [Plex API reference](/docs/create_module/api) page lists them all.
 
 :::note
-Register your commands and listeners in `enable()`. Plex adds them before Paper builds the server command list, so they
-work as soon as the server starts. If you register a command after the server has started, it does not appear until the
-next server restart.
+Register your commands in `load()`. Plex adds them before Paper builds the server command list, so they work as soon as
+the server starts. If you register a command after the server has started, it does not appear until the next server
+restart. Register your listeners in `enable()`.
 :::
 
 ## Updates

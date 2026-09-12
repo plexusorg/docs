@@ -3,8 +3,8 @@ title: Listeners
 description: Add an event listener to a Plex module
 ---
 
-A listener extends `PlexListener`. It works like any Bukkit listener, with `@EventHandler` methods. A listener has no
-built-in `api()` method, so pass the module to the listener if the listener needs the API.
+A listener implements `org.bukkit.event.Listener`. It works like any Bukkit listener, with `@EventHandler` methods. A
+listener has no built-in `api()` method, so pass the module to the listener if the listener needs the API.
 
 ```java title="src/main/java/dev/plex/listener/ExampleListener.java"
 package dev.plex.listener;
@@ -12,9 +12,10 @@ package dev.plex.listener;
 import dev.plex.ExampleModule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class ExampleListener extends PlexListener
+public class ExampleListener implements Listener
 {
     private final ExampleModule module;
 

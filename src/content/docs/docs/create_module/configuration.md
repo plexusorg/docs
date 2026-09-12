@@ -7,27 +7,27 @@ description: Add a configuration file and a message file to a Plex module
 
 To ship a configuration file, put the default file in `src/main/resources`.
 
-Create a `ModuleConfig` in your main class. The first path is the resource inside the JAR. The second path is where the
-file goes inside the module data folder.
+Create a `ModuleConfiguration` in your main class with `api().moduleConfigs().create(...)`, then load it. The file name
+is both the resource inside the JAR and the file inside the module data folder.
 
 ```java title="src/main/java/dev/plex/ExampleModule.java"
 package dev.plex;
 
-import dev.plex.config.ModuleConfig;
+import dev.plex.api.config.ModuleConfiguration;
 import dev.plex.module.PlexModule;
 
 public class ExampleModule extends PlexModule
 {
-    private ModuleConfig config;
+    private ModuleConfiguration config;
 
     @Override
-    public void enable()
+    public void load()
     {
-        config = new ModuleConfig(this, "config.yml", "config.yml");
+        config = api().moduleConfigs().create(this, "config.yml");
         config.load();
     }
 
-    public ModuleConfig getConfig()
+    public ModuleConfiguration getConfig()
     {
         return config;
     }
@@ -43,35 +43,40 @@ boolean enabled = getConfig().getBoolean("feature.enabled", false);
 int limit = getConfig().getInt("feature.limit", 10);
 ```
 
-`ModuleConfig` has `getString`, `getInt`, `getLong`, `getDouble`, `getBoolean`, and `get`, each with an optional default
-value. Use `set(path, value)` and `save()` to write changes back to disk.
+`ModuleConfiguration` extends the Bukkit `YamlConfiguration` class, so it has `getString`, `getInt`, `getLong`,
+`getDouble`, `getBoolean`, and `get`, each with an optional default value. Use `set(path, value)` and `save()` to write
+changes back to disk.
 
 ## Messages
 
 Keep user-facing text in a message file, so server owners can change it. Put the default file in `src/main/resources`.
 Plex message files use
-[MiniMessage](https://docs.advntr.dev/minimessage/format) formatting. Use `{0}`, `{1}`, and so on for replacement values.
+[MiniMessage](https://docs.advntr.dev/minimessage/format) formatting. Write a replacement value as a named tag, such as
+`<player>`.
 
 ```yaml title="src/main/resources/messages.yml"
-welcome: "<gray>Welcome, <yellow>{0}</yellow>."
+welcome: "<gray>Welcome, <yellow><player></yellow>."
 featureDisabled: "<red>That feature is disabled."
 ```
 
-Load the file in `enable()` with `loadMessages`. Plex copies it to `plugins/Plex/modules/Module-Example/messages.yml`.
+Load the file in `load()` with `loadMessages`. Plex copies it to `plugins/Plex/modules/Module-Example/messages.yml`.
 
 ```java
 @Override
-public void enable()
+public void load()
 {
     loadMessages("messages.yml");
 }
 ```
 
 Read a message as a component or as a string. These methods work in your main class and in any command that extends
-`SimplePlexCommand`.
+`SimplePlexCommand`. Pass one `TagResolver` for each named tag, such as `Placeholder.unparsed`. `messageString` takes no
+placeholders and returns the raw MiniMessage template.
 
 ```java
-Component welcome = messageComponent("welcome", player.getName());
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+
+Component welcome = messageComponent("welcome", Placeholder.unparsed("player", player.getName()));
 String plain = messageString("featureDisabled");
 ```
 

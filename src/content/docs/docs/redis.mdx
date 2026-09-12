@@ -80,7 +80,7 @@ data:
         password: 'your_secure_password_here'
 ```
 
-Replace `your_secure_password_here` with the password you made for Redis. Plex uses Redis for indefinite bans and for passing punishment and admin-chat messages between servers on your network. Plex stores player data and punishments in the SQL database, not in Redis.
+Replace `your_secure_password_here` with the password you made for Redis. Plex uses Redis to pass admin-chat messages between servers and to tell the other servers when a punishment changes. Plex stores player data, punishments, and indefinite bans outside Redis.
 
 ### Firewall Configuration
 If you are using a firewall, you may have to allow port `6380`. It is safe to allow connections from anywhere provided you have followed the documentation correctly.

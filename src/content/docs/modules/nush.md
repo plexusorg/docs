@@ -3,16 +3,19 @@ title: NUSH
 description: An overview of the NUSH module for Plex
 ---
 
-The NUSH module helps you stop raids. When a new player joins, only staff and the player can see the player's chat
-messages. Staff can then let the player chat where everyone sees it. If the player spams, staff can ban the player, and
-regular players do not see the spam. You can also set a wait time, so a new player can chat with everyone after that time
-without staff action.
+The NUSH module helps you stop raids. A new player is a player who joins the server for the first time. When a new
+player joins, only staff and the player can see the player's chat messages. Staff can then let the player chat where
+everyone sees it. If the player spams, staff can ban the player, and regular players do not see the spam. You can also
+set a wait time, so a new player can chat with everyone after that time without staff action.
+
+Staff see a held message with a `[NUSH]` prefix. The new player sees the message without the prefix, and does not know
+that NUSH holds it back.
 
 ## Permissions
 
 The `plex.nush.use` permission grants access to the NUSH command and all of its subcommands. The `plex.nush.view`
-permission lets a player see the chat messages that NUSH holds back. Give both permissions to your staff, and give
-neither to regular players.
+permission lets a player see the chat messages that NUSH holds back. It also sends the player an alert when NUSH marks a
+new player. Give both permissions to your staff, and give neither to regular players.
 
 ## Commands
 
@@ -22,7 +25,8 @@ Turns NUSH on. New players wait before their chat messages reach everyone.
 
 ### nush off
 
-Turns NUSH off. This is the default state. All new players can chat normally.
+Turns NUSH off. This is the default state. All new players can chat normally. The command also releases every player on
+the list at once.
 
 ### nush status
 
@@ -46,3 +50,6 @@ The module writes a `config.yml` file to its data folder with two options.
 |-----|---------|-------------|
 | server.enabled | false | Whether NUSH is on. The `/nush on` and `/nush off` commands change this value. |
 | server.wait_time | 5 | The wait time in minutes for a new player. The `/nush time` command changes this value. |
+
+The module also writes a `messages.yml` file to its data folder. Edit this file to change the messages that the module
+sends.

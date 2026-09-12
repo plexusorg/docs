@@ -42,7 +42,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
     compileOnly("dev.plex:api:2.0-SNAPSHOT")
 }
 
@@ -77,6 +77,8 @@ main: dev.plex.ExampleModule
 description: An example module for Plex
 version: 2.0-SNAPSHOT
 apiCompatibility: 1
+updater:
+  enabled: false
 ```
 
 The fields are as follows.
@@ -98,8 +100,8 @@ and [Build and install](/docs/create_module/install).
 
 ## The main class
 
-Your main class extends `PlexModule`. Register your commands and listeners in `enable()`. Pass `this` to a command or
-listener that needs the module, so it can reach `api()` and your config.
+Your main class extends `PlexModule`. Register your commands in `load()` and your listeners in `enable()`. Pass `this` to
+a command or listener that needs the module, so it can reach `api()` and your config.
 
 ```java title="src/main/java/dev/plex/ExampleModule.java"
 package dev.plex;
@@ -111,13 +113,18 @@ import dev.plex.module.PlexModule;
 public class ExampleModule extends PlexModule
 {
     @Override
-    public void enable()
+    public void load()
     {
         registerCommand(new ExampleCommand());
+    }
+
+    @Override
+    public void enable()
+    {
         registerListener(new ExampleListener(this));
         api().logging().info("{0} enabled with Plex API compatibility {1}",
                 getPlexModuleFile().getName(),
-                api().compatibility().version());
+                api().apiCompatibilityVersion());
     }
 
     @Override
@@ -133,13 +140,22 @@ public class ExampleModule extends PlexModule
 | Method | Description |
 |--------|-------------|
 | `api()` | Returns the Plex API facade. |
+| `plugin()` | Returns the Paper plugin that owns this module's native scheduled tasks. |
+| `ownTask(ScheduledTask)` | Registers a native Paper task, so Plex cancels it when the module unloads. |
 | `registerCommand(PlexCommand)` | Registers a command owned by this module. |
 | `registerListener(Listener)` | Registers a listener owned by this module. |
 | `unregisterCommand(PlexCommand)` / `unregisterListener(Listener)` | Removes a command or listener. |
+| `getCommand(String)` | Returns a tracked command by name or alias, or `null` when no command matches. |
+| `getPlexModuleFile()` | Returns the information that Plex read from your `module.yml`. |
 | `getDataFolder()` | Returns the module data folder, `plugins/Plex/modules/<name>/`. |
 | `getLogger()` | Returns the module logger. |
 | `getResource(String)` | Opens a file from the module JAR. |
 | `loadMessages(String)` | Loads the module message file. See [Messages](/docs/create_module/configuration#messages). |
+| `messages()` | Returns the loaded message file, or `null` when the module loads none. |
+| `messageComponent(String, TagResolver...)` | Resolves a message key into a component, with named placeholders. |
+| `messageString(String)` | Returns the raw MiniMessage template for a message key. |
+| `kickPlayerOnShutdown(Player, Component)` | Disconnects a player during module shutdown. |
+| `completeShutdownBeforeClose(CompletableFuture<Void>)` | Keeps the module class loader open until bounded shutdown work finishes. |
 
 Plex removes tracked commands and listeners for you when the module disables. You only need `disable()` for resources that
 Plex does not track, such as an external connection or a third-party listener.

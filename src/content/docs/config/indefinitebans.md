@@ -4,20 +4,31 @@ description: Instructions for how to use indefinite bans within Plex
 ---
 
 Plex has an indefinite ban system. Indefinite bans are reserved for players who should not automatically be unbanned.
-Anyone who has access to the `indefbans.yml` file can add indefinite bans. If you are using Redis, all indefinite bans
-will be uploaded to Redis on startup. From that point on, indefinite bans will be fetched from Redis instead of the
-`indefbans.yml` file. **Redis is NOT required to use indefinite bans.** If you do not use Redis, Plex will fetch
-indefinite bans from the `indefbans.yml` file. No matter which medium you use, you will always add new entries to the
-`indefbans.yml` file. Note that there is no in-game command for adding or removing indefinite bans.
+Plex reads the indefinite bans from the `/plugins/Plex/indefbans.yml` file. Redis is not involved. If you run several
+servers on Redis, Plex only tells the other servers to refresh their ban decisions.
+
+You can add an indefinite ban in game:
+
+- `/banname <username> [reason]` bans a username.
+- `/banip <ip or player> [reason]` bans an IP address. Give a player name to ban their current or last known IP address.
+
+Both commands write the new entry into `indefbans.yml`. There is no command to remove an indefinite ban. Delete the
+entry from the file and run `/plex reload`.
 
 ## Default file
 
 ```yaml title="/plugins/Plex/indefbans.yml"
 # Plex Indefinite Bans File
 # Players with their UUID / IP / Usernames in here will be indefinitely banned until removed
+# Root keys are organizational labels only, they do not affect ban matching.
+# Choose any non-empty, unique label without dots (.), including numbers or names.
+# Quote labels containing YAML punctuation, such as "case: repeated evasion".
+# Each block can contain multiple related usernames, UUIDs, and IPs.
 
 # If you want to get someone's UUID, use https://api.ashcon.app/mojang/v2/user/<username>
 griefers:
+  # The reason is optional. If set, it is shown on the ban screen and in the HTTPD's indefinite bans page.
+  reason: "Repeated griefing"
   users:
     - "badplayer123"
     - "badplayer321"
@@ -26,8 +37,6 @@ griefers:
   ips:
     - 123.123.123.123
 
-# Note that these keys can be anything, they are simply to help you keep things organized.
-# They are not used within the plugin. Duplicate keys are not allowed, and will not work.
 bypassers:
   users:
     - "bypasser1"
@@ -38,12 +47,14 @@ bypassers:
 
 ### How it works
 
-Each entry starts with a description. This is to help you organize indefinite bans. For example, you could have a
-section `griefers` for serial griefers or `bypassers` for players who have bypassed bans. The `users` section is for
-usernames only, the `uuids` section is only for UUIDs, and the `ips` section is for IPs only. If you do not want to ban
-a type, you do not have to include it. Note that no duplicate descriptions can exist. This means you cannot have
-`bypassers` as a section twice. The actual descriptions are not used in the plugins and can be anything you like. They
-do not affect the indefinite ban in any way.
+Each block starts with a label. The label helps you organize indefinite bans. For example, you could have a block
+`griefers` for serial griefers or `bypassers` for players who have bypassed bans. Plex does not use the label to match a
+ban, so you can name it anything you like. A label must be unique, so you cannot have `bypassers` twice. A label must not
+contain a dot. Put quotation marks around a label that contains a colon, such as `"case: repeated evasion"`.
+
+Each block takes an optional `reason`. Plex shows the reason on the ban screen. The `users` section is for usernames
+only, the `uuids` section is only for UUIDs, and the `ips` section is for IPs only. If you do not want to ban a type, you
+do not have to include it.
 
 ### Converting indefinite bans
 
