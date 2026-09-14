@@ -143,12 +143,14 @@ The module also uses two permission nodes that are not tied to a command.
 | Command | Permission | Description |
 |---------|------------|-------------|
 | nush | plex.nush.use | Toggle and manage NUSH |
+| nush allow, nush revoke | plex.nush.allow | Allow a player or restrict a player again. Also requires plex.nush.use |
 
-The module also uses one permission node that is not tied to a command.
+The module also uses these permissions:
 
 | Permission | Description |
 |------------|-------------|
-| plex.nush.view | View the messages that NUSH holds back from new players |
+| plex.nush.view | Receive the staff feed and alerts, including restricted players' normal join and leave messages while NUSH is on |
+| plex.nush.bypass | Bypass automatic restriction on arrival or when staff turn NUSH on. Does not remove an existing restriction |
 
 ## TFMExtras module
 
@@ -157,14 +159,13 @@ The module also uses one permission node that is not tied to a command.
 | admininfo | plex.tfmextras.admininfo | Show information on how to apply for admin |
 | autoclear | plex.tfmextras.autoclear | Toggle whether a player has their inventory cleared when they join |
 | autoteleport | plex.tfmextras.autotp | Teleport yourself at random |
-| cage | plex.tfmextras.cage | Trap a player in a cage until it is removed |
+| cage | plex.tfmextras.cage | Cage a player or remove their cage (admin-only) |
 | cake | plex.tfmextras.cake | Give a cake to everyone on the server |
-| cartsit | plex.tfmextras.cartsit | Sit in the nearest minecart, or eject the player in it |
 | clearchat | plex.tfmextras.clearchat | Clear the chat |
 | cloudclear | plex.tfmextras.cloudclear | Clear lingering area-effect clouds |
 | clownfish | plex.tfmextras.clownfish | Give a clownfish that knocks players back |
 | cookie | plex.tfmextras.cookie | Give a cookie to everyone on the server |
-| disco | plex.tfmextras.disco | Turn the floor under a player into a dance floor |
+| disco | plex.tfmextras.disco | Start or stop your own dance floor |
 | effect clear | plex.tfmextras.effect.clear | Clear your own potion effects |
 | effect give | plex.tfmextras.effect.give | Give yourself a potion effect |
 | eject | plex.tfmextras.eject | Remove all passengers from yourself |
@@ -173,21 +174,29 @@ The module also uses one permission node that is not tied to a command.
 | expel | plex.tfmextras.expel | Push away nearby players |
 | gravity | plex.tfmextras.gravity | Change your own gravity for this session |
 | jumppads | plex.tfmextras.jumppads | Enable jump pads for yourself or another player |
-| orbit | plex.tfmextras.orbit | Keep a player floating upward until you stop it |
+| orbit | plex.tfmextras.orbit | Start or stop your own orbit |
 | paintball | plex.tfmextras.paintball | Give snowballs that paint what they hit for a few seconds |
 | randomfish | plex.tfmextras.randomfish | Spawn a random fish at your location |
-| rocket | plex.tfmextras.rocket | Launch a player into the sky on a rocket |
+| rocket | plex.tfmextras.rocket | Launch yourself on a rocket without a public announcement |
 | size | plex.tfmextras.size | Change your own size for this session |
 | trail | plex.tfmextras.trail | Toggle a rainbow trail that fades behind you |
 
-The module also uses these permission nodes that are not tied to a command.
+Grant the base command permission as well as its `.others` permission to let staff target other players.
+Keep the cage, cake, and cookie permissions for admins.
+For disco, grant `plex.tfmextras.disco` for self-use. Also grant `plex.tfmextras.disco.everyone` for
+`/disco everyone [seconds|stop]`. You cannot target one other player.
+
+The module also uses these additional permissions:
 
 | Permission | Description |
 |------------|-------------|
-| plex.tfmextras.autotp.other | Toggle auto-teleport on join for a named player |
+| plex.tfmextras.autotp.others | Toggle auto-teleport on join for a named player |
 | plex.tfmextras.clownfish.restrict | Restrict a player with `/clownfish restrict` |
+| plex.tfmextras.disco.everyone | Start or stop dance floors for all online players; also requires plex.tfmextras.disco |
 | plex.tfmextras.effect.clear.others | Clear another player's potion effects |
 | plex.tfmextras.effect.give.others | Give another player a potion effect |
 | plex.tfmextras.gravity.others | Change another player's gravity |
 | plex.tfmextras.jumppads.others | Set the jump-pad mode of another player |
+| plex.tfmextras.orbit.others | Start or stop another player's orbit |
+| plex.tfmextras.rocket.others | Launch another player on a rocket with an admin announcement |
 | plex.tfmextras.size.others | Change another player's size |
