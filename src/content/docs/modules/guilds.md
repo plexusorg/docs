@@ -31,7 +31,7 @@ how to create a guild. Help and tab completion show only the subcommands that yo
 | `guild invite <player>` | Officer | Invite an online player. |
 | `guild guest add <player> [time]` | Officer | Give a player guest access to the guild world. |
 | `guild guest remove <player>` | Officer | Remove a guest immediately. |
-| `guild prefix [text]` | Owner | Set the guild prefix. Run it without text to clear the prefix. |
+| `guild prefix [text]` | Owner | Set the guild prefix. Every member shows the prefix before their tag in chat and in the tab list. Run it without text to clear the prefix. |
 | `guild resetworld <guild> [confirm]` | Staff | Reset a guild world. See [Reset a guild world](#reset-a-guild-world). |
 
 Warp names use letters and numbers only, with a maximum of 16 characters. You cannot name a warp `set` or `delete`.
