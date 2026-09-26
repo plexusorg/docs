@@ -86,16 +86,21 @@ Plex also uses these permission nodes that are not tied to a command.
 | guild chat | plex.guilds.chat | Toggle guild chat or send a guild chat message |
 | guild create | plex.guilds.create | Create a guild with a name |
 | guild guest | plex.guilds.guests | Add or remove a guest of the guild world |
+| guild info | plex.guilds.info | Show information about a guild |
 | guild invite | plex.guilds.invite | Invite a player to the guild |
 | guild leave | plex.guilds.leave | Leave your guild, or disband it as the owner |
+| guild list | plex.guilds.list | List guilds |
 | guild prefix | plex.guilds.prefix | Set or clear the guild prefix |
 | guild resetworld | plex.guilds.resetworld | Reset a guild world (staff) |
-| guild visit | plex.guilds.world | Teleport to a guild world where you are a guest |
+| guild visit | plex.guilds.world | Teleport to a guild world where you have entry access |
 | guild warp | plex.guilds.warp | List, use, set, and delete guild warps |
-| guild world | plex.guilds.world | Teleport to your guild world |
+| guild world | plex.guilds.world | Visit your guild world; owners can also generate or reset it |
 
 The command also works as `/guilds` and `/g`. The guild role also controls some subcommands. For example, only officers
 and the owner can invite players. See the [Guilds page](/modules/guilds) for the roles.
+
+Give staff `plex.guilds.world.bypass` to let them enter guild worlds without membership or guest access. This permits
+entry only, not building, interaction, or guild management. Staff still need `plex.guilds.world` to use `/guild visit`.
 
 ## HTTPD module
 
