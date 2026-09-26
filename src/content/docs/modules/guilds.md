@@ -91,18 +91,27 @@ owner becomes an officer. The old owner can then stay or leave.
 A guild world is private. Members and guests can enter it. Staff with `plex.guilds.world.bypass` can also enter without
 joining the guild or receiving guest access. For `/guild visit <guild>`, staff also need `plex.guilds.world`.
 
-The bypass permits entry only. It does not grant permission to build, interact, or manage the guild. The module blocks
+The bypass also permits building and interaction in the world. It does not permit guild management. The module blocks
 entry for other players.
 
 An officer or the owner runs `guild guest add <player> [time]` to add a guest. The guest gets a message with a button to
 visit the world.
 
-- A new guest can look but cannot build. Switch the guest to build mode in the menu.
+- A new guest cannot build. The guest can open doors, trapdoors, and fence gates, and use buttons, levers, and pressure
+  plates. Switch the guest to build mode in the menu.
 - Guest access expires. The default time is 24 hours. Enter a time such as `30m`, `12h`, or `7d` to change it. The
   maximum time is 30 days. You can change both values in the configuration.
 - Run `guild guest add` again for an existing guest to reset the time. The mode stays the same.
 - When access ends or you remove a guest, the module moves the guest out of the world.
 - Guests cannot use warps.
+
+## Guild chat
+
+Run `guild chat` to switch your chat between guild chat and public chat. Run `guild chat <message>` to send one message
+to guild chat. Only the members of your guild see the message.
+
+For safety, staff with `plex.guilds.chat.spy` see the guild chat of every guild. Each message shows the name of its
+guild. The permission has no toggle.
 
 ## Leave or disband a guild
 

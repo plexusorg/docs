@@ -99,8 +99,11 @@ Plex also uses these permission nodes that are not tied to a command.
 The command also works as `/guilds` and `/g`. The guild role also controls some subcommands. For example, only officers
 and the owner can invite players. See the [Guilds page](/modules/guilds) for the roles.
 
-Give staff `plex.guilds.world.bypass` to let them enter guild worlds without membership or guest access. This permits
-entry only, not building, interaction, or guild management. Staff still need `plex.guilds.world` to use `/guild visit`.
+Give staff `plex.guilds.world.bypass` to let them enter, build, and interact in guild worlds without membership or guest
+access. It does not permit guild management. Staff still need `plex.guilds.world` to use `/guild visit`.
+
+Give staff `plex.guilds.chat.spy` to let them see the guild chat of every guild. Each message shows the name of its
+guild.
 
 ## HTTPD module
 
