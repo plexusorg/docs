@@ -52,8 +52,10 @@ Creating a guild does not generate its world. As the owner, run `/guild world ge
 After generation finishes, run `/guild world` to visit. You must reset an existing world before you can generate
 another one with a different terrain type.
 
-Every guild world has a fixed 500,000 by 500,000 block border, regardless of terrain type. The border is centered at
-X=0, Z=0 and extends 250,000 blocks in each direction. This also applies when you load an existing guild world.
+Every guild world uses the border width in `guilds.worlds.size`, regardless of terrain type. The default is 500,000 by
+500,000 blocks, centered at X=0, Z=0. The default border extends 250,000 blocks in each direction. The configured border
+also applies when you load or visit an existing guild world. Restart the server after you change this setting. Changing
+the border does not regenerate existing terrain.
 
 ## The guild menu
 
@@ -136,6 +138,7 @@ The module writes a `config.yml` file to its data folder.
 | guilds.log-chat-message | true | Whether to log guild chat messages to the console. |
 | guilds.guests.default-duration | 24h | The guest access time when `guild guest add` has no time. |
 | guilds.guests.max-duration | 30d | The longest guest access time that a player can give. |
+| guilds.worlds.size | 500000 | Border width in blocks for every terrain type. Use an even number from 16 to 59999968. |
 | guilds.worlds.backup-retention-days | 7 | How long to keep backups from world resets. |
 
 Durations use a whole number followed by `m` (minutes), `h` (hours), or `d` (days).
