@@ -82,10 +82,10 @@ Plex also uses these permission nodes that are not tied to a command.
 | Command | Permission | Description |
 |---------|------------|-------------|
 | guild | plex.guilds.guild | Open the guild menu, or show your invites if you are not in a guild |
+| guild access | plex.guilds.access | Set who can visit and build in the guild world |
 | guild accept | plex.guilds.accept | Accept a guild invite |
 | guild chat | plex.guilds.chat | Toggle guild chat or send a guild chat message |
 | guild create | plex.guilds.create | Create a guild with a name |
-| guild guest | plex.guilds.guests | Add or remove a guest of the guild world |
 | guild info | plex.guilds.info | Show information about a guild |
 | guild invite | plex.guilds.invite | Invite a player to the guild |
 | guild leave | plex.guilds.leave | Leave your guild, or disband it as the owner |
@@ -99,8 +99,8 @@ Plex also uses these permission nodes that are not tied to a command.
 The command also works as `/guilds` and `/g`. The guild role also controls some subcommands. For example, only officers
 and the owner can invite players. See the [Guilds page](/modules/guilds) for the roles.
 
-Give staff `plex.guilds.world.bypass` to let them enter, build, and interact in guild worlds without membership or guest
-access. It does not permit guild management. Staff still need `plex.guilds.world` to use `/guild visit`.
+Give staff `plex.guilds.world.bypass` to let them enter, build, and interact in every guild world without membership. It
+does not permit guild management. Staff still need `plex.guilds.world` to use `/guild visit`.
 
 Give staff `plex.guilds.chat.spy` to let them see the guild chat of every guild. Each message shows the name of its
 guild.
