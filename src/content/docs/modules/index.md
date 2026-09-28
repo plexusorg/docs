@@ -20,7 +20,7 @@ To build your own module, see [Creating a module](/docs/create_module).
 | Module | Description |
 |--------|-------------|
 | FalseOp | Makes clients think they have operator status |
-| Guilds | Adds player guilds with a guild world, roles, world access settings, and warps |
+| Guilds | Adds player guilds with a private guild world, roles, guests, and warps |
 | HTTPD | Runs a web dashboard and API for server data and admin tools |
 | LibsDisguises | Adds admin controls for the LibsDisguises plugin |
 | NickMiniMessage | Sets EssentialsX nicknames with MiniMessage formatting |
