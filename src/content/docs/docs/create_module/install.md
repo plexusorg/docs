@@ -9,8 +9,11 @@ Build the module with Gradle.
 ./gradlew build
 ```
 
-The JAR is in `build/libs/`. Copy it into the `plugins/Plex/modules/` folder on your server. Restart the server, or run
-`/plex modules reload` in game. Plex reads the new module and enables it.
+The JAR is in `build/libs/`. Copy it into the `plugins/Plex/modules/` folder on your server. Restart the server. Plex
+reads the new module and enables it.
+
+On Paper, you can also run `/plex modules reload` in game. Do not use reload if the module needs new libraries, because
+Plex downloads libraries only when the server starts. On Folia, you must restart the server.
 
 You can also manage modules in game.
 

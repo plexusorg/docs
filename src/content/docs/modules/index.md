@@ -19,11 +19,12 @@ To build your own module, see [Creating a module](/docs/create_module).
 
 | Module | Description |
 |--------|-------------|
+| 2FA | Adds two-factor authentication with the `/2fa` command |
 | FalseOp | Makes clients think they have operator status |
 | Guilds | Adds player guilds with a private guild world, roles, guests, and warps |
 | HTTPD | Runs a web dashboard and API for server data and admin tools |
 | LibsDisguises | Adds admin controls for the LibsDisguises plugin |
-| MiniMessageExtensions | Sets EssentialsX nicknames with MiniMessage formatting |
+| MiniMessageExtensions | Sets MiniMessage nicknames and chat color styles |
 | NUSH | Silences brand-new players to help you stop raids |
 | TFMExtras | Adds extra fun and admin commands in the style of TotalFreedomMod |
 

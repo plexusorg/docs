@@ -9,6 +9,9 @@ If your module needs a third-party library at runtime, do not shade it into the 
 loads it before your module starts. The Plex Modules Gradle Plugin writes the library metadata into your `module.yml`
 during the build.
 
+Plex downloads libraries only when the server starts. When you install a module with libraries, or add a library to a
+module, restart the server. `/plex modules reload` does not download new libraries.
+
 Apply the plugin, then add the plugin repository so Gradle can resolve it.
 
 ```kotlin title="settings.gradle.kts"

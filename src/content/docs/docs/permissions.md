@@ -14,9 +14,9 @@ modification, come from the server config and change with your setup. World node
 | adminchat | plex.adminchat | Talk privately with other admins |
 | adminworld | plex.adminworld | Teleport to the adminworld |
 | ban | plex.ban | Ban a player, offline or online. Add `-rb` to roll back their last day of block changes |
-| banip | plex.banip | Ban an IP address forever. You can give an IP or a player name |
+| banip | plex.banip | Ban an IP address or range for 24 hours. You can give an IP, a range, or a player name |
 | banlist | plex.banlist | Show the active bans. Run `/banlist purge` from the console to unban everyone |
-| banname | plex.banname | Ban a username forever |
+| banname | plex.banname | Ban a username for 24 hours |
 | blockedit | plex.blockedit | Stop a player from modifying blocks |
 | commandspy | plex.commandspy | Spy on other players' commands |
 | consolesay | plex.consolesay | Show a message to everyone from the console |
@@ -58,6 +58,8 @@ modification, come from the server config and change with your setup. World node
 | tempmute | plex.tempmute | Temporarily mute a player |
 | toggle | plex.toggle | Toggle server features through a dialog |
 | unban | plex.ban | Unban a player, offline or online |
+| unbanip | plex.unbanip | Remove an IP or range ban. You can give an IP, a range, or a player name |
+| unbanname | plex.unbanname | Remove a username ban |
 | unfreeze | plex.unfreeze | Unfreeze a player |
 | unmute | plex.unmute | Unmute a player |
 | whohas | plex.whohas | List players with a specific item in their inventory |
@@ -71,10 +73,11 @@ Plex also uses these permission nodes that are not tied to a command.
 
 | Permission | Description |
 |------------|-------------|
-| plex.ban.bypass | Join the server while banned |
+| plex.ban.bypass | Join the server while banned. It does not bypass indefinite bans from `indefbans.yml` |
 | plex.gamemode.spectator.teleport | Teleport to a player while in spectator mode |
 | plex.mute.bypass | Chat and use blocked commands while chat is turned off |
 | plex.notes.notify | Get an alert when a player with notes joins |
+| plex.playerlimitbypass | Join when the server is full. Plex kicks a random player without this permission to make room |
 | plex.world.playerworlds | See and enter player worlds with `/world` |
 
 ## Guilds module
@@ -129,9 +132,10 @@ The module also uses two permission nodes that are not tied to a command.
 
 | Command | Permission | Description |
 |---------|------------|-------------|
+| chatstyle | plex.chatstyle | Set a color style for your chat messages, or turn it off |
 | nickmm | plex.nickmm | Change your nickname with MiniMessage formatting |
 
-The command also works as `/nickminimessage`.
+The `nickmm` command also works as `/nickminimessage`.
 
 The module also uses two permission nodes that are not tied to a command.
 
@@ -161,7 +165,7 @@ The module also uses these permissions:
 | admininfo | plex.tfmextras.admininfo | Show information on how to apply for admin |
 | autoclear | plex.tfmextras.autoclear | Toggle whether a player has their inventory cleared when they join |
 | autoteleport | plex.tfmextras.autotp | Teleport yourself at random |
-| cage | plex.tfmextras.cage | Cage a player or remove their cage (admin-only) |
+| cage | plex.tfmextras.cage | Cage a player |
 | cake | plex.tfmextras.cake | Give a cake to everyone on the server |
 | clearchat | plex.tfmextras.clearchat | Clear the chat |
 | cloudclear | plex.tfmextras.cloudclear | Clear lingering area-effect clouds |
@@ -182,11 +186,12 @@ The module also uses these permissions:
 | rocket | plex.tfmextras.rocket | Launch yourself on a rocket without a public announcement |
 | size | plex.tfmextras.size | Change your own size for this session |
 | trail | plex.tfmextras.trail | Toggle a rainbow trail that fades behind you |
+| uncage | plex.tfmextras.cage | Remove a player's cage |
 
 Grant the base command permission as well as its `.others` permission to let staff target other players.
 Keep the cage, cake, and cookie permissions for admins.
-For disco, grant `plex.tfmextras.disco` for self-use. Also grant `plex.tfmextras.disco.everyone` for
-`/disco everyone [seconds|stop]`. You cannot target one other player.
+For disco, grant `plex.tfmextras.disco.others` to let staff start or stop a dance floor for another player, or for
+every online player with `-a`.
 
 The module also uses these additional permissions:
 
@@ -194,7 +199,7 @@ The module also uses these additional permissions:
 |------------|-------------|
 | plex.tfmextras.autotp.others | Toggle auto-teleport on join for a named player |
 | plex.tfmextras.clownfish.restrict | Restrict a player with `/clownfish restrict` |
-| plex.tfmextras.disco.everyone | Start or stop dance floors for all online players; also requires plex.tfmextras.disco |
+| plex.tfmextras.disco.others | Start or stop a dance floor for another player, or for every online player with `-a`; also requires plex.tfmextras.disco |
 | plex.tfmextras.effect.clear.others | Clear another player's potion effects |
 | plex.tfmextras.effect.give.others | Give another player a potion effect |
 | plex.tfmextras.gravity.others | Change another player's gravity |

@@ -27,35 +27,42 @@ Fun commands:
 - `cookie` gives a cookie to everyone.
 - `expel` pushes away nearby players.
 - `jumppads` enables jump pads for you or another player.
-- `orbit <player> [power]` keeps a player floating upward in survival mode until you run `orbit <player> stop`.
+- `orbit [power] [player|-a]` keeps a player floating upward in survival mode. If you do not name a player, it affects
+  you. Use `-a` to affect every online player. The power goes from 1 to 150, and the default is 100. Use
+  `orbit stop [player|-a]` to end it.
 - `paintball [color]` gives snowballs that paint whatever they hit. The paint fades after a few seconds.
 - `randomfish` spawns a random fish.
-- `rocket [player]` launches a player upward on a trail of flames, sets off a firework at the top, and lets the player
+- `rocket [player|-a]` launches a player upward on a trail of flames, sets off a firework at the top, and lets the player
   fall slowly.
 - `trail` toggles a rainbow trail under your feet that fades behind you.
 
 Player effects:
 - `cage <player> [outer] [inner]` traps a player in a cage of glass, or of the blocks you name. The player cannot move
-  or teleport out. `cage <player> off` removes the cage. Blocks that fall, flow, or explode are not allowed.
-- Use `disco [seconds]` to start your own dance floor with music and color changes. It lasts 10 seconds unless you
-  give a time. Use `disco stop` to end it early.
-- Use `disco everyone [seconds|stop]` to start or stop dance floors for all online players. You need both
-  `plex.tfmextras.disco` and `plex.tfmextras.disco.everyone`. You cannot target one other player.
-- `gravity <player> <low|normal|high|value>` changes how fast a player falls. `reset` restores the normal value.
-- `size <player> <scale>` makes a player larger or smaller, from 0.1 to 10. `reset` restores the normal size.
+  or teleport out. The outer wall must be a solid block that does not fall and is not TNT. The inner fill follows the
+  same rule, but it can also be air or water. Waterlogged blocks are not allowed.
+- `uncage <player>` removes the cage and puts the old blocks back.
+- Use `disco [seconds|stop] [player|-a]` to start or stop a dance floor with music and color changes. If you do not
+  name a player, it affects you. Use `-a` to affect every online player. It lasts 10 seconds unless you give a time.
+  Use `disco stop` to end it early.
+- `gravity <low|normal|high|reset|value> [player|-a]` changes how fast a player falls. If you do not name a player, it
+  affects you. Use `-a` to affect every online player. A custom value goes from 0.01 to 1.0. `normal` and `reset`
+  restore the normal value.
+- `size <scale|reset> [player|-a]` makes a player larger or smaller, from 0.1 to 10. If you do not name a player, it
+  affects you. Use `-a` to affect every online player. `reset` restores the normal size.
 
 Cleanup commands:
 - `cloudclear` clears lingering area-effect clouds.
 - `eject` removes all passengers from you.
 
 The trail, paintball, cage, and disco commands only change blocks for a short time. Trail blocks and paintball splats
-fade on their own. A cage or a dance floor goes away when the command ends or the player leaves. The module puts every
+fade on their own. A cage goes away when you run `uncage` or the player leaves. A dance floor goes away when it ends or
+the player leaves. The module puts every
 original block back, and it also does this when the module unloads. Size and gravity changes last until the player
 leaves the server or the module unloads.
 
 For orbit, rocket, size, and gravity, grant the base command permission for self-use.
-Also grant the matching `.others` permission to staff who can target other players. Keep cage, cake, and cookie for admins.
-Grant `plex.tfmextras.disco` for self-use. Also grant `plex.tfmextras.disco.everyone` to staff who can affect everyone.
+Also grant the matching `.others` permission to staff who can target other players or everyone with `-a`. Keep cage, cake, and cookie for admins.
+Grant `plex.tfmextras.disco` for self-use. Also grant `plex.tfmextras.disco.others` to staff who can target another player or everyone.
 Use `/rocket` to launch yourself. You receive a private reply. To launch someone else, use `/rocket <player>` with
 `plex.tfmextras.rocket.others`; this keeps the admin announcement.
 

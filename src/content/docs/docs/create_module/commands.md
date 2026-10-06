@@ -146,7 +146,7 @@ to `ownTask(...)`, so module unload cancels it.
 | `permissionMessage()` | Returns the standard no-permission message for this command. |
 | `broadcast("...")` | Sends a MiniMessage broadcast to everyone. |
 | `send(audience, message)` | Sends a message to an audience. |
-| `getNonNullPlayer("name")` | Returns an online player, or throws `PlayerNotFoundException`. |
+| `getNonNullPlayer("name")` | Returns the online player that matches a UUID, an exact name, or the start of one name. Throws `PlayerNotFoundException` if no player matches, or `AmbiguousPlayerException` if more than one player matches. |
 | `onlinePlayerNames()` | Returns the names of online players. |
 | `checkPermission(sender, "node")` | Checks a permission, or throws `CommandFailException`. |
 | `silentCheckPermission(sender, "node")` | Checks a permission without throwing. |
@@ -159,6 +159,7 @@ from the command body to stop the command with a clear response.
 | Exception | Result |
 |-----------|--------|
 | `PlayerNotFoundException` | Sends the `playerNotFound` message. |
+| `AmbiguousPlayerException` | Sends the `playerAmbiguous` message with the matching names. |
 | `PlayerNotBannedException` | Sends the `playerNotBanned` message. |
 | `ConsoleOnlyException` | Sends the `consoleOnly` message. |
 | `ConsoleMustDefinePlayerException` | Sends the `consoleMustDefinePlayer` message. |

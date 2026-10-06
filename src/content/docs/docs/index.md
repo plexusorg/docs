@@ -12,7 +12,7 @@ Plex uses permission-based freedom. It works with any Vault-compatible permissio
 drop the traditional rank system and control what each player can do with permission nodes. This gives you exact control
 over the server.
 
-Performance is a core goal. Plex can use Redis to share admin chat and punishment updates between the servers on your
+Performance is a core goal. Plex can use Redis to share admin chat and ban updates between the servers on your
 network. It stores player data in SQLite, MariaDB, or PostgreSQL, so you can start small and scale up as your community
 grows.
 

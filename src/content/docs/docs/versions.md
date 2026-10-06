@@ -13,7 +13,6 @@ because Folia does not provide a world generation API. Full Folia support will c
 | Plex Version | Minecraft Versions |
 |--------------|--------------------|
 | 2.0          | 26.1 - 26.2        |
-| 1.6          | 1.21.10            |
 | 1.5          | 1.21.7 - 1.21.8    |
 | 1.4          | 1.20.4             |
 | 1.3          | 1.19.4 - 1.20.4    |

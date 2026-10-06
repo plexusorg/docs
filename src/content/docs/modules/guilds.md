@@ -20,7 +20,7 @@ how to create a guild. Help and tab completion show only the subcommands that yo
 | `guild help` | Anyone | Show the subcommands that you can use. |
 | `guild create <name>` | No guild | Create a guild. You become the owner. Guild names are unique and not case-sensitive. |
 | `guild list [page]` | Anyone | List guilds. Click a guild to see its information. |
-| `guild info [guild]` | Anyone | Show a guild's name, UUID, owner, member count, creation date, and prefix. Enter a name or UUID. Omit it to show your own guild. |
+| `guild info [guild]` | Anyone | Show a guild's name, prefix, creation date, owner, officers, and members. Online players show in green and offline players in gray. Enter a guild name, guild UUID, world name, or player name. Omit it to show your own guild. |
 | `guild accept <guild>` | No guild | Accept an invite. You can also click the button in the invite message. An invite expires after five minutes. |
 | `guild visit <guild>` | Member, guest, or staff with entry permission | Teleport to a guild world. Enter the guild name or UUID. |
 | `guild world` | Member | Teleport to the spawn of your guild world. |
@@ -34,7 +34,7 @@ how to create a guild. Help and tab completion show only the subcommands that yo
 | `guild leave` | Member | Leave the guild. For the owner, this shows a warning first. |
 | `guild leave confirm` | Owner | Disband the guild and permanently delete the guild world. |
 | `guild invite <player>` | Officer | Invite an online player. |
-| `guild guest add <player> [time]` | Officer | Give a player guest access to the guild world. |
+| `guild guest add <player> [view\|build] [time]` | Officer | Give a player guest access to the guild world. |
 | `guild guest remove <player>` | Officer | Remove a guest immediately. |
 | `guild prefix set <text>` | Owner | Set the guild prefix. Every member shows the prefix before their tag in chat and in the tab list. |
 | `guild prefix clear` | Owner | Remove the guild prefix. |
@@ -67,6 +67,8 @@ Run `/guild` to open the menu. The menu shows only the buttons that you can use.
   the access, or to remove the guest.
 - Click **Set world spawn here** to set the guild world spawn to your location. You must be in your guild world.
 - Click **Warps** to see the warps. Click a warp to teleport.
+- Click **World settings** to change the time and weather of the guild world. Only the owner and officers see this
+  button.
 
 Long lists have pages. Use the arrows at the bottom of the menu to change the page.
 
@@ -77,7 +79,7 @@ A guild has three roles. These roles are not Bukkit permission nodes.
 | Action | Owner | Officer | Member |
 |--------|:-----:|:-------:|:------:|
 | Enter the guild world, build, and use warps | Yes | Yes | Yes |
-| Invite players, manage guests, set and delete warps, set the world spawn | Yes | Yes | No |
+| Invite players, manage guests, set and delete warps, set the world spawn, change the world time and weather | Yes | Yes | No |
 | Kick members | Yes | Yes | No |
 | Kick officers, promote, demote, set the prefix | Yes | No | No |
 
@@ -94,14 +96,16 @@ joining the guild or receiving guest access. For `/guild visit <guild>`, staff a
 The bypass also permits building and interaction in the world. It does not permit guild management. The module blocks
 entry for other players.
 
-An officer or the owner runs `guild guest add <player> [time]` to add a guest. The guest gets a message with a button to
-visit the world.
+An officer or the owner runs `guild guest add <player> [view|build] [time]` to add a guest. The guest gets a message with
+a button to visit the world.
 
-- A new guest cannot build. The guest can open doors, trapdoors, and fence gates, and use buttons, levers, and pressure
-  plates. Switch the guest to build mode in the menu.
+- Add `build` to let the guest build at once. If you do not enter a mode, a new guest gets view mode.
+- A guest in view mode cannot build. The guest can open doors, trapdoors, and fence gates, and use buttons, levers, and
+  pressure plates. Switch the guest to build mode in the menu.
 - Guest access expires. The default time is 24 hours. Enter a time such as `30m`, `12h`, or `7d` to change it. The
   maximum time is 30 days. You can change both values in the configuration.
-- Run `guild guest add` again for an existing guest to reset the time. The mode stays the same.
+- Run `guild guest add` again for an existing guest to reset the time. If you do not enter a mode, the mode stays the
+  same.
 - When access ends or you remove a guest, the module moves the guest out of the world.
 - Guests cannot use warps.
 
@@ -145,10 +149,12 @@ The module writes a `config.yml` file to its data folder.
 | Key | Default | Description |
 |-----|---------|-------------|
 | guilds.log-chat-message | true | Whether to log guild chat messages to the console. |
+| guilds.invites.daily-limit | 5 | The most invites one guild can send in 24 hours. |
 | guilds.guests.default-duration | 24h | The guest access time when `guild guest add` has no time. |
 | guilds.guests.max-duration | 30d | The longest guest access time that a player can give. |
+| guilds.worlds.unload-after | 5m | How long an empty guild world stays loaded before it unloads. |
 | guilds.worlds.size | 500000 | Border width in blocks for every terrain type. Use an even number from 16 to 59999968. |
-| guilds.worlds.backup-retention-days | 7 | How long to keep backups from world resets. |
+| guilds.worlds.backup-retention-days | 7 | How long to keep backups from world resets. A backup for an unfinished reset is kept until the reset finishes. |
 
 Durations use a whole number followed by `m` (minutes), `h` (hours), or `d` (days).
 

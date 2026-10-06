@@ -7,20 +7,17 @@ Plex has an indefinite ban system. Indefinite bans are reserved for players who 
 Plex reads the indefinite bans from the `/plugins/Plex/indefbans.yml` file. Redis is not involved. If you run several
 servers on Redis, Plex only tells the other servers to refresh their ban decisions.
 
-You can add an indefinite ban in game:
+To add or remove an indefinite ban, edit `indefbans.yml` and run `/plex reload`. No command adds or removes an
+indefinite ban.
 
-- `/banname <username> [reason]` bans a username.
-- `/banip <ip or player> [reason]` bans an IP address. Give a player name to ban their current or last known IP address.
-
-Both commands write the new entry into `indefbans.yml`. There is no command to remove an indefinite ban. Delete the
-entry from the file and run `/plex reload`.
+`/banname` and `/banip` make 24-hour bans, not indefinite bans. Use `/unbanname` and `/unbanip` to remove them.
 
 ## Default file
 
 ```yaml title="/plugins/Plex/indefbans.yml"
 # Plex Indefinite Bans File
 # Players with their UUID / IP / Usernames in here will be indefinitely banned until removed
-# Root keys are organizational labels only, they do not affect ban matching.
+# Use labels to organize the entries. Plex does not use these labels to decide who is banned.
 # Choose any non-empty, unique label without dots (.), including numbers or names.
 # Quote labels containing YAML punctuation, such as "case: repeated evasion".
 # Each block can contain multiple related usernames, UUIDs, and IPs.
@@ -41,7 +38,7 @@ bypassers:
   users:
     - "bypasser1"
   ips:
-    - 321.321.321.321
+    - 192.0.2.1
     - 169.254.1.2
 ```
 
@@ -55,6 +52,8 @@ contain a dot. Put quotation marks around a label that contains a colon, such as
 Each block takes an optional `reason`. Plex shows the reason on the ban screen. The `users` section is for usernames
 only, the `uuids` section is only for UUIDs, and the `ips` section is for IPs only. If you do not want to ban a type, you
 do not have to include it.
+
+An entry in `ips` can be one IP address, a CIDR range such as `203.0.113.0/24`, or a wildcard such as `203.0.113.*`.
 
 ### Converting indefinite bans
 

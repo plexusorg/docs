@@ -15,12 +15,12 @@ Below is the default `messages.yml` file.
 # This file uses the MiniMessage system.
 # Documentation available at https://docs.papermc.io/adventure/minimessage/format/
 
-# Messages in here will be placed in for certain commands, actions, etc.
+# You can customize messages for commands and other actions here.
 # Warning: not all commands have customizable messages
 
 # Dynamic values use native MiniMessage tags such as <player> and <count>.
 # Available tags are documented above each message. Tags are optional and may be repeated.
-# <view_notes> adds the notes command click action to the text inside it.
+# Put text inside <view_notes>...</view_notes> so players can click it to view the notes.
 # Existing message files must be updated to this syntax; brace placeholders are not supported.
 
 # <appeal_url> - Appeal URL
@@ -37,6 +37,12 @@ banStatus: "<red>Banned <dark_gray>• <gold><reason> <dark_gray>• <yellow>Exp
 # <punisher> - Punisher
 banCapacityMessage: "<red>You are banned and all spectator slots are occupied. You may appeal at <gold><appeal_url>.\n<red>Reason: <gold><reason>\n<red>Expires in <gold><expires_in>\n<red>Banned by: <gold><punisher>"
 bannedPriorityKick: "<red>A regular player needed your spectator slot. Reconnect when space is available."
+# <player> - Player name
+bannedPlayerJoined: "<gray>Banned player <yellow><player><gray> joined"
+# <player> - Player name
+bannedPlayerLeft: "<gray>Banned player <yellow><player><gray> left"
+bannedTabMarker: "<dark_red>[BANNED]"
+playerLimitBypassKick: "<red>A player with priority needed your slot. Reconnect when space is available."
 # <reason> - Reason
 # <punisher> - Punisher
 kickMessage: "<red>You have been kicked! \n<red>Reason: <gold><reason>\n<red>Kicked by: <gold><punisher>"
@@ -48,10 +54,11 @@ indefBanMessage: "<red>Your <type> is indefinitely banned! You may appeal at <go
 # <reason> - The reason
 indefBanMessageReason: "<red>Your <type> is indefinitely banned! You may appeal at <gold><appeal_url>.\n<red>Reason: <gold><reason>"
 playerNotFound: "<red>Player not found!"
+playerAmbiguous: "<red>More than one player matches: <players>. Enter a full name."
 specifyPlayer: "<red>You must specify a player!"
 worldNotFound: "<red>World not found!"
 correctUsagePrefix: "<yellow>Correct Usage: "
-# This will always be used for punishments where the sanctioning administrator has not provided a reason. Will ignore MiniMessage tags.
+# If an admin does not give a reason for a punishment, Plex uses this message. MiniMessage tags are not processed here.
 noReasonProvided: "No reason provided."
 # <world> - The world you have been teleported to
 playerWorldTeleport: "<aqua>You have been teleported to <world>."
@@ -82,15 +89,15 @@ lockedUpPlayer: "<aqua><sender> - Locking up <player>"
 unlockedPlayer: "<aqua><sender> - Unlocking <player>"
 # <permission> - The permission node required to use the command
 noPermissionNode: "<red>You must have the permission: <permission> <red>to use this command!"
-noPermissionInGame: "<red>You must be in console to use this command!"
-noPermissionConsole: "<red>You must be in-game to use this command!"
+noPermissionInGame: "<red>Run this command from the console."
+noPermissionConsole: "<red>Run this command in-game."
 spectatorTeleportDenied: "<red>You do not have permission to teleport while spectating."
 gameModeCommandBlocked: "<red>The vanilla gamemode command is disabled. Use the Essentials gamemode command or the gamemode switcher instead."
-consoleMustDefinePlayer: "<red>You must define a player since you are running this command from console."
+consoleMustDefinePlayer: "<red>Specify a player when you run this command from the console."
 # <world> - The world name
 teleportedToWorld: "<aqua>You have been teleported to the <world>."
 higherRankThanYou: "<red>This player is an admin or a higher rank than you."
-consoleOnly: "<red>This command can only be executed by the console."
+consoleOnly: "<red>Run this command from the console."
 # <sender> - The command sender
 # <player> - The player
 banningPlayer: "<red><sender> - Banning <player>"
@@ -104,6 +111,14 @@ invalidUsername: "<red>That is not a valid Minecraft username."
 invalidIpOrPlayer: "<red>Specify a valid IP address or a player with a known IP address."
 nameAlreadyBanned: "<red>That username is already banned."
 ipAlreadyBanned: "<red>That IP address is already banned."
+nameNotBanned: "<red>That username has no active 24-hour ban."
+ipNotBanned: "<red>That exact IP address or range has no active 24-hour ban."
+# <sender> - The command sender
+# <username> - The username
+unbanningName: "<aqua><sender> - Unbanning username <username>"
+# <sender> - The command sender
+# <ip> - The IP address or range
+unbanningIp: "<aqua><sender> - Unbanning IP <ip>"
 # <sender> - The command sender
 # <player> - The player
 unbanningPlayer: "<aqua><sender> - Unbanning <player>"
@@ -142,7 +157,7 @@ stateDisabledSafe: "<green>disabled"
 stateOn: "<green>on"
 stateOff: "<red>off"
 # <max_length> - Maximum length, configured in config.yml
-maximumPrefixLength: "<red>The maximum length for a tag may only be <max_length>."
+maximumPrefixLength: "<red>Your tag cannot be longer than <max_length> characters."
 prefixCleared: "<aqua>Your prefix has been cleared."
 # <player> - The player name
 otherPrefixCleared: "<aqua>You have cleared <player>'s prefix."
@@ -150,7 +165,7 @@ otherPrefixCleared: "<aqua>You have cleared <player>'s prefix."
 prefixSetTo: "<aqua>Your prefix has been set to <prefix>"
 # <action> - The action (blocked / unblocked)
 # <count> - The amount of players
-blockeditSize: "<gray><action> all block modification abilities for <count> players."
+blockeditSize: "<gray><action> block editing for <count> players."
 blockeditListEntry: "<gray>- <player>"
 blockeditListNone: "<gray>- none"
 blockeditAllPlayers: "all players"
@@ -160,18 +175,18 @@ blockeditUnblockedAction: "Unblocked"
 blockeditBlockedState: "blocked"
 blockeditUnblockedState: "unblocked"
 # The action (blocked or restored)
-editsModified: "<gray>Your block modification abilities have been <state>."
-listOfPlayersBlocked: "<gray>The following have block modification abilities restricted:"
+editsModified: "<gray>Block editing is now <state> for you."
+listOfPlayersBlocked: "<gray>Players who cannot edit blocks:"
 # <player> - The player name
-editsBlocked: "<gray>Blocked block modification abilities for <player>"
+editsBlocked: "<gray>Blocked block editing for <player>"
 # <sender> - The command sender
 # <players> - The player name
-blockingEdits: "<red><sender> - Blocking block modification abilities for <players>"
+blockingEdits: "<red><sender> - Blocking block editing for <players>"
 # <sender> - The command sender
 # <players> - The player
-unblockingEdits: "<aqua><sender> - Unblocking block modification abilities for <players>"
+unblockingEdits: "<aqua><sender> - Unblocking block editing for <players>"
 # <player> - The player name
-editsUnblocked: "<gray>Unblocked block modification abilities for <player>"
+editsUnblocked: "<gray>Unblocked block editing for <player>"
 # <sender> - The command sender
 # <count> - Number of entities removed
 removedEntities: "<red><sender> - Removed <count> entities"
@@ -202,7 +217,7 @@ mobLimitSet: "<gray>The mob limit has been set to: <em><white><limit>"
 # <chunk_x> - Chunk x value
 # <chunk_z> - Chunk z value
 mobLimitStatus: "<gray>(<status><gray>) <em><white><count> <reset><gray>/ <em><white><limit> <reset><gray>per chunk (<em><white>Chunk<gray>: <reset><chunk_x>, <chunk_z><gray>)"
-mobLimitCeiling: "<gray>The limit you have entered is too high. Defaulting to the ceiling value from config"
+mobLimitCeiling: "<gray>That limit is too high. The limit has been set to the maximum allowed in the configuration."
 mobLimitEnabled: "<green>Enabled"
 mobLimitDisabled: "<red>Disabled"
 # <sender> - The command sender
@@ -212,7 +227,7 @@ sayMessage: "<blue>[Server: <sender>] <message>"
 # <message> - The message being said
 consoleSayMessage: "<gray>[Console: <sender>] <white><message>"
 # <input> - The number attempted to be parsed
-unableToParseNumber: "<red>Unable to parse <input> as a number!"
+unableToParseNumber: "<red><input> is not a valid number!"
 noNotes: "<red>This player has no notes!"
 noteAdded: "<green>Note added."
 noteNotFound: "<red>A note with this ID could not be found."
@@ -252,8 +267,8 @@ setOtherPlayersLoginMessage: "<gray><player>'s login message is now:<newline><gr
 removedOwnLoginMessage: "<gray>Your login message has been removed."
 # <player> - The player
 removedOtherLoginMessage: "<gray>You removed <player>'s login message."
-nameRequired: "<red>Policy requires that you must state your player name in your login message. You can either do this by inserting your name or \\<player>."
-groupRequired: "<red>Policy requires that you must state your group in your login message. You can either do this by inserting your configured group title or \\<group>."
+nameRequired: "<red>Include your username in your login message. Enter your username or \\<player>."
+groupRequired: "<red>Include your group title in your login message. Enter the title or \\<group>."
 groupNotConfigured: "<red>Your primary group does not have a title configured, so it cannot be used in a login message."
 # <material> - The material name
 # <players> - The players who have the material in their inventory
@@ -298,12 +313,9 @@ smittenQuietly: "<gray>Smitten <player> quietly."
 smitten: "<red>You've been smitten. Reason: <yellow><reason>"
 nukerKickMessage: "Please turn off your nuker!"
 nukerTempbanReason: "You are temporarily banned for five minutes for using a Nuker."
-antiSpamMessage: "<gray>Please refrain from spamming messages."
+antiSpamMessage: "<gray>Please do not spam."
 # <player> - The player
 banExpiredBroadcast: "Plex - Automatically unbanning <player>"
-# <player> - The player
-redisResetSuccessful: "<yellow>Successfuly reset <player>'s Redis punishments!"
-redisResetPlayerNotFound: "Couldn't find player in Redis punishments."
 reappliedGamerules: "<aqua>All game rules have been re-applied!"
 commandNotFound: "<red>That command could not be found!"
 # <command> - The command
@@ -317,7 +329,7 @@ rollbackNoResult: "<gray>No activities have been rolled back"
 punishmentMenuTitle: "<aqua><bold>Punishments"
 # <player> - The player
 punishedPlayerMenuTitle: "<red><bold>Punishments - <player>"
-punishmentPlayerNotFound: '<red>This player does not exist. Try doing /punishments \<player> instead.'
+punishmentPlayerNotFound: '<red>This player does not exist. Use /punishments \<player> instead.'
 # <count> - The amount of active bans
 # <players> - The active ban list
 activeBansList: "<gold>Active Bans (<count>): <yellow><players>"
@@ -361,7 +373,7 @@ moduleUpdateDisabled: "<yellow>Skipping <module>; module updates are disabled."
 # <skipped_count> - The number of modules skipped
 # <failed_count> - The number of modules that failed to update
 moduleUpdateSummary: "<green>Module updates finished: <yellow><updated_count> updated<gray>, <yellow><skipped_count> skipped<gray>, <red><failed_count> failed<gray>. Modules were reloaded after all update attempts completed."
-moduleRestartRequired: "<yellow>Module changes applied. Restart the server if module commands do not appear or disappear."
+moduleCommandsReloaded: "<green>Module commands reloaded."
 
 # WorldGuard protection command
 protectRegionCreated: "<green>Created WorldGuard region <yellow><region></yellow> with the <yellow><preset></yellow> preset in <yellow><world></yellow>."
@@ -376,7 +388,7 @@ protectInvalidRegionId: "<red><region> is not a valid WorldGuard region name."
 protectManagerUnavailable: "<red>WorldGuard region support is unavailable for world <world>."
 protectInvalidPreset: "<red>The protection configuration is invalid: <error>"
 protectInvalidRadius: "<red>The protection radius must be at least 1 block."
-protectPlayerOnly: "<red>This protection operation must be run by a player."
+protectPlayerOnly: "<red>Run this command in-game."
 protectUnsupportedRegion: "<red>Region <region> is not a cuboid. Plex only manages cuboid regions."
 protectManagedOtherWorld: "<red>A Plex-managed region with that name already exists in world <world>."
 protectNoRegions: "<gray>Plex is not managing any WorldGuard regions."
@@ -393,6 +405,10 @@ A banned player may still join in spectator mode when a spectator slot is free. 
 `bannedPriorityKick` when a regular player needs the slot. Plex shows `banCapacityMessage` when every spectator slot is
 already taken.
 
+A player with the `plex.playerlimitbypass` permission can join when the server is full. Plex first kicks a banned
+player to make room. If no banned player is online, Plex kicks a random player who does not have that permission. That
+player sees `playerLimitBypassKick`.
+
 ## Login messages
 
 Plex replaces the player's own name with `<player>` and their group title with `<group>` when they set a login message.
@@ -405,21 +421,21 @@ runs.
 
 ## MiniMessage
 
-The `messages.yml` file uses MiniMessage for colors. For example, `<aqua>` colors the text aqua. This is not like HTML,
-so you do not close the tag with `</aqua>`. MiniMessage also has special tags, such as `<rainbow>`. The default color is
-gray. For the full MiniMessage guide, see
+The `messages.yml` file uses MiniMessage for colors. For example, `<aqua>` colors the text aqua. You do not need to close
+a color tag. You can close one, for example with `</aqua>`, to end that color early. MiniMessage also has special tags,
+such as `<rainbow>`. Text with no color tag uses the normal Minecraft color, which is white in chat. Add a tag such as
+`<gray>` to pick a color. For the full MiniMessage guide, see
 [https://docs.advntr.dev/minimessage/format.html](https://docs.advntr.dev/minimessage/format.html).
 
 Values in angle brackets, such as `<player>` and `<count>`, are replacement values. Plex fills each one with a value,
 such as a player name or a number. The comment above each message lists the values for that message. A value is optional,
-and you can repeat it. Older message files that use `{0}` and `{1}` no longer work. Rewrite those messages with the
-names.
+and you can repeat it. Plex does not support placeholders in braces, such as `{0}`. Use the names in angle brackets.
 
 Modules can ship their own message files. A module reads its own `messages.yml` first, then falls back to the Plex
 messages for any key that it does not define.
 
 ## Troubleshooting
 
-If a command shows `No message.`, your `messages.yml` file may be missing a key. Plex adds missing keys to your file when
-it starts, so a restart usually fixes this. You can also compare your file with the default file on
-[GitHub](https://raw.githubusercontent.com/plexusorg/Plex/master/server/src/main/resources/messages.yml).
+If a command fails with an error instead of showing a message, your `messages.yml` file may be missing a key. Plex adds
+missing keys back when the server starts and when you run `/plex reload`. You can also compare your file
+with the default file on [GitHub](https://raw.githubusercontent.com/plexusorg/Plex/master/server/src/main/resources/messages.yml).

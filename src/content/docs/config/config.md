@@ -41,11 +41,18 @@ chat:
   # This does not include color tags such as <red> or <rainbow>
   max-tag-length: 64
   # The chat format can be customized here if the Plex chat system is enabled
-  format: "<prefix> <white><name> <gray>» <reset><message>"
+  # Use <name> for the username, <displayname> for the display name, and <uuid> for the UUID.
+  # Use <head:<uuid>> to show the sender's head.
+  format: "<prefix> <white><displayname> <gray>» <reset><message>"
+  # If someone types your username in public chat, you will see it in yellow and hear a sound.
+  # Usernames are not case-sensitive, and mentioning yourself will not play a sound.
+  mentions: true
+  # If a user hovers over a nickname in chat, it will show their real username.
+  nickname-hover: true
 
 # Group names must match the primary group returned by your permissions plugin.
 # Colors appear in the tab list and in generated login messages.
-# Groups without a configured title do not receive a generated login message.
+# If a group has no title, Plex will not generate a login message for its members.
 groups:
   admin:
     color: '<aqua>'
@@ -150,13 +157,13 @@ How many join decisions Plex keeps in memory.
 
 **Default:** `300`
 
-The default duration, in seconds, of a mute set with `/mute` when you do not give a time.
+How long, in seconds, a mute from `/mute` lasts.
 
 ### punishments.freeze-timer
 
 **Default:** `300`
 
-The default duration, in seconds, of a freeze set with `/freeze` when you do not give a time.
+How long, in seconds, a freeze from `/freeze` lasts.
 
 ## Chat
 
@@ -174,10 +181,29 @@ The maximum length of a tag in game. This counts characters only. It does not co
 
 ### chat.format
 
-**Default:** `"<prefix> <white><name> <gray>» <reset><message>"`
+**Default:** `"<prefix> <white><displayname> <gray>» <reset><message>"`
 
-The chat format. Plex replaces `<prefix>` with the player prefix, `<name>` with the player name, and `<message>` with
-the message.
+The chat format. You can use these placeholders:
+
+- `<prefix>` is the player prefix.
+- `<name>` is the username.
+- `<displayname>` is the display name, such as a nickname.
+- `<uuid>` is the player UUID.
+- `<message>` is the message.
+- `<head:<uuid>>` shows the head of the player who sent the message.
+
+### chat.mentions
+
+**Default:** `true`
+
+If someone types your username in public chat, you see your name in yellow and hear a sound. Plex does not check upper
+and lower case. If you type your own name, it is not highlighted and you hear no sound.
+
+### chat.nickname-hover
+
+**Default:** `true`
+
+Move your mouse over a nickname in chat to see the real username of that player.
 
 ## Groups
 
@@ -465,8 +491,6 @@ older version, Plex moves them into `worlds.yml` at the first startup.
 
 # These gamerules apply to every world on the server.
 global_gamerules:
-  - "advance_weather;true"
-  - "advance_time;true"
   - "spawn_mobs;false"
   - "spawn_monsters;false"
   - "spawn_patrols;false"
@@ -482,6 +506,7 @@ global_gamerules:
   - "show_advancement_messages;false"
   - "show_death_messages;false"
   - "send_command_feedback;false"
+  - "command_blocks_work;false"
 
 worlds:
   flatlands:

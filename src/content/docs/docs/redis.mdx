@@ -4,7 +4,7 @@ description: Learn how to configure a Redis server for Plex
 ---
 import {Tabs, TabItem} from '@astrojs/starlight/components';
 
-This page will show you how to set up and configure Redis for Plex. This tutorial assumes a moderate amount of computer knowledge. Please note that setting up Redis is optional. It offers many performance improvements, but can be dangerous if improperly configured.
+This page will show you how to set up and configure Redis for Plex. This tutorial assumes a moderate amount of computer knowledge. Redis is optional. Plex needs it only when you run more than one server and want to share admin chat and ban changes between them. A bad Redis setup can be dangerous, so follow each step with care.
 
 ## Using Pterodactyl
 If you are using Pterodactyl, setting up Redis is easy. You will need to download and add the Redis egg, which requires administrator privileges. If you are not an administrator, you may request an administrator to set up Redis for you.
@@ -80,7 +80,7 @@ data:
         password: 'your_secure_password_here'
 ```
 
-Replace `your_secure_password_here` with the password you made for Redis. Plex uses Redis to pass admin-chat messages between servers and to tell the other servers when a punishment changes. Plex stores player data, punishments, and indefinite bans outside Redis.
+Replace `your_secure_password_here` with the password you made for Redis. Plex uses Redis to pass admin-chat messages between servers and to tell the other servers when a ban changes. Plex stores player data, punishments, and indefinite bans outside Redis.
 
 ### Firewall Configuration
 If you are using a firewall, you may have to allow port `6380`. It is safe to allow connections from anywhere provided you have followed the documentation correctly.

@@ -43,11 +43,11 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.2.build.+")
-    compileOnly("dev.plex:api:2.0-SNAPSHOT")
+    compileOnly("dev.plex:api:2.0")
 }
 
 group = "dev.plex"
-version = "2.0-SNAPSHOT"
+version = "2.0"
 description = "Module-Example"
 
 java {
@@ -75,7 +75,7 @@ Create `src/main/resources/module.yml`. Plex reads this file to load your module
 name: Module-Example
 main: dev.plex.ExampleModule
 description: An example module for Plex
-version: 2.0-SNAPSHOT
+version: 2.0
 apiCompatibility: 1
 updater:
   enabled: false
