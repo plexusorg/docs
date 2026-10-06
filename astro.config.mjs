@@ -106,8 +106,6 @@ export default defineConfig({
         },
         sidebar,
         lastUpdated: true,
-        // src/content/docs/404.md is the 404 page. Starlight's own 404 route would build the same page again.
-        disable404Route: true,
         routeMiddleware: './src/components/qol/route-data.ts',
         editLink: {
             baseUrl: 'https://github.com/plexusorg/docs/edit/master/',
