@@ -28,6 +28,7 @@ dependencies. Plex provides both at runtime, so you must not shade them into you
 ```kotlin title="build.gradle.kts"
 plugins {
     java
+    checkstyle
     `maven-publish`
 }
 
@@ -54,11 +55,19 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
+checkstyle {
+    toolVersion = "14.3.0"
+    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+}
+
 tasks.getByName<Jar>("jar") {
     archiveBaseName.set("Module-Example")
     archiveVersion.set("")
 }
 ```
+
+The template includes the same Checkstyle rules as Plex and the official modules, in
+`config/checkstyle/checkstyle.xml`. Gradle checks your code with them on every build.
 
 The `archiveBaseName` sets the name of your JAR file. Keep the `Module-` prefix. The `archiveVersion.set("")` call removes
 the version from the file name, so the built file is `Module-Example.jar`. A stable file name lets the module updater

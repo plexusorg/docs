@@ -19,7 +19,6 @@ To build your own module, see [Creating a module](/docs/create_module).
 
 | Module | Description |
 |--------|-------------|
-| 2FA | Adds two-factor authentication with the `/2fa` command |
 | FalseOp | Makes clients think they have operator status |
 | Guilds | Adds player guilds with a private guild world, roles, guests, and warps |
 | HTTPD | Runs a web dashboard and API for server data and admin tools |
