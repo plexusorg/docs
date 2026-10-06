@@ -83,7 +83,7 @@ Create `src/main/resources/module.yml`. Plex reads this file to load your module
 ```yaml title="src/main/resources/module.yml"
 name: Module-Example
 main: dev.plex.ExampleModule
-description: An example module for Plex
+description: A starting point for your own Plex module
 version: 2.0
 apiCompatibility: 1
 updater:
