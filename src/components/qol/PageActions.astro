@@ -1,0 +1,113 @@
+---
+/*
+ * The page actions under "On this page": a link to the Markdown copy of the page, and a button that copies it.
+ * The link has no "#" href, so Starlight's scroll tracking never marks it as the current entry.
+ */
+import {hasMarkdownCopy, markdownPath} from './markdown-path';
+
+interface Props {
+    isMobile?: boolean;
+}
+
+const {isMobile = false} = Astro.props;
+const {entry, id} = Astro.locals.starlightRoute;
+const href = markdownPath(id);
+---
+
+{hasMarkdownCopy(entry) && (
+    <ul class:list={['plex-page-actions', {isMobile}]}>
+        <li>
+            <a href={href}>View as Markdown</a>
+        </li>
+        <li>
+            <button type="button" data-copy-page={href}>
+                <span data-copy-label aria-live="polite">Copy page</span>
+            </button>
+        </li>
+    </ul>
+)}
+
+<style>
+    .plex-page-actions {
+        margin: 0.75rem 0 0;
+        padding: 0.75rem 0 0;
+        border-top: 1px solid var(--plex-line);
+        list-style: none;
+    }
+
+    a,
+    button {
+        display: block;
+        width: 100%;
+        padding: 0.25rem 1rem;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        font: inherit;
+        font-size: var(--sl-text-sm);
+        line-height: 1.35;
+        text-align: start;
+        color: var(--plex-muted);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    a:hover,
+    button:hover {
+        color: var(--plex-heading);
+    }
+
+    button[data-state='copied'] {
+        color: var(--plex-link);
+    }
+
+    .isMobile {
+        margin: 0;
+        padding: 0;
+        border-top: 0;
+    }
+
+    .isMobile li {
+        border-top: 1px solid var(--sl-color-gray-6);
+    }
+
+    .isMobile a,
+    .isMobile button {
+        padding-block: 0.5rem;
+        outline-offset: var(--sl-outline-offset-inside);
+    }
+</style>
+
+<script>
+    const labels = {idle: 'Copy page', copied: 'Copied', failed: 'Copy failed'};
+
+    for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-page]')) {
+        const label = button.querySelector('[data-copy-label]')!;
+        let reset: number | undefined;
+        const show = (state: keyof typeof labels) => {
+            button.dataset.state = state;
+            label.textContent = labels[state];
+            window.clearTimeout(reset);
+            reset = window.setTimeout(() => {
+                delete button.dataset.state;
+                label.textContent = labels.idle;
+            }, 2000);
+        };
+        button.addEventListener('click', async () => {
+            // Safari allows the clipboard write only inside the click, so the item takes the pending fetch.
+            const markdown = fetch(button.dataset.copyPage!).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`${response.status} ${response.statusText}`);
+                }
+                return response.text();
+            }).then((body) => new Blob([body], {type: 'text/plain'}));
+            try {
+                await navigator.clipboard.write([new ClipboardItem({'text/plain': markdown})]);
+                show('copied');
+            } catch (error) {
+                console.error('Could not copy the page as Markdown', error);
+                show('failed');
+            }
+        });
+    }
+</script>

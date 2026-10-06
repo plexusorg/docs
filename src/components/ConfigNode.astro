@@ -1,0 +1,47 @@
+---
+// One level of a ConfigTree. A setting is a <details> row: the key, then its default value in the value column.
+// Opening it shows what the setting does. A nested map is a label row with its settings indented below it.
+import {inline, paragraphs, type TreeNode} from '../data/reference';
+
+interface Props {
+    nodes: TreeNode[];
+    depth: number;
+}
+
+const {nodes, depth} = Astro.props;
+---
+
+{nodes.map((node) => node.kind === 'leaf' ? (
+    <div class="ref-item" id={node.id} style={`--depth: ${depth}`} data-ref-item>
+        <details>
+            <summary class="ref-row">
+                <span class="ref-key">
+                    <svg class="ref-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                    {node.key}
+                </span>
+                <span class="ref-value">
+                    {node.display}{node.count !== undefined && <span class="ref-count">{node.count} entries</span>}
+                </span>
+            </summary>
+            <div class="ref-panel" translate="yes">
+                <Fragment set:html={paragraphs(node.doc.description)} />
+                {node.doc.note && <p><span class="ref-label">Note</span> <Fragment set:html={inline(node.doc.note)} /></p>}
+                {node.accepts && <p><span class="ref-label">Accepts</span> <Fragment set:html={inline(node.accepts)} /></p>}
+                {node.block && (
+                    <div>
+                        <p><span class="ref-label">Default</span></p>
+                        <pre class="ref-block" tabindex="0" aria-label={`Default value of ${node.path}`} translate="no">{node.block}</pre>
+                    </div>
+                )}
+            </div>
+        </details>
+        <a class="ref-anchor" href={`#${node.id}`} aria-label={`Link to ${node.path}`}>#</a>
+    </div>
+) : (
+    <div class="ref-branch" id={node.id} style={`--depth: ${depth}`}>
+        <div class="ref-row ref-branch-label">
+            <span class="ref-key">{node.key}</span>
+        </div>
+        <Astro.self nodes={node.children} depth={depth + 1} />
+    </div>
+))}

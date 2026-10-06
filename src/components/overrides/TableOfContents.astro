@@ -1,0 +1,14 @@
+---
+/*
+ * Starlight's table of contents, with the page actions under the headings.
+ */
+import Default from '@astrojs/starlight/components/TableOfContents.astro';
+import PageActions from '../qol/PageActions.astro';
+---
+
+{Astro.locals.starlightRoute.toc && (
+    <>
+        <Default/>
+        <PageActions/>
+    </>
+)}

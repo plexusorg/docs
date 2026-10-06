@@ -2,15 +2,21 @@
 title: Build and install
 description: Build a Plex module and install it on a server
 ---
+import {Steps} from '@astrojs/starlight/components';
 
-Build the module with Gradle.
+<Steps>
 
-```bash
-./gradlew build
-```
+1. Build the module with Gradle.
 
-The JAR is in `build/libs/`. Copy it into the `plugins/Plex/modules/` folder on your server. Restart the server. Plex
-reads the new module and enables it.
+   ```bash
+   ./gradlew build
+   ```
+
+2. The JAR is in `build/libs/`. Copy it into the `plugins/Plex/modules/` folder on your server.
+
+3. Restart the server. Plex reads the new module and enables it.
+
+</Steps>
 
 On Paper, you can also run `/plex modules reload` in game. Do not use reload if the module needs new libraries, because
 Plex downloads libraries only when the server starts. On Folia, you must restart the server.

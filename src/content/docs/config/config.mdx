@@ -1,0 +1,140 @@
+---
+title: Configuration
+description: Every setting in the Plex configuration files, with its default value and what it does.
+---
+
+import ConfigTree from '../../../components/ConfigTree.astro';
+import {configFiles} from '../../../data/reference';
+
+export const presets = Object.entries(configFiles['protection.yml'].data.presets);
+
+Plex writes its configuration files to `/plugins/Plex/` the first time it starts. The main file is `config.yml`. Plex
+keeps the entity settings, world settings, toggles, and protection presets in their own files in the same folder.
+
+Each section below lists the settings of one part of a file, with their default values. Click a setting to see what it
+does and what it accepts. Use the `#` link beside a setting to share a link that opens it.
+
+## config.yml
+
+### Server
+
+<ConfigTree file="config.yml" keys="server" />
+
+### Banning
+
+<ConfigTree file="config.yml" keys="banning" />
+
+### Punishments
+
+<ConfigTree file="config.yml" keys="punishments" />
+
+### Chat
+
+<ConfigTree file="config.yml" keys="chat" />
+
+### Groups and titles
+
+<ConfigTree file="config.yml" keys="groups" />
+
+Plex asks your permissions plugin for the primary group of each player, and then looks up that group under `groups`.
+The group `color` colors the player in the tab list.
+
+### Login messages
+
+<ConfigTree file="config.yml" keys="loginmessages" />
+
+When a player has no login message of their own and the group has a `title`, Plex builds a login message from
+`loginmessages.default-format`. A player can set a login message with `/setloginmessage`. The `loginmessages.name` and
+`loginmessages.group` settings decide if that message must hold the player's name and group title.
+
+### Database and Redis
+
+<ConfigTree file="config.yml" keys="data" />
+
+### Blocked commands
+
+<ConfigTree file="config.yml" keys="block_on_mute" />
+
+### Updates
+
+<ConfigTree file="config.yml" keys="updater" />
+
+### Debugging
+
+<ConfigTree file="config.yml" keys="debug" />
+
+## entities.yml
+
+If your `config.yml` still holds these settings from an older version, Plex moves them into `entities.yml` at the
+first startup.
+
+### Entity wipe
+
+<ConfigTree file="entities.yml" keys="entitywipe_list autowipe" />
+
+### Blocked blocks and entities
+
+<ConfigTree file="entities.yml" keys="blocked_blocks blocked_entities" />
+
+### Mob limit
+
+<ConfigTree file="entities.yml" keys="entity_limit" />
+
+## worlds.yml
+
+If your `config.yml` still holds these settings from an older version, Plex moves them into `worlds.yml` at the first
+startup.
+
+### Gamerules
+
+<ConfigTree file="worlds.yml" keys="global_gamerules" />
+
+### World list
+
+<ConfigTree file="worlds.yml" keys="worlds" />
+
+The `parameters` section of a world sets how it generates. The layers run from the top to the bottom. The default
+worlds generate one grass layer, then 32 dirt layers, then 16 stone layers, then one bedrock layer.
+
+The `entry` and `modification` sections are optional. Leave one out to let every player enter or change the world.
+
+## toggles.yml
+
+Plex keeps the current state of each `/toggle` option in this file. Plex saves each change, so the state survives a
+restart. You can also edit the file and run `/plex reload` to apply it.
+
+<ConfigTree file="toggles.yml" keys="explosions fluidspread drops redstone chat pvp" />
+
+## protection.yml
+
+Plex can create and keep WorldGuard regions. You need WorldGuard installed to use the `/protect` command. This file
+holds the flag presets and the regions that Plex manages.
+
+### Presets
+
+<ConfigTree file="protection.yml" keys="presets" />
+
+The default file has these presets:
+
+<ul>
+    {presets.map(([name, preset]) => (
+        <li><code>{name}</code>: {preset.description}</li>
+    ))}
+</ul>
+
+### Managed regions
+
+<ConfigTree file="protection.yml" keys="regions" />
+
+Plex writes the regions it manages back into `protection.yml` under the `regions` key. It restores those regions and
+their flags when the server starts.
+
+### Protect commands
+
+- `/protect create <region> <preset>` creates a region from your current WorldEdit selection.
+- `/protect create <region> <preset> <radius>` creates a full-height square around you instead.
+- `/protect apply <region> <preset>` changes a region to another preset.
+- `/protect remove <region>` removes a region from the world.
+- `/protect list` lists the regions that Plex manages.
+- `/protect presets` lists the presets and their descriptions.
+- `/protect reload` reloads `protection.yml` and synchronizes the managed regions.

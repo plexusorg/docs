@@ -1,0 +1,72 @@
+---
+/*
+ * One section of a Plex configuration file, built from the real default file in src/data/plex/. The page puts a
+ * heading above each section. Click a setting to open what it does and what it accepts. ConfigNode.astro renders the
+ * levels, and reference-tree.ts opens the setting in the URL hash.
+ *
+ * This follows the pattern of PaperMC's ConfigNode component (github.com/PaperMC/docs):
+ * a recursive tree, <details> leaves, a path id and a "#" link on every node, and a script that
+ * opens the leaf in the URL hash.
+ *
+ * Copyright (c) PaperMC
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+import ConfigNode from './ConfigNode.astro';
+import {configFiles, type ConfigFileName, type TreeNode} from '../data/reference';
+import './reference.css';
+
+interface Props {
+    file: ConfigFileName;
+    /** The top-level keys of the file that this section shows, separated by spaces. */
+    keys: string;
+}
+
+const {file, keys} = Astro.props;
+const wanted = keys.split(/\s+/);
+const picked = configFiles[file].nodes.filter((node) => wanted.includes(node.key));
+
+// A section with one top-level map is named by its heading, so its settings start at the first level.
+const nodes: TreeNode[] = picked.length === 1 && picked[0].kind === 'branch' ? picked[0].children : picked;
+
+// The key column fits the longest key with its indent, so every value in the section starts at the same place.
+const longest = new Map<number, number>();
+const measure = (list: TreeNode[], depth: number) => {
+    for (const node of list) {
+        longest.set(depth, Math.max(longest.get(depth) ?? 0, node.key.length));
+        if (node.kind === 'branch') {
+            measure(node.children, depth + 1);
+        }
+    }
+};
+measure(nodes, 0);
+const keyColumn = `max(${[...longest].map(([depth, length]) =>
+    `calc(${length + 1}ch + var(--ref-gutter) + ${depth} * var(--ref-indent))`).join(', ')})`;
+---
+
+<div class="ref ref-config not-content" data-ref translate="no" style={`--ref-key-col: ${keyColumn}`}>
+    <ConfigNode nodes={nodes} depth={0} />
+</div>
+
+<script>
+    import './reference-tree.ts';
+</script>

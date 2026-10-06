@@ -2,7 +2,7 @@
 title: Compiling Plex
 description: How to compile Plex from source
 ---
-import {Tabs, TabItem} from '@astrojs/starlight/components';
+import {Steps, Tabs, TabItem} from '@astrojs/starlight/components';
 
 Plex uses Gradle, so you do not manage dependencies by hand. If you do not want to build Plex yourself, you can download
 a pre-built JAR from the [CI server](https://ci.plex.us.org).
@@ -23,56 +23,60 @@ Git. You need Git to clone the repository and to build Plex.
 
 ## Compile Plex
 
-### Download the source code
+<Steps>
 
-Clone the Plex repository with Git.
+1. ### Download the source code
 
-```bash
-git clone https://github.com/plexusorg/Plex
-```
+   Clone the Plex repository with Git.
 
-### Open the project directory
+   ```bash
+   git clone https://github.com/plexusorg/Plex
+   ```
 
-```bash
-cd Plex
-```
+2. ### Open the project directory
 
-### Run the build
+   ```bash
+   cd Plex
+   ```
 
-Plex includes the Gradle wrapper, so you do not install Gradle. Run the command for your system.
+3. ### Run the build
 
-<Tabs>
-    <TabItem value="macOS/Linux" label="macOS/Linux" default>
+   Plex includes the Gradle wrapper, so you do not install Gradle. Run the command for your system.
 
-        ```bash
-        ./gradlew build
-        ```
+   <Tabs syncKey="os">
+       <TabItem value="macOS/Linux" label="macOS/Linux" default>
 
-    </TabItem>
-    <TabItem value="Windows" label="Windows">
+           ```bash
+           ./gradlew build
+           ```
 
-        ```bash
-        gradlew.bat build
-        ```
+       </TabItem>
+       <TabItem value="Windows" label="Windows">
 
-    </TabItem>
-</Tabs>
+           ```bash
+           gradlew.bat build
+           ```
 
-### Find the compiled JARs
+       </TabItem>
+   </Tabs>
 
-Plex is a multi-module project. After a successful build, the JAR files are in the root `build/libs/` folder.
+4. ### Find the compiled JARs
 
-```
-build/libs/
-```
+   Plex is a multi-module project. After a successful build, the JAR files are in the root `build/libs/` folder.
 
-You get three files. The version in each file name matches the build.
+   ```
+   build/libs/
+   ```
 
-| File | Purpose |
-|------|---------|
-| `Plex-<version>.jar` | The server plugin. Install this on your Paper server. |
-| `Plex-Velocity-<version>.jar` | The Velocity proxy plugin. Install this only if you run a Velocity proxy. |
-| `Plex-API-<version>.jar` | The module API library. Module authors compile against this. You do not install it on the server. |
+   You get three files. The version in each file name matches the build.
+
+   | File | Purpose |
+   |------|---------|
+   | `Plex-<version>.jar` | The server plugin. Install this on your Paper server. |
+   | `Plex-Velocity-<version>.jar` | The Velocity proxy plugin. Install this only if you run a Velocity proxy. |
+   | `Plex-API-<version>.jar` | The module API library. Module authors compile against this. You do not install it on the server. |
+
+</Steps>
 
 ## Run Plex
 

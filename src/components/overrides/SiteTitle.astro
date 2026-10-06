@@ -1,0 +1,120 @@
+---
+/*
+ * The Plex lockup (mark, "Plex", "Docs") and the header links from starlight-utils.
+ * This replaces the starlight-utils SiteTitle override, so it also renders the leading nav links
+ * that the starlight-utils route middleware puts in Astro.locals.starlightUtils.navLinks.
+ */
+import PlexMark from '../../assets/plex-mark.svg';
+
+const { siteTitleHref } = Astro.locals.starlightRoute;
+const navLinks = Astro.locals.starlightUtils?.navLinks ?? [];
+---
+
+<div class="plex-title-bar">
+    <a href={siteTitleHref} class="plex-site-title" translate="no">
+        <PlexMark class="plex-site-mark" width={28} height={28} aria-hidden="true"/>
+        <span class="plex-wordmark">Plex</span>
+        <span class="plex-wordmark-suffix">Docs</span>
+    </a>
+    {navLinks.length > 0 && (
+        <ul class="plex-nav-links">
+            {navLinks.map((entry) => (
+                <li>
+                    <a href={entry.href} {...entry.attrs} aria-current={entry.isCurrent ? 'page' : undefined}>
+                        {entry.label}
+                    </a>
+                </li>
+            ))}
+        </ul>
+    )}
+</div>
+
+<style>
+    .plex-title-bar {
+        display: flex;
+        align-items: center;
+        gap: 1.75rem;
+        min-width: 0;
+    }
+
+    .plex-site-title {
+        display: flex;
+        flex: none;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.1875rem;
+        line-height: 1;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .plex-site-mark {
+        flex: none;
+        width: 28px;
+        height: 28px;
+    }
+
+    .plex-wordmark {
+        font-weight: 800;
+        font-stretch: 125%;
+        letter-spacing: -0.01em;
+        color: var(--plex-heading);
+    }
+
+    .plex-wordmark-suffix {
+        font-weight: 400;
+        color: var(--plex-muted);
+    }
+
+    .plex-nav-links {
+        display: flex;
+        gap: 1.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        white-space: nowrap;
+    }
+
+    .plex-nav-links a {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--plex-muted);
+        text-decoration: none;
+        transition: color 150ms ease;
+    }
+
+    .plex-nav-links a:hover,
+    .plex-nav-links a[aria-current='page'] {
+        color: var(--plex-heading);
+    }
+
+    /* Narrow screens: keep the header links visible next to the search and menu buttons. */
+    @media (max-width: 30rem) {
+        .plex-title-bar {
+            gap: 1rem;
+        }
+
+        .plex-site-mark {
+            width: 24px;
+            height: 24px;
+        }
+
+        .plex-wordmark-suffix {
+            display: none;
+        }
+
+        .plex-nav-links {
+            gap: 0.875rem;
+        }
+
+        .plex-nav-links a {
+            font-size: 0.875rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .plex-nav-links a {
+            transition: none;
+        }
+    }
+</style>

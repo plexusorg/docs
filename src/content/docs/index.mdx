@@ -1,46 +1,46 @@
 ---
-title: Home
-description: The official website and documentation for the Plex Minecraft Plugin
+title: Plex
+description: Plex is the core plugin for free-OP and anarchy servers. Read the documentation and download builds.
 template: splash
 editUrl: false
 hero:
   title: Plex
-  tagline: Welcome to the website and documentation for Plex!
+  tagline: The core for free-OP and anarchy servers
   image:
-    file: ../../assets/plexlogo.png
+    file: ../../assets/plex-mark.svg
   actions:
-    - text: Let's get started
+    - text: Read the docs
       link: /docs/
       icon: right-arrow
+    - text: Downloads
+      link: /downloads
+      variant: secondary
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+Plex is the core plugin for free-OP and anarchy servers. It works with any Vault-compatible permissions plugin and
+stores player data in SQLite, MariaDB, or PostgreSQL. Modules add optional features.
 
-## Why Plex?
+## Start here
 
-<CardGrid>
-    <Card title="Performance oriented" icon="rocket">
-        Plex is built for performance. It stores player data in SQLite, MariaDB, or PostgreSQL. It can also use Redis to
-        share admin chat and ban updates between the servers on your network.
-    </Card>
-    <Card title="Fully customizable" icon="setting">
-        Plex fits your server. You can change almost every message and the chat format. You can also create as many
-        custom worlds as you need.
-    </Card>
-    <Card title="Permissions" icon="list-format">
-        Plex works with any Vault-compatible permissions plugin. Use permission nodes to control what each player can do.
-        The FalseOp module can make players look like operators without giving them real op.
-    </Card>
-    <Card title="Modular" icon="cloud-download">
-        Plex has a module system. Add or remove modules to fit your server. Modules can add large features, such as a
-        web dashboard through HTTPD.
-    </Card>
-    <Card title="Converters" icon="random">
-        Moving from TotalFreedomMod? IBConverter turns your existing indefinite bans into Plex's format, so you do not
-        start from scratch.
-    </Card>
-    <Card title="Quality control" icon="sun">
-        Every release is tested to catch bugs before they reach your server. The codebase is built for stability and fast
-        development.
-    </Card>
-</CardGrid>
+<nav class="plex-entries not-content" aria-label="Start here">
+    <a href="/config/config">
+        <span class="plex-entry-title">Configuration</span>
+        <span class="plex-entry-text">Change config.yml and the other Plex files.</span>
+    </a>
+    <a href="/docs/permissions">
+        <span class="plex-entry-title">Permissions</span>
+        <span class="plex-entry-text">The permission node for each command in Plex and the official modules.</span>
+    </a>
+    <a href="/modules">
+        <span class="plex-entry-title">Modules</span>
+        <span class="plex-entry-text">Install, update, and remove the official modules.</span>
+    </a>
+    <a href="/docs/create_module">
+        <span class="plex-entry-title">Creating a module</span>
+        <span class="plex-entry-text">Build your own module with Java, Gradle, and the Plex API.</span>
+    </a>
+    <a href="/api">
+        <span class="plex-entry-title">Plex API</span>
+        <span class="plex-entry-text">Use players, punishments, messages, storage, and more from a module or a plugin.</span>
+    </a>
+</nav>

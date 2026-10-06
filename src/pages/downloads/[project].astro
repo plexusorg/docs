@@ -148,18 +148,7 @@ const emptyMessage = activeChannel
 </StarlightPage>
 
 <style>
-    #plex-builds {
-        --bd-surface: var(--sl-color-gray-6);
-        --bd-edge: var(--sl-color-gray-5);
-        --bd-fog: var(--sl-color-gray-3);
-        --bd-paper: var(--sl-color-white);
-        --bd-steel: var(--sl-color-text-accent);
-    }
-
-    #plex-builds a:focus-visible {
-        outline: 2px solid var(--bd-steel);
-        outline-offset: 2px;
-    }
+    /* Colors come from the --plex-* tokens in src/styles/custom.css, so both themes work. */
 
     .bd-hidden {
         position: absolute;
@@ -175,13 +164,14 @@ const emptyMessage = activeChannel
         align-items: center;
         gap: 0.25rem;
         font-size: var(--sl-text-sm);
-        color: var(--bd-fog);
+        font-weight: 500;
+        color: var(--plex-muted);
         text-decoration: none;
         transition: color 150ms ease;
     }
 
     .bd-back:hover {
-        color: var(--bd-paper);
+        color: var(--plex-heading);
     }
 
     .bd-back-icon {
@@ -191,118 +181,144 @@ const emptyMessage = activeChannel
 
     .bd-lede {
         margin: 0.75rem 0 0;
-        color: var(--bd-fog);
-        text-wrap: pretty;
+        font-size: var(--sl-text-lg);
+        color: var(--plex-body);
     }
 
     .bd-lede a,
     .bd-note a {
-        color: var(--bd-steel);
-        text-decoration: none;
+        color: var(--plex-link);
+        text-decoration-line: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.2em;
+        text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
         transition: color 150ms ease;
     }
 
     .bd-lede a:hover,
     .bd-note a:hover {
-        color: var(--bd-paper);
+        color: var(--plex-heading);
+        text-decoration-color: currentColor;
     }
 
     .bd-note {
         margin: 2rem 0 0;
-        padding: 1rem;
-        border: 1px solid var(--bd-edge);
-        border-radius: 0.375rem;
-        background: var(--bd-surface);
+        padding: 1rem 1.25rem;
+        border-radius: 6px;
+        background-color: var(--plex-surface);
         font-size: var(--sl-text-sm);
-        color: var(--bd-fog);
-    }
-
-    .bd-version {
-        margin-top: 2.5rem;
-    }
-
-    .bd-version-title {
-        margin: 0;
-        font-size: var(--sl-text-xl);
-        font-weight: 500;
-        line-height: var(--sl-line-height-headings);
-        color: var(--bd-paper);
-    }
-
-    .bd-table-wrap {
-        margin-top: 1rem;
-        overflow-x: auto;
-        border: 1px solid var(--bd-edge);
-        border-radius: 0.5rem;
-        background: var(--bd-surface);
-    }
-
-    .bd-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: var(--sl-text-sm);
-    }
-
-    .bd-table th,
-    .bd-table td {
-        padding: 0.85rem 1.25rem;
-        text-align: left;
-        vertical-align: middle;
-    }
-
-    .bd-table thead th {
-        font-weight: 400;
-        font-size: var(--sl-text-xs);
-        color: var(--bd-fog);
-        border-bottom: 1px solid var(--bd-edge);
-        white-space: nowrap;
-    }
-
-    .bd-table tbody tr + tr th,
-    .bd-table tbody tr + tr td {
-        border-top: 1px solid var(--bd-edge);
-    }
-
-    .bd-table tbody td {
-        color: var(--bd-fog);
-        font-variant-numeric: tabular-nums;
-    }
-
-    .bd-build {
-        font-weight: 600;
-        color: var(--bd-paper);
-        font-variant-numeric: tabular-nums;
-        white-space: nowrap;
-    }
-
-    .bd-nowrap {
-        white-space: nowrap;
+        color: var(--plex-muted);
     }
 
     .bd-tabs {
         display: flex;
         gap: 1.75rem;
         margin-top: 2rem;
-        border-bottom: 1px solid var(--bd-edge);
+        border-bottom: 1px solid var(--plex-line);
     }
 
     .bd-tab {
         margin-bottom: -1px;
         padding-bottom: 0.6rem;
         border-bottom: 2px solid transparent;
-        font-size: var(--sl-text-sm);
-        color: var(--bd-fog);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--plex-muted);
         text-decoration: none;
-        transition: color 150ms ease, border-color 150ms ease;
+        transition: color 150ms ease;
     }
 
     .bd-tab:hover {
-        color: var(--bd-paper);
+        color: var(--plex-heading);
     }
 
     .bd-tab[aria-current='page'] {
-        color: var(--bd-paper);
-        border-bottom-color: var(--bd-steel);
+        color: var(--plex-heading);
+        font-weight: 600;
+        border-bottom-color: var(--plex-tick);
+    }
+
+    /* Version sections: the margin tick, then the version. */
+
+    .bd-version {
+        margin-top: 3rem;
+    }
+
+    .bd-version-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0;
+        font-size: var(--sl-text-h2);
+        font-weight: 700;
+        font-stretch: 112.5%;
+        letter-spacing: -0.015em;
+        line-height: var(--sl-line-height-headings);
+        color: var(--plex-heading);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .bd-version-title::before {
+        content: '';
+        flex: none;
+        width: 8px;
+        height: 8px;
+        background-color: var(--plex-tick);
+    }
+
+    /* Build table: the same rule system as the docs tables. One line color under the header and between rows. */
+
+    .bd-table-wrap {
+        margin-top: 1rem;
+        overflow-x: auto;
+    }
+
+    .bd-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9375rem;
+    }
+
+    .bd-table th,
+    .bd-table td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .bd-table :is(th, td):first-child {
+        padding-inline-start: 0;
+    }
+
+    .bd-table :is(th, td):last-child {
+        padding-inline-end: 0;
+    }
+
+    .bd-table thead th {
+        font-weight: 600;
+        color: var(--plex-heading);
+        border-bottom: 1px solid var(--plex-line);
+        white-space: nowrap;
+    }
+
+    .bd-table tbody tr + tr {
+        border-top: 1px solid var(--plex-line);
+    }
+
+    .bd-table tbody td {
+        color: var(--plex-body);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .bd-build {
+        font-weight: 600;
+        color: var(--plex-heading);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .bd-nowrap {
+        white-space: nowrap;
     }
 
     .bd-cell-action {
@@ -313,14 +329,15 @@ const emptyMessage = activeChannel
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        color: var(--bd-steel);
+        font-weight: 500;
+        color: var(--plex-link);
         text-decoration: none;
         white-space: nowrap;
         transition: color 150ms ease;
     }
 
     .bd-download:hover {
-        color: var(--bd-paper);
+        color: var(--plex-heading);
     }
 
     .bd-download-icon {
@@ -334,6 +351,11 @@ const emptyMessage = activeChannel
     }
 
     @media (prefers-reduced-motion: reduce) {
+        .bd-back,
+        .bd-lede a,
+        .bd-note a,
+        .bd-tab,
+        .bd-download,
         .bd-download-icon {
             transition: none;
         }

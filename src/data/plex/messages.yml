@@ -1,16 +1,3 @@
----
-title: Messages
-description: All of the messages within the messages.yml file for Plex
----
-
-You can change almost every message in Plex. This page shows the `messages.yml` file. The file is at
-`/plugins/Plex/messages.yml`.
-
-## Default file
-
-Below is the default `messages.yml` file.
-
-```yaml title="/plugins/Plex/messages.yml"
 # Plex Messages File
 # This file uses the MiniMessage system.
 # Documentation available at https://docs.papermc.io/adventure/minimessage/format/
@@ -397,45 +384,3 @@ protectRegionListEntry: "<gray>- <yellow><region></yellow> in <world> (preset: <
 protectNoPresets: "<gray>No protection presets are configured."
 protectPresetListHeader: "<gold>Protection presets (<count>):"
 protectPresetListEntry: "<gray>- <yellow><preset></yellow>: <description>"
-```
-
-## Ban messages
-
-A banned player may still join in spectator mode when a spectator slot is free. Plex kicks that player with
-`bannedPriorityKick` when a regular player needs the slot. Plex shows `banCapacityMessage` when every spectator slot is
-already taken.
-
-A player with the `plex.playerlimitbypass` permission can join when the server is full. Plex first kicks a banned
-player to make room. If no banned player is online, Plex kicks a random player who does not have that permission. That
-player sees `playerLimitBypassKick`.
-
-## Login messages
-
-Plex replaces the player's own name with `<player>` and their group title with `<group>` when they set a login message.
-The `nameRequired` and `groupRequired` messages tell a player to add those values.
-
-## Rollbacks
-
-Plex uses Oasis for a rollback. If Oasis is not installed, Plex uses CoreProtect. Without either plugin, no rollback
-runs.
-
-## MiniMessage
-
-The `messages.yml` file uses MiniMessage for colors. For example, `<aqua>` colors the text aqua. You do not need to close
-a color tag. You can close one, for example with `</aqua>`, to end that color early. MiniMessage also has special tags,
-such as `<rainbow>`. Text with no color tag uses the normal Minecraft color, which is white in chat. Add a tag such as
-`<gray>` to pick a color. For the full MiniMessage guide, see
-[https://docs.advntr.dev/minimessage/format.html](https://docs.advntr.dev/minimessage/format.html).
-
-Values in angle brackets, such as `<player>` and `<count>`, are replacement values. Plex fills each one with a value,
-such as a player name or a number. The comment above each message lists the values for that message. A value is optional,
-and you can repeat it. Plex does not support placeholders in braces, such as `{0}`. Use the names in angle brackets.
-
-Modules can ship their own message files. A module reads its own `messages.yml` first, then falls back to the Plex
-messages for any key that it does not define.
-
-## Troubleshooting
-
-If a command fails with an error instead of showing a message, your `messages.yml` file may be missing a key. Plex adds
-missing keys back when the server starts and when you run `/plex reload`. You can also compare your file
-with the default file on [GitHub](https://raw.githubusercontent.com/plexusorg/Plex/master/server/src/main/resources/messages.yml).

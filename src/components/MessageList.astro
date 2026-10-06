@@ -1,0 +1,41 @@
+---
+// One group of messages from Plex's default messages.yml, with each message's default text and the placeholders that
+// the comments above it list. The page puts a heading above each group. The data comes from src/data/plex/messages.yml.
+import {messageGroups} from '../data/reference';
+import './reference.css';
+
+interface Props {
+    /** The group title, as messages.yml groups the messages. */
+    group: string;
+}
+
+const {group} = Astro.props;
+const {messages} = messageGroups.find((candidate) => candidate.title === group)!;
+const keyColumn = Math.max(...messages.map((message) => message.key.length)) + 3;
+const search = (key: string, value: string, names: string[]) => [key, value, ...names].join(' ').toLowerCase();
+---
+
+<div class="ref ref-messages not-content" data-ref translate="no" style={`--ref-key-col: ${keyColumn}ch`}>
+    {messages.map((message) => (
+        <div class="ref-item ref-message" id={message.key} data-ref-item
+             data-search={search(message.key, message.value, message.placeholders.map((p) => p.name))}>
+            <span class="ref-key">{message.key}</span>
+            <div class="ref-message-body">
+                <span class="ref-value">{message.value}</span>
+                {message.placeholders.length > 0 && (
+                    <ul class="ref-chips" aria-label="Placeholders">
+                        {message.placeholders.map((placeholder) => (
+                            <li><code class="ref-chip">&lt;{placeholder.name}&gt;</code> <span translate="yes">{placeholder.description}</span></li>
+                        ))}
+                    </ul>
+                )}
+                {message.note && <p class="ref-note" translate="yes">{message.note}</p>}
+            </div>
+            <a class="ref-anchor" href={`#${message.key}`} aria-label={`Link to ${message.key}`}>#</a>
+        </div>
+    ))}
+</div>
+
+<script>
+    import './reference-tree.ts';
+</script>

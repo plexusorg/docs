@@ -33,7 +33,7 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
         </nav>
 
         {plex && (
-            <section aria-labelledby="dl-plex-heading">
+            <section class="dl-section" aria-labelledby="dl-plex-heading">
                 <div class="dl-section-head">
                     <h2 id="dl-plex-heading">Plex</h2>
                     <a class="dl-more" href={projectPath(plex.name, activeChannel)}>
@@ -56,10 +56,10 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
             </section>
         )}
 
-        <div class="dl-cut" aria-hidden="true"></div>
-
-        <section aria-labelledby="dl-modules-heading">
-            <h2 id="dl-modules-heading">Modules</h2>
+        <section class="dl-section" aria-labelledby="dl-modules-heading">
+            <div class="dl-section-head">
+                <h2 id="dl-modules-heading">Modules</h2>
+            </div>
             <p class="dl-section-sub">
                 Modules are optional. Each one ships its own stable and dev builds.
             </p>
@@ -71,102 +71,113 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
 </StarlightPage>
 
 <style is:global>
-    /* Design tokens, mapped onto Starlight so both themes keep working. */
-    #plex-downloads {
-        --dl-surface: var(--sl-color-gray-6);
-        --dl-edge: var(--sl-color-gray-5);
-        --dl-edge-hover: var(--sl-color-gray-4);
-        --dl-fog: var(--sl-color-gray-3);
-        --dl-paper: var(--sl-color-white);
-        --dl-steel: var(--sl-color-text-accent);
-        --dl-radius: 0.5rem;
-        --dl-radius-sm: 0.375rem;
-    }
-
-    #plex-downloads a:focus-visible {
-        outline: 2px solid var(--dl-steel);
-        outline-offset: 2px;
-    }
-
-    /* Page intro and sections */
+    /* Colors come from the --plex-* tokens in src/styles/custom.css, so both themes work. */
 
     #plex-downloads .dl-lede {
         margin: 0 0 2rem;
-        color: var(--dl-fog);
-        text-wrap: pretty;
+        font-size: var(--sl-text-lg);
+        color: var(--plex-body);
     }
+
+    #plex-downloads .dl-lede a,
+    #plex-downloads .dl-note a,
+    #plex-downloads .dl-row-note a {
+        color: var(--plex-link);
+        text-decoration-line: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.2em;
+        text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+        transition: color 150ms ease;
+    }
+
+    #plex-downloads .dl-lede a:hover,
+    #plex-downloads .dl-note a:hover,
+    #plex-downloads .dl-row-note a:hover {
+        color: var(--plex-heading);
+        text-decoration-color: currentColor;
+    }
+
+    /* Channel tabs */
 
     #plex-downloads .dl-tabs {
         display: flex;
         gap: 1.75rem;
-        margin: 0 0 2.5rem;
-        border-bottom: 1px solid var(--dl-edge);
+        margin: 0;
+        border-bottom: 1px solid var(--plex-line);
     }
 
     #plex-downloads .dl-tab {
         margin-bottom: -1px;
         padding-bottom: 0.6rem;
         border-bottom: 2px solid transparent;
-        font-size: var(--sl-text-sm);
-        color: var(--dl-fog);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--plex-muted);
         text-decoration: none;
-        transition: color 150ms ease, border-color 150ms ease;
-    }
-
-    #plex-downloads .dl-tab:hover {
-        color: var(--dl-paper);
-    }
-
-    #plex-downloads .dl-tab[aria-current='page'] {
-        color: var(--dl-paper);
-        border-bottom-color: var(--dl-steel);
-    }
-
-    #plex-downloads .dl-lede a {
-        color: var(--dl-steel);
         transition: color 150ms ease;
     }
 
-    #plex-downloads .dl-lede a:hover {
-        color: var(--dl-paper);
+    #plex-downloads .dl-tab:hover {
+        color: var(--plex-heading);
     }
 
-    #plex-downloads h2 {
-        margin: 0;
-        font-size: var(--sl-text-xl);
-        font-weight: 500;
-        line-height: var(--sl-line-height-headings);
-        color: var(--dl-paper);
-        text-wrap: balance;
+    #plex-downloads .dl-tab[aria-current='page'] {
+        color: var(--plex-heading);
+        font-weight: 600;
+        border-bottom-color: var(--plex-tick);
+    }
+
+    /* Sections: the margin tick, the heading, then the "All builds" link at the end of the row. */
+
+    #plex-downloads .dl-section {
+        margin-top: 3rem;
     }
 
     #plex-downloads .dl-section-head {
         display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 1rem;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    #plex-downloads .dl-section-head::before {
+        content: '';
+        flex: none;
+        width: 8px;
+        height: 8px;
+        background-color: var(--plex-tick);
+    }
+
+    #plex-downloads h2 {
+        margin: 0;
+        font-size: var(--sl-text-h2);
+        font-weight: 700;
+        font-stretch: 112.5%;
+        letter-spacing: -0.015em;
+        line-height: var(--sl-line-height-headings);
+        color: var(--plex-heading);
     }
 
     #plex-downloads .dl-section-sub {
         margin: 0.5rem 0 0;
-        max-width: 42rem;
         font-size: var(--sl-text-sm);
-        color: var(--dl-fog);
+        color: var(--plex-muted);
     }
 
     #plex-downloads .dl-more {
         display: inline-flex;
         flex: none;
+        margin-inline-start: auto;
         align-items: center;
         gap: 0.25rem;
         font-size: var(--sl-text-sm);
-        color: var(--dl-fog);
+        font-weight: 500;
+        color: var(--plex-muted);
         text-decoration: none;
         transition: color 150ms ease;
     }
 
     #plex-downloads .dl-more:hover {
-        color: var(--dl-paper);
+        color: var(--plex-heading);
     }
 
     #plex-downloads .dl-more-icon {
@@ -174,33 +185,28 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
         height: 0.9rem;
     }
 
-    #plex-downloads .dl-cut {
-        margin: 3rem 0;
-        border-top: 1px dashed var(--dl-edge);
-    }
-
-    /* Featured Plex card */
+    /* Featured Plex build */
 
     #plex-downloads .dl-featured {
-        margin-top: 1rem;
+        margin-top: 1.25rem;
     }
 
     #plex-downloads .dl-card {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
-        padding: 1.25rem;
-        border: 1px solid var(--dl-edge);
-        border-radius: var(--dl-radius);
-        background: var(--dl-surface);
-        color: var(--sl-color-text);
+        gap: 1rem 1.5rem;
+        padding: 1.25rem 1.5rem;
+        border: 1px solid var(--plex-line);
+        border-radius: 6px;
+        color: var(--plex-body);
         text-decoration: none;
         transition: border-color 150ms ease;
     }
 
     #plex-downloads .dl-card:hover {
-        border-color: var(--dl-edge-hover);
+        border-color: var(--plex-muted);
     }
 
     #plex-downloads .dl-card-main {
@@ -210,19 +216,21 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
 
     #plex-downloads .dl-version {
         display: block;
-        font-size: var(--sl-text-2xl);
-        font-weight: 700;
+        font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+        font-weight: 800;
+        font-stretch: 125%;
         letter-spacing: -0.02em;
-        line-height: 1.15;
-        color: var(--dl-paper);
+        line-height: 1.1;
+        color: var(--plex-heading);
         font-variant-numeric: tabular-nums;
+        overflow-wrap: anywhere;
     }
 
     #plex-downloads .dl-card-meta {
         display: block;
-        margin-top: 0.35rem;
-        font-size: var(--sl-text-xs);
-        color: var(--dl-fog);
+        margin-top: 0.5rem;
+        font-size: var(--sl-text-sm);
+        color: var(--plex-muted);
         font-variant-numeric: tabular-nums;
     }
 
@@ -231,13 +239,13 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
         flex: none;
         align-items: center;
         gap: 0.45rem;
-        font-size: var(--sl-text-sm);
-        color: var(--dl-steel);
+        font-weight: 600;
+        color: var(--plex-link);
         transition: color 150ms ease;
     }
 
     #plex-downloads .dl-card:hover .dl-card-action {
-        color: var(--dl-paper);
+        color: var(--plex-heading);
     }
 
     #plex-downloads .dl-card-icon {
@@ -251,47 +259,41 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
     }
 
     #plex-downloads .dl-card-empty {
-        display: flex;
-        align-items: center;
         margin: 0;
-        padding: 1.25rem;
-        border: 1px dashed var(--dl-edge);
-        border-radius: var(--dl-radius);
+        padding: 1.25rem 1.5rem;
+        border: 1px dashed var(--plex-line);
+        border-radius: 6px;
         font-size: var(--sl-text-sm);
-        color: var(--dl-fog);
+        color: var(--plex-muted);
     }
 
-    /* Module list */
+    /* Module list: one line between rows, no frame above or below. */
 
     #plex-downloads .dl-list {
         list-style: none;
-        margin: 1rem 0 0;
+        margin: 0.5rem 0 0;
         padding: 0;
-        border: 1px solid var(--dl-edge);
-        border-radius: var(--dl-radius);
-        background: var(--dl-surface);
     }
 
     #plex-downloads .dl-row {
-        padding: 1rem 1.25rem;
+        padding: 1rem 0;
     }
 
     #plex-downloads .dl-row + .dl-row {
-        border-top: 1px solid var(--dl-edge);
+        border-top: 1px solid var(--plex-line);
     }
 
     #plex-downloads .dl-row-main {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: baseline;
         justify-content: space-between;
         gap: 0.5rem 1.5rem;
     }
 
     #plex-downloads .dl-module-name {
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        color: var(--dl-paper);
+        font-weight: 600;
+        color: var(--plex-heading);
     }
 
     #plex-downloads .dl-actions {
@@ -306,13 +308,13 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
         align-items: center;
         gap: 0.45rem;
         font-size: var(--sl-text-sm);
-        color: var(--dl-steel);
+        color: var(--plex-link);
         text-decoration: none;
         transition: color 150ms ease;
     }
 
     #plex-downloads .dl-action:hover {
-        color: var(--dl-paper);
+        color: var(--plex-heading);
     }
 
     #plex-downloads .dl-action-version {
@@ -333,45 +335,24 @@ const activeChannel = CHANNELS.includes(requestedChannel) ? requestedChannel : s
     #plex-downloads .dl-action-empty,
     #plex-downloads .dl-row-note {
         font-size: var(--sl-text-sm);
-        color: var(--dl-fog);
+        color: var(--plex-muted);
     }
 
-    #plex-downloads .dl-row-note a {
-        color: var(--dl-steel);
-        text-decoration: none;
-        transition: color 150ms ease;
-    }
-
-    #plex-downloads .dl-row-note a:hover {
-        color: var(--dl-paper);
-    }
-
-    /* Error and empty notices */
+    /* Error notice */
 
     #plex-downloads .dl-note {
         margin: 1rem 0 0;
-        padding: 1rem;
-        border: 1px solid var(--dl-edge);
-        border-radius: var(--dl-radius-sm);
-        background: var(--dl-surface);
+        padding: 1rem 1.25rem;
+        border-radius: 6px;
+        background-color: var(--plex-surface);
         font-size: var(--sl-text-sm);
-        color: var(--dl-fog);
-    }
-
-    #plex-downloads .dl-note a {
-        color: var(--dl-steel);
-        text-decoration: none;
-        transition: color 150ms ease;
-    }
-
-    #plex-downloads .dl-note a:hover {
-        color: var(--dl-paper);
+        color: var(--plex-muted);
     }
 
     @media (prefers-reduced-motion: reduce) {
-        #plex-downloads .dl-card-icon,
-        #plex-downloads .dl-action-icon {
-            transition: color 150ms ease;
+        #plex-downloads :is(.dl-lede a, .dl-note a, .dl-row-note a, .dl-tab, .dl-more, .dl-card, .dl-card-action,
+            .dl-card-icon, .dl-action, .dl-action-icon) {
+            transition: none;
         }
 
         #plex-downloads .dl-card:hover .dl-card-icon,

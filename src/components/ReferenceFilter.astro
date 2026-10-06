@@ -1,0 +1,24 @@
+---
+// A filter box for a reference page. It filters every [data-ref-item] on the page by its data-search text, and hides
+// a reference section with no matches together with the heading above it. Without JavaScript it stays hidden.
+import './reference.css';
+
+interface Props {
+    label: string;
+}
+
+const {label} = Astro.props;
+---
+
+<div class="ref-tools not-content" data-ref-tools hidden>
+    <label class="ref-filter">
+        <span class="ref-sr">{label}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        <input type="search" placeholder={label} autocomplete="off" spellcheck="false" data-ref-filter />
+    </label>
+    <p class="ref-empty" data-ref-empty hidden>Nothing matches.</p>
+</div>
+
+<script>
+    import './reference-tree.ts';
+</script>

@@ -1,0 +1,16 @@
+diff --git a/entryToSimpleMarkdown.ts b/entryToSimpleMarkdown.ts
+index 0354f11fb5fd294ba494c02c7cb1f794f957a707..bead4142aab51ab54bb52ea7b29ff2fd5a0a4f68 100644
+--- a/entryToSimpleMarkdown.ts
++++ b/entryToSimpleMarkdown.ts
+@@ -137,6 +137,11 @@ const htmlToMarkdownPipeline = unified()
+ 							}
+ 						}
+ 					}
++					// A blank line holds a "\n" of its own, which hast-util-to-mdast doubles. Join the line texts instead.
++					const lineText = (node: any): string =>
++						node.type === 'text' ? node.value : (node.children ?? []).map(lineText).join('');
++					const lines = selectAll('.ec-line', code).map((line) => lineText(line).replace(/\n$/, ''));
++					code.children = [{ type: 'text', value: lines.join('\n') }];
+ 				}
+ 			}
+ 		};

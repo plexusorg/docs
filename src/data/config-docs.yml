@@ -1,0 +1,199 @@
+# Descriptions for the configuration reference at /config/config.
+#
+# The default values and types come from Plex's own files in src/data/plex/. This file holds only the words.
+# Each section is one Plex file. Each entry is a dotted path to a setting in that file, with:
+#   description  What the setting does. Inline markdown works: `code`, [links](/path), and **bold**.
+#                A blank line starts a new paragraph.
+#   accepts      Optional. The values the setting takes. Without it, the page derives "true or false",
+#                "a whole number", or "a list" from the default value.
+#   note         Optional. An extra remark that the page shows under the description.
+#
+# Which paths need an entry:
+#   - Every scalar value (a string, a number, or true/false) needs an entry at its own path.
+#   - A list is one setting. Document it at the path of the list, such as block_on_mute.
+#   - A map is a group of settings, and the page lists its keys one by one. If the keys of a map are names that a
+#     server owner picks, such as groups, worlds, or presets, document the map at its own path instead. The page then
+#     shows the map as one setting with its default YAML, and its keys need no entries.
+#   - An empty map, such as regions: {}, is one setting.
+# The build fails when a setting in a Plex file has no entry here, or when an entry here names no setting.
+
+config.yml:
+  server.name:
+    description: The name of your server. Plex uses it in many places, including the `<servername>` placeholder.
+  server.motd:
+    description: >-
+      The text that appears on the server list. Plex replaces `<servername>` with the server name and `<mcversion>`
+      with the Minecraft version.
+  server.colorize_motd:
+    description: If `true`, Plex colorizes the MOTD at random. Set it to `false` to color the MOTD yourself.
+  server.sample:
+    description: A custom message that appears under the player count in the server list.
+  server.timezone:
+    description: The timezone for time-based messages, such as the end date in a ban message.
+    accepts: a timezone name, such as `Etc/UTC` or `America/New_York`
+  banning.ban_url:
+    description: The appeal URL that the ban message shows. You change the full ban message in `messages.yml`.
+  banning.admission-cache-seconds:
+    description: How long, in seconds, Plex keeps a join decision in memory before it asks the database again.
+  banning.admission-cache-size:
+    description: How many join decisions Plex keeps in memory.
+  punishments.mute-timer:
+    description: How long, in seconds, a mute from `/mute` lasts.
+  punishments.freeze-timer:
+    description: How long, in seconds, a freeze from `/freeze` lasts.
+  chat.enabled:
+    description: >-
+      Turns on the Plex chat system. Turn it off if you use a permissions plugin and want another plugin to handle
+      prefixes.
+  chat.max-tag-length:
+    description: >-
+      The maximum length of a tag in game. Plex counts only the characters that show. MiniMessage tags such as
+      `<red>` do not count.
+  chat.format:
+    description: >-
+      The chat format. You can use these placeholders: `<prefix>` for the player prefix, `<name>` for the username,
+      `<displayname>` for the display name (such as a nickname), `<uuid>` for the player UUID, and `<message>` for the
+      message.
+
+
+      `<head:<uuid>>` shows the head of the player who sent the message.
+    accepts: a MiniMessage string
+  chat.mentions:
+    description: >-
+      If someone types your username in public chat, you see your name in yellow and hear a sound. Plex ignores upper
+      and lower case. If you type your own name, it is not highlighted and you hear no sound.
+  chat.nickname-hover:
+    description: Move your mouse over a nickname in chat to see the real username of that player.
+  groups:
+    description: >-
+      Sets a color and a title for each group in your permissions plugin. Each key is a group name. It must match the
+      primary group that your permissions plugin returns for the player. The four groups in the default file are
+      examples, and you can use your own group names.
+
+
+      `color` sets the color of the group in the tab list. Plex uses white for a group with no color. `title` is the
+      readable rank name that Plex puts in generated login messages, such as `Senior Admin`. A group with no title gets
+      no generated login message.
+    accepts: a group name, then `color` (a MiniMessage color tag) and `title` (text)
+  loginmessages.name:
+    description: Requires players to include their name when they set a login message.
+  loginmessages.group:
+    description: Requires players to include their group title when they set a login message.
+  loginmessages.default-format:
+    description: >-
+      The format of the generated group login message. You can use the placeholders `<player>`, `<group>`,
+      `<group_key>`, `<title>`, `<article>`, and `<group_color>`.
+    accepts: a MiniMessage string
+  data.db.storage:
+    description: >-
+      The database that Plex uses for player data. Plex does not transfer data when you change the storage type.
+      SQLite writes to `plugins/Plex/database.db`.
+    accepts: "`sqlite`, `mariadb`, or `postgres`"
+  data.db.user:
+    description: The database username. SQLite does not use it.
+  data.db.password:
+    description: The database password. SQLite does not use it.
+  data.db.hostname:
+    description: The database hostname. SQLite does not use it.
+  data.db.port:
+    description: The database port. SQLite does not use it.
+    note: The default port `3306` is the MySQL and MariaDB port. Change it to `5432` if you use PostgreSQL.
+  data.db.name:
+    description: The database name. SQLite does not use it.
+  data.redis.enabled:
+    description: Turns on the Plex Redis features. See [Configuring Redis](/docs/redis).
+  data.redis.auth:
+    description: Turns on authentication for Redis.
+    note: We recommend that you turn on Redis authentication.
+  data.redis.hostname:
+    description: The Redis hostname. Redis needs this value to work.
+  data.redis.port:
+    description: The port that Redis listens on. Redis needs this value to work.
+  data.redis.password:
+    description: The Redis password. Leave it blank if authentication is off.
+  block_on_mute:
+    description: The commands that Plex blocks when a player is muted or when chat is off.
+    accepts: a list of command names, without the slash
+  updater.enabled:
+    description: Turns on the update check.
+  updater.interval:
+    description: How often, in seconds, Plex checks for an update. The lowest value is `60`.
+  updater.channel:
+    description: >-
+      The update channel that Plex checks. Plex sets this value itself at every startup. A development build uses
+      `dev` and a release build uses `stable`. Do not edit it. Run `/plex update` to install the newest build.
+    accepts: "`stable` or `dev`"
+  debug:
+    description: >-
+      Turns on extra logging in the console. This helps you diagnose problems. Keep it off during normal use.
+
+entities.yml:
+  entitywipe_list:
+    description: >-
+      Plex does not wipe the entities in this list. By default the list holds every mob, because you can remove mobs
+      with the `/mobpurge` command.
+    accepts: a list of entity type names
+  autowipe.enabled:
+    description: Turns on automatic entity wiping.
+  autowipe.interval:
+    description: How often, in seconds, Plex wipes the entities. The default is five minutes.
+  autowipe.entities:
+    description: The entities that Plex wipes automatically.
+    accepts: a list of entity type names
+  blocked_blocks:
+    description: The blocks that players cannot place.
+    accepts: a list of block names
+  blocked_entities:
+    description: The entities that players cannot spawn.
+    accepts: a list of entity type names
+  entity_limit.mob_limit_enabled:
+    description: Turns on the mob limit per chunk.
+  entity_limit.max_mobs_per_chunk:
+    description: The maximum number of mobs in a chunk.
+  entity_limit.mob_limit_ceiling:
+    description: The highest value that you can set the mob limit to with `/moblimit`.
+
+worlds.yml:
+  global_gamerules:
+    description: >-
+      The gamerules for every world on the server. A gamerule for one world overrides the global value. Each entry is
+      the gamerule name, a semicolon, and `true` or `false`.
+    accepts: a list of `gamerule;value` entries, with the current Minecraft gamerule names such as `keep_inventory`
+  worlds:
+    description: >-
+      The worlds that Plex generates. Each key is the name of a world, and you can add as many worlds as you
+      want. `name` is the readable world name. `entry` and `modification` each take an optional `permission` and the
+      `message` that a player sees without it. `gameRules` overrides the global gamerules for this world.
+      `parameters` sets the layers of the world.
+    accepts: a world name, then `name`, `entry`, `modification`, `gameRules`, and `parameters`
+
+toggles.yml:
+  explosions:
+    description: If `true`, explosions damage blocks. If `false`, explosions still happen but leave the blocks alone.
+  fluidspread:
+    description: If `true`, water and lava spread.
+  drops:
+    description: If `true`, players can drop items.
+  redstone:
+    description: If `true`, redstone works.
+  chat:
+    description: >-
+      If `false`, only players with `plex.mute.bypass` can chat. Plex also blocks the commands in
+      `block_on_mute` for everyone else.
+  pvp:
+    description: If `true`, players can damage other players.
+
+protection.yml:
+  presets:
+    description: >-
+      The flag presets that `/protect` applies to a region. Each key is a preset name. `description` is the text that
+      `/protect presets` shows. `flags` lists the WorldGuard flags and their values.
+
+
+      You can use any WorldGuard flag. Values use the WorldGuard YAML format. To limit a flag to a region group, give
+      the flag a `value` and a `group`, such as `group: nonmembers`.
+    accepts: a preset name, then `description` and `flags`
+  regions:
+    description: >-
+      The regions that Plex manages. Plex saves each region that you create or add with `/protect` here, and restores
+      the regions and their flags when the server starts. You do not need to edit this section.
