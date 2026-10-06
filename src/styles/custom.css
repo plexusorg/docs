@@ -76,8 +76,42 @@
 
 /* Base */
 
+/* Keep the layout still between short and long pages. */
 html {
     scrollbar-gutter: stable;
+}
+
+/*
+ * Scrollbars, the same on every box that scrolls: no rail and no arrows, a rounded warm-gray thumb
+ * that turns vermilion on hover. Chromium and Safari draw them from ::-webkit-scrollbar.
+ * Chromium lets scrollbar-width and scrollbar-color win over those, so only a browser without
+ * ::-webkit-scrollbar (Firefox) gets the standard properties.
+ */
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 4px solid transparent;
+    border-radius: 999px;
+    background-color: var(--sl-color-gray-4);
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--plex-accent);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    * {
+        scrollbar-color: var(--sl-color-gray-4) transparent;
+    }
 }
 
 body {
@@ -344,6 +378,25 @@ starlight-toc a[aria-current='true']::before {
     width: 6px;
     height: 6px;
     background-color: var(--plex-tick);
+}
+
+/* A page with a sidebar and no table of contents (the downloads pages) keeps the column and header layout of
+   the docs pages. Starlight centers that column in the full width instead. */
+
+@media (min-width: 50rem) {
+    :root[data-has-sidebar]:not([data-has-toc]) {
+        --__toc-width: initial;
+    }
+}
+
+@media (min-width: 72rem) {
+    [data-has-sidebar]:not([data-has-toc]) .main-pane {
+        --sl-content-margin-inline: auto 0;
+        width: min(
+            calc(100% - var(--sl-sidebar-width)),
+            calc(var(--sl-content-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2)
+        );
+    }
 }
 
 /* Previous and next links */

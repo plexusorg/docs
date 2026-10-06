@@ -93,6 +93,7 @@ export default defineConfig({
             SiteTitle: './src/components/overrides/SiteTitle.astro',
             TableOfContents: './src/components/overrides/TableOfContents.astro',
             MobileTableOfContents: './src/components/overrides/MobileTableOfContents.astro',
+            ThemeSelect: './src/components/overrides/ThemeSelect.astro',
         },
         customCss: [
             '@fontsource-variable/archivo/wdth.css',
@@ -139,9 +140,6 @@ export default defineConfig({
             exclude: ['/downloads', '/downloads/**'],
         }), starlightLlmsTxt({
             projectName: 'Plex',
-            description: 'Plex is the core plugin for free-OP and anarchy Minecraft servers. It works with any '
-                + 'Vault-compatible permissions plugin and stores player data in SQLite, MariaDB, or PostgreSQL. '
-                + 'Modules add optional features.',
             details: 'Every page has a Markdown copy at its URL with `.md` added, for example `/docs/compiling.md`.',
             promote: pageOrder,
             exclude: ['404'],
@@ -164,12 +162,17 @@ export default defineConfig({
             // The worker bundle pulls in Starlight's Tabs, Steps and FileTree through the content collection,
             // but it only renders the download pages. satteri has no build that runs in workerd, so the worker
             // gets a stub. Node prerenders the docs pages with the real satteri.
+            // In dev nothing is tree-shaken: StarlightPage loads FileTree, which parses its SVG icons on import.
+            // The stub gives those icons an empty tree and still fails any content parse.
             name: 'stub-satteri-in-worker',
             enforce: 'pre',
             applyToEnvironment: (environment) => environment.name === 'ssr',
             resolveId: (id) => id === 'satteri' ? '\0satteri-stub' : null,
             load: (id) => id === '\0satteri-stub'
-                ? 'export function htmlToHast() { throw new Error("satteri is not available in the worker"); }'
+                ? `export function htmlToHast(html, options) {
+                    if (options?.space === 'svg') return {type: 'root', children: []};
+                    throw new Error('satteri is not available in the worker');
+                }`
                 : null,
         }],
     },
