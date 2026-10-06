@@ -14,3 +14,19 @@ index 0354f11fb5fd294ba494c02c7cb1f794f957a707..bead4142aab51ab54bb52ea7b29ff2fd
  				}
  			}
  		};
+diff --git a/generator.ts b/generator.ts
+index 3a076f3d8b5070980f89e0601cfa11a6583a4ee5..350516446544e5fd94dba9375ed7d6ab29f1824b 100644
+--- a/generator.ts
++++ b/generator.ts
+@@ -27,7 +27,10 @@ export async function generateLlmsTxt(
+ 		include?: string[] | undefined;
+ 	}
+ ): Promise<string> {
+-	let docs = await getCollection('docs', (doc) => isDefaultLocale(doc) && !doc.data.draft);
++	let docs = await getCollection(
++		'docs',
++		(doc) => isDefaultLocale(doc) && !doc.data.draft && Boolean(doc.body?.trim())
++	);
+ 	if (include) {
+ 		docs = docs.filter((doc) => micromatch.isMatch(doc.id, include));
+ 	}
