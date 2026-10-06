@@ -52,7 +52,7 @@ export default defineConfig({
                     {label: 'Guilds', link: '/modules/guilds'},
                     {label: 'HTTPD', link: '/modules/httpd'},
                     {label: 'LibsDisguises', link: '/modules/libsdisguises'},
-                    {label: 'NickMiniMessage', link: '/modules/nickminimessage'},
+                    {label: 'MiniMessageExtensions', link: '/modules/minimessageextensions'},
                     {label: 'NUSH', link: '/modules/nush'},
                     {label: 'TFMExtras', link: '/modules/tfmextras'},
                 ]
@@ -95,7 +95,22 @@ export default defineConfig({
             }
         }), starlightLinksValidator()],
     }), sitemap()],
+    vite: {
+        plugins: [{
+            // The worker bundle pulls in Starlight's Tabs, Steps and FileTree through the content collection,
+            // but it only renders the download pages. satteri has no build that runs in workerd, so the worker
+            // gets a stub. Node prerenders the docs pages with the real satteri.
+            name: 'stub-satteri-in-worker',
+            enforce: 'pre',
+            applyToEnvironment: (environment) => environment.name === 'ssr',
+            resolveId: (id) => id === 'satteri' ? '\0satteri-stub' : null,
+            load: (id) => id === '\0satteri-stub'
+                ? 'export function htmlToHast() { throw new Error("satteri is not available in the worker"); }'
+                : null,
+        }],
+    },
     adapter: cloudflare({
-        imageService: "compile"
+        imageService: "compile",
+        prerenderEnvironment: "node"
     }),
 });

@@ -125,7 +125,7 @@ The module also uses two permission nodes that are not tied to a command.
 | plex.libsdisguises.bypass | Exempt a player from `/undisguiseall`. The `-a` flag ignores this permission. |
 | plex.libsdisguises.player | Keep the fake name when disguised as another player. Without it, the disguise shows the real name but keeps the fake skin. |
 
-## NickMiniMessage module
+## MiniMessageExtensions module
 
 | Command | Permission | Description |
 |---------|------------|-------------|

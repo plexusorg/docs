@@ -1,9 +1,9 @@
 ---
-title: NickMiniMessage
-description: An overview of the NickMiniMessage module for Plex
+title: MiniMessageExtensions
+description: An overview of the MiniMessageExtensions module for Plex
 ---
 
-The NickMiniMessage module lets players set an EssentialsX nickname with MiniMessage formatting. This module needs
+The MiniMessageExtensions module lets players set an EssentialsX nickname with MiniMessage formatting. This module needs
 EssentialsX on the server. If EssentialsX is missing, the module does not start.
 
 ## Commands

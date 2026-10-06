@@ -46,7 +46,7 @@ export const PROJECTS: Project[] = [
     {name: 'Module-Guilds'},
     {name: 'Module-HTTPD'},
     {name: 'Module-LibsDisguises'},
-    {name: 'Module-NickMiniMessage'},
+    {name: 'Module-MiniMessageExtensions'},
     {name: 'Module-NUSH'},
     {name: 'Module-TFMExtras'},
 ];

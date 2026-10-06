@@ -2,13 +2,13 @@
   "name": "plex-documentation",
   "version": "3.0.0",
   "dependencies": {
-    "@astrojs/cloudflare": "^14.3.2",
+    "@astrojs/cloudflare": "^14.3.3",
     "@astrojs/sitemap": "^3.7.4",
-    "@astrojs/starlight": "^0.41.11",
+    "@astrojs/starlight": "^0.42.5",
     "@lorenzo_lewis/starlight-utils": "^0.3.2",
-    "astro": "^7.3.3",
-    "sharp": "^0.35.4",
-    "starlight-links-validator": "^0.25.3"
+    "astro": "^7.3.5",
+    "sharp": "^0.35.5",
+    "starlight-links-validator": "^0.26.0"
   },
   "scripts": {
     "dev": "astro dev",
