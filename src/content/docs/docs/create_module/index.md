@@ -25,7 +25,7 @@ lifecycle methods.
 
 You reach every supported feature through one method, `api()`. It returns the Plex API facade. From there you call
 `api().players()`, `api().messages()`, `api().punishments()`, and the other services. The
-[Plex API reference](/docs/create_module/api) page lists them all.
+[Plex API](/api) section describes them all.
 
 :::note
 Register your commands in `load()`. Plex adds them before Paper builds the server command list, so they work as soon as
@@ -53,5 +53,6 @@ Read the pages in order to build a module from start to finish.
 3. [Listeners](/docs/create_module/listeners) adds a listener.
 4. [Configuration and messages](/docs/create_module/configuration) adds a config file and a message file.
 5. [Libraries and storage](/docs/create_module/libraries) adds runtime libraries, database storage, and scheduled tasks.
-6. [The Plex API](/docs/create_module/api) lists every service that a module can use.
-7. [Build and install](/docs/create_module/install) builds the module and installs it on a server.
+6. [Build and install](/docs/create_module/install) builds the module and installs it on a server.
+
+The [Plex API](/api) section describes every service that a module can use.

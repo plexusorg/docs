@@ -67,8 +67,21 @@ export default defineConfig({
                     {label: 'Listeners', link: '/docs/create_module/listeners'},
                     {label: 'Configuration and messages', link: '/docs/create_module/configuration'},
                     {label: 'Libraries and storage', link: '/docs/create_module/libraries'},
-                    {label: 'The Plex API', link: '/docs/create_module/api'},
                     {label: 'Build and install', link: '/docs/create_module/install'},
+                ]
+            },
+            {
+                label: 'Plex API',
+                collapsed: true,
+                items: [
+                    {label: 'Overview', link: '/api'},
+                    {label: 'Players', link: '/api/players'},
+                    {label: 'Punishments', link: '/api/punishments'},
+                    {label: 'Messages and logging', link: '/api/messages'},
+                    {label: 'Commands and configuration', link: '/api/commands-and-configuration'},
+                    {label: 'Storage', link: '/api/storage'},
+                    {label: 'Notes, rollback, and modules', link: '/api/notes-rollback-modules'},
+                    {label: 'Events', link: '/api/events'},
                 ]
             },
             {label: 'Configuring Redis', link: '/docs/redis'},
