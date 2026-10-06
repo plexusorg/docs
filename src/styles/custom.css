@@ -422,31 +422,48 @@ starlight-toc a[aria-current='true']::before {
     color: var(--plex-heading);
 }
 
-/* Landing page */
+/*
+ * Landing page: one centered column at the docs width. Every block spans the column: the hero puts
+ * the copy on the left and the mark on the right, and the feature grid and the entry rows run edge to edge.
+ * On a phone, the hero stacks and centers.
+ */
 
+/* Starlight widens the column to 67.5rem on a page without a sidebar. */
+:root[data-has-hero] {
+    --sl-content-width: 60rem;
+}
+
+/* Starlight centers this column only from 72rem. */
+[data-has-hero] .sl-container {
+    margin-inline: auto;
+}
+
+/* The dot grid from og.png, faded out toward the edges so it has no hard border. */
 [data-has-hero] .hero {
-    grid-template-columns: 100%;
-    justify-items: start;
+    position: relative;
+    isolation: isolate;
     gap: 2rem;
-    padding-block: clamp(2rem, 1rem + 6vmin, 4.5rem) 1.5rem;
+    padding-block: 2.5rem 3rem;
+}
+
+[data-has-hero] .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(circle, var(--plex-line) 1px, transparent 1.5px);
+    background-size: 24px 24px;
+    background-position: center;
+    mask-image: radial-gradient(closest-side, #000 40%, transparent);
 }
 
 [data-has-hero] .hero > img {
-    order: 0;
-    width: clamp(3.5rem, 2.5rem + 3vw, 5rem);
+    width: 6rem;
     height: auto;
-    margin: 0;
 }
 
 [data-has-hero] .hero .stack {
-    width: 100%;
     gap: 2rem;
-    text-align: start;
-}
-
-[data-has-hero] .hero .copy {
-    align-items: flex-start;
-    gap: 1rem;
 }
 
 [data-has-hero] .hero .copy > * {
@@ -454,20 +471,34 @@ starlight-toc a[aria-current='true']::before {
 }
 
 [data-has-hero] .hero #_top {
-    font-size: clamp(4rem, 1.5rem + 10vw, 8rem);
+    font-size: clamp(4rem, 2rem + 8vw, 7.5rem);
     letter-spacing: -0.035em;
     line-height: 0.95;
 }
 
+/* 18px keeps the tagline on one line at 390px. Balance covers a narrower phone. */
 [data-has-hero] .hero .tagline {
-    font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+    font-size: clamp(1.125rem, 0.9rem + 1vw, 1.625rem);
     line-height: 1.35;
+    text-wrap: balance;
     color: var(--plex-body);
 }
 
 [data-has-hero] .hero .actions {
-    justify-content: flex-start;
     gap: 0.75rem;
+}
+
+@media (min-width: 50rem) {
+    [data-has-hero] .hero {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 3rem;
+        padding-block: clamp(3rem, 1rem + 8vmin, 6rem);
+    }
+
+    [data-has-hero] .hero > img {
+        width: clamp(11rem, 4rem + 14vw, 16rem);
+        margin: 0;
+    }
 }
 
 .sl-link-button {
@@ -498,15 +529,77 @@ starlight-toc a[aria-current='true']::before {
     border-color: var(--plex-muted);
 }
 
-/* Entry points: rows separated by one line between items, no frame above or below. */
+/* Features: six surface cards with no border, in one, two, or three columns, so every row is full. */
+
+.plex-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 40rem) {
+    .plex-features {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 64rem) {
+    .plex-features {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.plex-features li {
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: 6px;
+    background-color: var(--plex-surface);
+}
+
+.plex-features h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: var(--sl-text-lg);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--plex-heading);
+}
+
+.plex-features h3::before {
+    content: '';
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background-color: var(--plex-tick);
+}
+
+.plex-features p {
+    margin: 0.5rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--plex-body);
+}
+
+/*
+ * Entry points: rows separated by one line between items, no frame above or below. From 64rem, each row
+ * puts the title, the text, and the arrow in three columns across the full width.
+ */
 
 .plex-entries {
     margin-top: 0.5rem;
 }
 
 .plex-entries a {
-    display: block;
-    padding-block: 1rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1.5rem;
+    align-items: center;
+    padding-block: 1.25rem;
     text-decoration: none;
 }
 
@@ -514,8 +607,18 @@ starlight-toc a[aria-current='true']::before {
     border-top: 1px solid var(--plex-line);
 }
 
+.plex-entries a::after {
+    content: '';
+    grid-area: 1 / 2 / 3 / 3;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--plex-muted);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.92 11.62a1 1 0 0 0-.21-.33l-5-5a1 1 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1 1 0 1 0 1.42 1.42l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition: background-color 150ms ease, transform 150ms ease;
+}
+
 .plex-entry-title {
-    display: block;
+    grid-area: 1 / 1;
     font-size: var(--sl-text-lg);
     font-weight: 600;
     line-height: 1.4;
@@ -524,7 +627,7 @@ starlight-toc a[aria-current='true']::before {
 }
 
 .plex-entry-text {
-    display: block;
+    grid-area: 2 / 1;
     margin-top: 0.25rem;
     color: var(--plex-muted);
 }
@@ -533,9 +636,31 @@ starlight-toc a[aria-current='true']::before {
     color: var(--plex-link);
 }
 
+.plex-entries a:hover::after {
+    background-color: var(--plex-link);
+    transform: translateX(0.25rem);
+}
+
+@media (min-width: 64rem) {
+    .plex-entries a {
+        grid-template-columns: 12rem minmax(0, 1fr) auto;
+        column-gap: 2rem;
+    }
+
+    .plex-entries a::after {
+        grid-area: 1 / 3;
+    }
+
+    .plex-entry-text {
+        grid-area: 1 / 2;
+        margin-top: 0;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .sl-link-button,
-    .plex-entry-title {
+    .plex-entry-title,
+    .plex-entries a::after {
         transition: none;
     }
 }
