@@ -91,13 +91,17 @@ Plex also uses these permission nodes that are not tied to a command.
 | guild guest | `plex.guilds.guests` | Add or remove a guest of the guild world |
 | guild info | `plex.guilds.info` | Show information about a guild |
 | guild invite | `plex.guilds.invite` | Invite a player to the guild |
-| guild leave | `plex.guilds.leave` | Leave your guild, or disband it as the owner |
+| guild leave | `plex.guilds.leave` | Leave your guild |
+| guild leave confirm | `plex.guilds.disband` | Disband your guild as the owner |
 | guild list | `plex.guilds.list` | List guilds |
 | guild prefix | `plex.guilds.prefix` | Set or clear the guild prefix |
+| guild recover | `plex.guilds.recover` | Restore a disbanded guild or undo a player's guild actions (staff) |
 | guild resetworld | `plex.guilds.resetworld` | Reset a guild world (staff) |
 | guild visit | `plex.guilds.world` | Teleport to a guild world where you have entry access |
 | guild warp | `plex.guilds.warp` | List, use, set, and delete guild warps |
-| guild world | `plex.guilds.world` | Visit your guild world; owners can also generate or reset it |
+| guild world | `plex.guilds.world` | Visit your guild world; owners can also generate it |
+| guild world reset | `plex.guilds.world.reset` | Reset your guild world as the owner |
+| guild -o | `plex.guilds.others` | Manage another guild as its owner (staff) |
 
 The command also works as `/guilds` and `/g`. The guild role also controls some subcommands. For example, only officers
 and the owner can invite players. See the [Guilds page](/modules/guilds) for the roles.

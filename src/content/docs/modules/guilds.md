@@ -25,20 +25,25 @@ how to create a guild. Help and tab completion show only the subcommands that yo
 | `guild visit <guild>` | Member, guest, or staff with entry permission | Teleport to a guild world. Enter the guild name or UUID. |
 | `guild world` | Member | Teleport to the spawn of your guild world. |
 | `guild world generate <overworld\|nether\|end\|superflat>` | Owner | Generate your guild world with the selected terrain type. |
-| `guild world reset [confirm]` | Owner | Reset your guild world after confirmation. See [Reset a guild world](#reset-a-guild-world). |
+| `guild world reset [confirm]` | Owner with `plex.guilds.world.reset` | Reset your guild world after confirmation. See [Reset a guild world](#reset-a-guild-world). |
 | `guild warp` | Member | Show a clickable list of the guild warps. |
 | `guild warp <name>` | Member | Teleport to a warp. |
 | `guild warp set <name>` | Officer | Create or move a warp at your location. You must be in your guild world. |
 | `guild warp delete <name>` | Officer | Delete a warp. |
 | `guild chat [message]` | Member | Toggle guild chat, or send one message to guild chat. |
 | `guild leave` | Member | Leave the guild. For the owner, this shows a warning first. |
-| `guild leave confirm` | Owner | Disband the guild and permanently delete the guild world. |
+| `guild leave confirm` | Owner with `plex.guilds.disband` | Disband the guild. See [Leave or disband a guild](#leave-or-disband-a-guild). |
 | `guild invite <player>` | Officer | Invite an online player. |
 | `guild guest add <player> [view\|build] [time]` | Officer | Give a player guest access to the guild world. |
 | `guild guest remove <player>` | Officer | Remove a guest immediately. |
 | `guild prefix set <text>` | Owner | Set the guild prefix. Every member shows the prefix before their tag in chat and in the tab list. |
 | `guild prefix clear` | Owner | Remove the guild prefix. |
 | `guild resetworld <guild> [confirm]` | Staff | Reset a guild world. See [Reset a guild world](#reset-a-guild-world). |
+| `guild -o <guild> [subcommand] [arguments]` | Staff | Manage another guild as if you were its owner. See [Manage another guild](#manage-another-guild). |
+| `guild recover deleted` | Staff | List disbanded guilds that you can still restore. |
+| `guild recover guild <guild> [confirm]` | Staff | Restore a disbanded guild. See [Recover a guild](#recover-a-guild). |
+| `guild recover sessions <player>` | Staff | List a player's sessions and the guild actions in each. |
+| `guild recover session <id> [confirm]` | Staff | Undo the guild actions of one session. |
 
 Guild names can contain `:`, for example `/guild create :3`.
 
@@ -122,25 +127,70 @@ guild. The permission has no toggle.
 A member or officer runs `guild leave` to leave the guild.
 
 When the owner runs `guild leave`, the module shows a warning. The owner then runs `guild leave confirm` to disband the
-guild.
+guild. This requires `plex.guilds.disband`. An owner without it must ask staff to disband the guild, or make another
+member the owner and then leave.
+
+Disbanding removes the guild for every member and closes the guild world. Staff can restore the guild for the number of
+days in `guilds.recovery.retention-days`. Until then, nobody can create a guild with the same name. After that time, the
+module permanently deletes the guild, its world, its reset backups, and, with Oasis, the block history of its world.
 
 :::danger
-Disbanding removes the guild for every member. It also permanently deletes the guild world and everything built in it.
-There is no backup. To keep the guild, make another member the owner first.
+After the retention period, there is no backup. To keep the guild, make another member the owner first.
 :::
 
 ## Reset a guild world
 
-As the owner, run `/guild world reset`. Read the warning, then run `/guild world reset confirm` within 60 seconds.
+As the owner, run `/guild world reset`. Read the warning, then run `/guild world reset confirm` within 60 seconds. This
+requires `plex.guilds.world.reset`. An owner without it must ask staff to reset the world.
 
 Staff can reset another guild's world with `/guild resetworld <guild>`. Enter the guild name or UUID, read the warning,
 then run `/guild resetworld <guild> confirm`. This requires `plex.guilds.resetworld`, not the entry bypass permission.
 
 The reset moves all players out of the world and removes the world. The guild, its members, and its guests stay. The
 reset clears the world's warps and saved spawn. The module keeps a backup of the old world for the number of days in
-`guilds.worlds.backup-retention-days`.
+`guilds.worlds.backup-retention-days`. With Oasis, the reset also deletes the block history of the old world.
 
 After the reset, the owner must run `/guild world generate <type>` before anyone can visit again.
+
+## Manage another guild
+
+Staff with `plex.guilds.others` can act on any guild as if they were its owner. Run `/guild -o <guild>` to open that
+guild's menu. Enter the guild name or UUID. In the menu, you can promote, demote, and kick members, make a member the
+owner, and manage guests, warps, the spawn, and the world settings. When you make a member the owner, the current owner
+becomes an officer. You cannot kick the owner.
+
+Add a subcommand to run it for that guild, for example `/guild -o Builders warp set spawn` or
+`/guild -o Builders world reset`. These subcommands work with `-o`: `invite`, `warp`, `guest`, `prefix`, `world`,
+`visit`, `chat`, `info`, and `leave`. You still need the permission for the subcommand itself.
+
+- `guild -o <guild> visit` teleports you to the guild world without the entry bypass permission.
+- `guild -o <guild> chat` switches your chat to that guild's chat.
+- `guild -o <guild> leave confirm` disbands the guild.
+
+## Recover a guild
+
+The module records every guild action with the player who made it and the session in which it happened. A session lasts
+from when a player joins the server until they leave. The module keeps disbanded guilds and this action log for the
+number of days in `guilds.recovery.retention-days`. Recovery requires `plex.guilds.recover`.
+
+To restore a disbanded guild, run `/guild recover deleted` to list the disbanded guilds. Click a guild, or run
+`/guild recover guild <guild>`, to preview the restore. Then run `/guild recover guild <guild> confirm`. The guild comes
+back with its world, warps, and prefix. Members who joined another guild in the meantime stay in their new guild. If the
+owner is one of them, the restore makes the member with the highest role the owner. If no member remains, the guild
+cannot be restored.
+
+To undo what a player did, for example after a compromised account, run `/guild recover sessions <player>`. Click a
+session, or run `/guild recover session <id>`, to see its actions. Then run `/guild recover session <id> confirm` to
+reverse them. The undo covers members, roles, ownership, guests, invites, warps, the spawn, the prefix, world settings,
+world resets, guild creation, and disbands. It does not undo block changes in the world.
+
+The undo skips an action when:
+
+- the guild changed again after the action,
+- the action reset a world whose backup no longer exists,
+- the action generated a world,
+- the old prefix now belongs to another guild, or
+- the player now belongs to another guild.
 
 ## Configuration
 
@@ -148,6 +198,7 @@ The module writes a `config.yml` file to its data folder.
 
 | Key | Default | Description |
 |-----|---------|-------------|
+| guilds.recovery.retention-days | 7 | How long to keep disbanded guilds and the action log for recovery. |
 | guilds.log-chat-message | true | Whether to log guild chat messages to the console. |
 | guilds.invites.daily-limit | 5 | The most invites one guild can send in 24 hours. |
 | guilds.guests.default-duration | 24h | The guest access time when `guild guest add` has no time. |
