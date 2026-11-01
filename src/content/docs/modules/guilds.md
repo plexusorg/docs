@@ -34,7 +34,7 @@ how to create a guild. Help and tab completion show only the subcommands that yo
 | `guild leave` | Member | Leave the guild. For the owner, this shows a warning first. |
 | `guild leave confirm` | Owner with `plex.guilds.disband` | Disband the guild. See [Leave or disband a guild](#leave-or-disband-a-guild). |
 | `guild invite <player>` | Officer | Invite an online player. |
-| `guild guest add <player> [view\|build] [time]` | Officer | Give a player guest access to the guild world. |
+| `guild guest add <player> [view\|build] [time]` | Officer | Give a player guest access to the guild world. Build mode requires `plex.guilds.guests.build`. |
 | `guild guest remove <player>` | Officer | Remove a guest immediately. |
 | `guild prefix set <text>` | Owner | Set the guild prefix. Every member shows the prefix before their tag in chat and in the tab list. |
 | `guild prefix clear` | Owner | Remove the guild prefix. |
@@ -64,7 +64,8 @@ the border does not regenerate existing terrain.
 
 ## The guild menu
 
-Run `/guild` to open the menu. The menu shows only the buttons that you can use.
+Run `/guild` to open the menu. The menu shows the buttons that your role allows. A button for an action that also needs a
+permission you lack is gray, and its description says why. See [Protect destructive actions](#protect-destructive-actions).
 
 - Click **Go to world** to teleport to the guild world spawn.
 - Click **Members** to see the members and their roles. Click a member to promote, demote, or kick them.
@@ -92,6 +93,17 @@ A new member gets the Member role. The owner promotes a member to officer in the
 
 To give the guild to another player, the owner promotes an officer again. That player becomes the owner, and the old
 owner becomes an officer. The old owner can then stay or leave.
+
+Some actions need a permission node as well as the role:
+
+| Action | Permission |
+|--------|------------|
+| Make a member the owner | `plex.guilds.transfer` |
+| Promote a member to officer, or demote an officer | `plex.guilds.roles` |
+| Kick a member or officer | `plex.guilds.kick` |
+| Give a guest build mode, or extend a guest in build mode | `plex.guilds.guests.build` |
+| Disband the guild | `plex.guilds.disband` |
+| Reset the guild world | `plex.guilds.world.reset` |
 
 ## Guests
 
@@ -127,8 +139,8 @@ guild. The permission has no toggle.
 A member or officer runs `guild leave` to leave the guild.
 
 When the owner runs `guild leave`, the module shows a warning. The owner then runs `guild leave confirm` to disband the
-guild. This requires `plex.guilds.disband`. An owner without it must ask staff to disband the guild, or make another
-member the owner and then leave.
+guild. This requires `plex.guilds.disband`. An owner without it can ask staff to disband the guild. To leave without
+disbanding, make another member the owner, which requires `plex.guilds.transfer`, and then leave.
 
 Disbanding removes the guild for every member and closes the guild world. Staff can restore the guild for the number of
 days in `guilds.recovery.retention-days`. Until then, nobody can create a guild with the same name. After that time, the
@@ -151,6 +163,42 @@ reset clears the world's warps and saved spawn. The module keeps a backup of the
 `guilds.worlds.backup-retention-days`. With Oasis, the reset also deletes the block history of the old world.
 
 After the reset, the owner must run `/guild world generate <type>` before anyone can visit again.
+
+## Protect destructive actions
+
+On a server that allows offline-mode (cracked) accounts, anyone can join under a name that has no sign-in protection.
+That person gets the guild role of the real player. As an owner, they could disband the guild, reset its world, or give
+the guild to their own account. They could also leave a way back in: promote an alt to officer, or give an alt a
+build-mode guest pass for up to 30 days.
+
+To prevent this, grant the nodes in the table under [Roles](#roles) only to logins that your authentication plugin has
+proven. Use a LuckPerms context from that plugin. A player whose login is not proven keeps the role and every other
+guild action, but sees these buttons gray and gets a message when they try one.
+
+For example, if your authentication plugin sets a `login` context to the method that proved the login, you can let
+players use a password and require something stronger from staff:
+
+```text
+lp group default permission set plex.guilds.transfer true login=premium login=password
+lp group default permission set plex.guilds.roles true login=premium login=password
+lp group default permission set plex.guilds.kick true login=premium login=password
+lp group default permission set plex.guilds.guests.build true login=premium login=password
+lp group default permission set plex.guilds.disband true login=premium login=password
+lp group default permission set plex.guilds.world.reset true login=premium login=password
+lp group admin permission set plex.guilds.others true login=premium login=2fa
+lp group admin permission set plex.guilds.recover true login=premium login=2fa
+lp group admin permission set plex.guilds.resetworld true login=premium login=2fa
+lp group admin permission set plex.guilds.world.bypass true login=premium login=2fa
+```
+
+Replace `login` and its values with the context your plugin provides. LuckPerms applies a node when the player has any
+one of the listed values for a context. A login with no context value gets none of these nodes.
+
+Edit the locked-action messages in `messages.yml` to tell players how to protect their account on your server.
+
+If someone already used a player's account, staff can undo that session's guild actions with
+`/guild recover session`. See [Recover a guild](#recover-a-guild). Block changes in the guild world need a rollback in
+Oasis.
 
 ## Manage another guild
 

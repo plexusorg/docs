@@ -106,6 +106,18 @@ Plex also uses these permission nodes that are not tied to a command.
 The command also works as `/guilds` and `/g`. The guild role also controls some subcommands. For example, only officers
 and the owner can invite players. See the [Guilds page](/modules/guilds) for the roles.
 
+These permissions control guild actions that the role allows:
+
+| Permission | Description |
+|------------|-------------|
+| `plex.guilds.transfer` | Make another member the guild owner |
+| `plex.guilds.roles` | Promote a member to officer or demote an officer |
+| `plex.guilds.kick` | Kick a member or officer |
+| `plex.guilds.guests.build` | Give a guest build mode, or extend a guest in build mode |
+
+Grant these and `plex.guilds.disband` and `plex.guilds.world.reset` only to proven logins on an offline-mode server. See
+[Protect destructive actions](/modules/guilds#protect-destructive-actions).
+
 Give staff `plex.guilds.world.bypass` to let them enter, build, and interact in guild worlds without membership or guest
 access. It does not permit guild management. Staff still need `plex.guilds.world` to use `/guild visit`.
 
