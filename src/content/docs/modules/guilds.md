@@ -175,24 +175,8 @@ To prevent this, grant the nodes in the table under [Roles](#roles) only to logi
 proven. Use a LuckPerms context from that plugin. A player whose login is not proven keeps the role and every other
 guild action, but sees these buttons gray and gets a message when they try one.
 
-For example, if your authentication plugin sets a `login` context to the method that proved the login, you can let
-players use a password and require something stronger from staff:
-
-```text
-lp group default permission set plex.guilds.transfer true login=premium login=password
-lp group default permission set plex.guilds.roles true login=premium login=password
-lp group default permission set plex.guilds.kick true login=premium login=password
-lp group default permission set plex.guilds.guests.build true login=premium login=password
-lp group default permission set plex.guilds.disband true login=premium login=password
-lp group default permission set plex.guilds.world.reset true login=premium login=password
-lp group admin permission set plex.guilds.others true login=premium login=2fa
-lp group admin permission set plex.guilds.recover true login=premium login=2fa
-lp group admin permission set plex.guilds.resetworld true login=premium login=2fa
-lp group admin permission set plex.guilds.world.bypass true login=premium login=2fa
-```
-
-Replace `login` and its values with the context your plugin provides. LuckPerms applies a node when the player has any
-one of the listed values for a context. A login with no context value gets none of these nodes.
+LuckPerms applies a node when the player has any one of the values you list for a context, so you can accept weaker
+sign-in methods for players than for staff.
 
 Edit the locked-action messages in `messages.yml` to tell players how to protect their account on your server.
 
