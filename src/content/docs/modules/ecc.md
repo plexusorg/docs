@@ -206,11 +206,27 @@ server, using only `a-z`, `0-9`, `-` and `_`. ECC-Server does not start without 
 Shows whether ECC-Server is reachable, how many messages wait to be sent, how many actions it has not yet confirmed, and
 how many players are muted. It then lists what ECC-Server reports about itself. Requires `plex.ecc.status`.
 
+### Chat safety alerts
+
+Every chat safety decision is shown as it happens, in the console and to online staff with `plex.ecc.alerts`:
+
+- a player is muted, with the channel and the line that started the check
+- a player stays muted while the check is not sure yet (once per check)
+- a player is unmuted, and why: not involved, still not sure when the time limit ran out, or their ban's kick time came
+- a player is banned, as an offender or at risk, with the cause and the minutes until the kick, or offline
+
+Run `/ecc alerts` to stop seeing alerts until you leave the server; run it again to see them. Staff given
+`plex.ecc.alerts` while online see alerts once they rejoin or run `/ecc alerts`. Requires `plex.ecc.status` and
+`plex.ecc.alerts`.
+
+On the ECC-Server machine, `journalctl -u ecc-server -f` shows each decision without the chat text.
+
 ### Chat safety permissions
 
 | Permission | Access |
 |------------|--------|
 | `plex.ecc.status` | Use `/ecc status`. |
+| `plex.ecc.alerts` | See chat safety alerts, and use `/ecc alerts`. Grant it to staff. |
 | `plex.ecc.chat.bypass` | Never checked by chat safety. Grant it to staff. |
 
 ### When ECC-Server is unreachable
