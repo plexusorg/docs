@@ -42,12 +42,12 @@ export interface VersionBuilds {
 
 export const PROJECTS: Project[] = [
     {name: 'Plex', jenkins: 'https://ci.plex.us.org/job/Plex/job/master/'},
+    {name: 'Module-ECC'},
     {name: 'Module-FalseOp'},
     {name: 'Module-Guilds'},
     {name: 'Module-HTTPD'},
     {name: 'Module-LibsDisguises'},
     {name: 'Module-MiniMessageExtensions'},
-    {name: 'Module-NUSH'},
     {name: 'Module-TFMExtras'},
 ];
 

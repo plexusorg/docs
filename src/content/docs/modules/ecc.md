@@ -1,7 +1,11 @@
 ---
-title: NUSH
-description: An overview of the NUSH module for Plex
+title: Module-ECC
+description: Raid protection and chat safety for Plex
 ---
+
+Module-ECC (Extra Chat Controls) replaces Module-NUSH and keeps its config. It has two parts: NUSH raid protection and chat safety.
+
+## NUSH
 
 NUSH turns itself on when it detects a raid. Staff can also turn it on with `/nush on`. When staff turn NUSH on, it
 restricts players who joined within the last five minutes, plus players who join while it is on. Previous visits do not
@@ -17,7 +21,7 @@ wait releases that restriction but does not grant permanent trust. Use `/nush al
 NUSH caches staff-trust lookups for up to 30 seconds. Local `/nush allow` and `/nush revoke` changes take effect immediately.
 A trust change made on another server can take up to 30 seconds to affect a new join.
 
-## Permissions
+### Permissions
 
 | Permission | Access |
 |------------|--------|
@@ -30,7 +34,7 @@ Grant `plex.nush.use` and `plex.nush.view` to staff who manage NUSH. Also grant 
 allow or restrict players. Grant `plex.nush.bypass` separately to players who should bypass automatic restriction.
 Use `/nush feed` to mute or unmute the chat and command feed. Alerts and normal join and leave messages remain visible.
 
-## Raid detection
+### Raid detection
 
 NUSH always watches for a sudden rise in joins, chat messages, or commands. It learns the normal traffic of your server
 and compares new traffic with it. A rise must reach at least 10 joins in 10 seconds, 30 chat messages in 5 seconds, or
@@ -43,7 +47,7 @@ traffic stays low for 120 seconds, staff see a second alert, but NUSH stays on.
 Raid detection does not change `server.enabled`. After a restart, NUSH uses the saved value again. NUSH does not count
 joins in the first 60 seconds after the module starts, because many players can join when a server starts.
 
-## WorldEdit commands
+### WorldEdit commands
 
 NUSH does not block most commands from restricted players. It watches their WorldEdit commands and shows them in the
 staff feed. With FastAsyncWorldEdit, the command seems to work for the player, but the world does not change. Without
@@ -56,58 +60,58 @@ To use FastAsyncWorldEdit with NUSH, add the NUSH class to `extent.allowed-plugi
 ```yaml
 extent:
   allowed-plugins:
-    - dev.plex.nush.ShadowExtent
+    - dev.plex.ecc.nush.ShadowExtent
 ```
 
 If you do not add it, NUSH logs an error at startup and cancels WorldEdit commands instead.
 
-## Commands
+### Commands
 
-### nush on
+#### nush on
 
 Turns NUSH on. Restricts recent arrivals and subsequent joins, including returning players. The default lookback is five minutes.
 
-### nush off
+#### nush off
 
 Turns NUSH off. Players can chat normally. The command also releases every player on the list at once. Use this
 command to end an automatic raid response.
 
-### nush status
+#### nush status
 
 Shows whether NUSH is on or off, how many players are restricted, and the state of raid detection.
 
-### nush kick
+#### nush kick
 
 Disconnects every restricted player who is online.
 
-### nush list
+#### nush list
 
 Shows each restricted player with the time left and how many chat messages and WorldEdit commands they sent.
 
-### nush log \<player\>
+#### nush log \<player\>
 
 Shows the stored chat and command log of a restricted player. The `log.size` setting sets how many entries NUSH keeps
 for each player. The default is 50.
 
-### nush feed
+#### nush feed
 
 Mutes or unmutes the chat and command feed for you. Alerts remain visible.
 
-### nush time \<minutes\>
+#### nush time \<minutes\>
 
 Sets the wait time in minutes for new restrictions. This is separate from the recent-join lookback.
 
-### nush allow \<player\>
+#### nush allow \<player\>
 
 Trusts a restricted player and releases their restriction. Staff trust exempts the player from later automatic restrictions.
 
 Only `/nush allow` grants staff trust. Finishing the wait time does not.
 
-### nush revoke \<player\>
+#### nush revoke \<player\>
 
 Removes staff trust and restricts the player again.
 
-## Configuration
+### Configuration
 
 The module writes a `config.yml` file to its data folder. The admission settings are:
 
@@ -119,3 +123,92 @@ The module writes a `config.yml` file to its data folder. The admission settings
 
 The module also writes a `messages.yml` file to its data folder. Edit this file to change the messages that the module
 sends.
+
+## Chat safety
+
+Chat safety checks what players say for sexual talk and grooming. It is off by default.
+
+When a conversation looks like a problem, the sender is shadow muted: they see their own messages, and nobody else does.
+A second check then reviews the conversation. Players who are not involved are unmuted. Players the review finds at fault
+or at risk are banned indefinitely by UUID, name, and IP. The ban screen is fixed, and the player is kicked a few
+minutes later. A player who is paused for their own safety sees a welfare screen that points to
+`totalfreedom.tf/pages/welfare` instead of a ban reason.
+
+Module-ECC reads public chat, private messages and mail sent through EssentialsX, `/me`, `/nick`, signs, books, anvil
+names, and module chat channels such as guild chat. Staff with `plex.ecc.chat.bypass` are never checked.
+
+### Requirements
+
+Module-ECC only sends what players say and carries out the result. ECC-Server makes every decision. It runs a
+classifier on your machine and judges conversations it flags with a second model on Amazon Bedrock. You need:
+
+- ECC-Server on the same machine as the game server
+- A Weights & Biases API key, which ECC-Server uses to download its model files
+- An Amazon Bedrock API key with access to the model ECC-Server calls
+
+Chat safety needs none of this while it is off.
+
+### Set up
+
+ECC-Server is a Debian package for amd64 (Debian, Ubuntu) from the Telesphorepo apt repository.
+
+1. Open `https://telesphorepo.com/debian/ecc-server` and use the "Use this repository" tab. It gives you the apt line and
+   the signing key setup for your machine. Add both.
+2. Install the package. It starts the `ecc-server` service.
+
+   ```sh
+   sudo apt update
+   sudo apt install ecc-server
+   ```
+
+3. Store your keys. Each command asks for the key at a hidden prompt, checks it, and stores it encrypted on this machine.
+
+   ```sh
+   sudo ecc-server wandb login
+   sudo ecc-server bedrock login
+   ```
+
+4. Run `ecc-server status`. On first start, ECC-Server downloads its model files, about 3 GB, so the status reports not
+   ready until the download finishes. Wait for it to report ready.
+5. In the module's `config.yml`, set `chat_safety.enabled` to `true`, then run `/plex modules reload` or restart the
+   server.
+6. Run `/ecc status` in game to confirm the link to ECC-Server.
+
+Bedrock API keys expire. When ECC-Server reports that Bedrock refuses its key, run `sudo ecc-server bedrock login` again.
+
+### Maintain ECC-Server
+
+| Command | Use |
+|---------|-----|
+| `ecc-server status` | Shows whether the server is ready, the model download, Bedrock, and the players it is checking. |
+| `ecc-server update` | Checks for new model files now. ECC-Server also checks every 10 minutes. |
+| `sudo -u ecc-server ecc-server rollback` | Switches back to the previous model files. |
+| `sudo apt update && sudo apt upgrade` | Upgrades ECC-Server. Your `config.toml` and keys stay. |
+
+ECC-Server reads `/etc/ecc-server/config.toml`. If the file has no `server` key, add one with a short name for this game
+server, using only `a-z`, `0-9`, `-` and `_`. ECC-Server does not start without it.
+
+### Chat safety configuration
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| chat_safety.enabled | false | Turns chat safety on. While false, the module reads no other chat safety setting. |
+| chat_safety.model_host | `http://127.0.0.1:8790` | The address of ECC-Server. Change it only if you changed `listen` in ECC-Server's config. |
+
+### /ecc status
+
+Shows whether ECC-Server is reachable, how many messages wait to be sent, how many actions it has not yet confirmed, and
+how many players are muted. It then lists what ECC-Server reports about itself. Requires `plex.ecc.status`.
+
+### Chat safety permissions
+
+| Permission | Access |
+|------------|--------|
+| `plex.ecc.status` | Use `/ecc status`. |
+| `plex.ecc.chat.bypass` | Never checked by chat safety. Grant it to staff. |
+
+### When ECC-Server is unreachable
+
+Chat is never blocked. The module keeps the messages and sends them when ECC-Server returns, and actions ECC-Server could
+not deliver wait until the module confirms them. Players who are muted stay muted. `/ecc status` shows the link as
+unreachable and how many messages are waiting.

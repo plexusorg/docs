@@ -160,7 +160,9 @@ The module also uses two permission nodes that are not tied to a command.
 | `plex.nickmm.ignore_length_limit` | Bypass the maximum nickname length |
 | `plex.nickmm.ignore_matching` | Bypass the duplicate-nickname check |
 
-## NUSH module
+## ECC module
+
+Module-ECC includes NUSH raid protection and chat safety.
 
 | Command | Permission | Description |
 |---------|------------|-------------|
@@ -173,6 +175,14 @@ The module also uses these permissions:
 |------------|-------------|
 | `plex.nush.view` | Receive the staff feed and alerts, including restricted players' normal join and leave messages while NUSH is on |
 | `plex.nush.bypass` | Bypass automatic restriction on arrival or when staff turn NUSH on. Does not remove an existing restriction |
+
+| Command | Permission | Description |
+|---------|------------|-------------|
+| ecc status | `plex.ecc.status` | Show the state of chat safety and ECC-Server |
+
+| Permission | Description |
+|------------|-------------|
+| `plex.ecc.chat.bypass` | Never checked by chat safety |
 
 ## TFMExtras module
 

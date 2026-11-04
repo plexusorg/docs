@@ -9,7 +9,7 @@ The fastest way to start is the [ExampleModule](https://github.com/plexusorg/Exa
 
 To adapt the template, change the project name in `settings.gradle.kts`, the `archiveBaseName` in `build.gradle.kts`, and
 the fields in `module.yml`. The sections below explain each of these files. You can also read the source of an official
-module, such as [Module-NUSH](https://github.com/plexusorg/Module-NUSH) or
+module, such as [Module-ECC](https://github.com/plexusorg/Module-ECC) or
 [Module-FalseOp](https://github.com/plexusorg/Module-FalseOp), for a larger working example.
 
 ## settings.gradle.kts

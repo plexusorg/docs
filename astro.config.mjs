@@ -34,12 +34,12 @@ const sidebar = [
         collapsed: true,
         items: [
             {label: 'Introduction', link: '/modules'},
+            {label: 'ECC', link: '/modules/ecc'},
             {label: 'FalseOp', link: '/modules/falseop'},
             {label: 'Guilds', link: '/modules/guilds'},
             {label: 'HTTPD', link: '/modules/httpd'},
             {label: 'LibsDisguises', link: '/modules/libsdisguises'},
             {label: 'MiniMessageExtensions', link: '/modules/minimessageextensions'},
-            {label: 'NUSH', link: '/modules/nush'},
             {label: 'TFMExtras', link: '/modules/tfmextras'},
         ]
     },
