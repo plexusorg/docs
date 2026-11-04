@@ -142,7 +142,7 @@ names, and module chat channels such as guild chat. Staff with `plex.ecc.chat.by
 Module-ECC only sends what players say and carries out the result. ECC-Server makes every decision. It runs a
 classifier on your machine and judges conversations it flags with a second model on Amazon Bedrock. You need:
 
-- ECC-Server on the same machine as the game server
+- ECC-Server on the same machine as the game server, or on its host when the game server runs in a container
 - A Weights & Biases API key, which ECC-Server uses to download its model files
 - An Amazon Bedrock API key with access to the model ECC-Server calls
 
@@ -168,11 +168,15 @@ ECC-Server is a Debian package for amd64 (Debian, Ubuntu) from the Telesphorepo 
    sudo ecc-server bedrock login
    ```
 
-4. Run `ecc-server status`. On first start, ECC-Server downloads its model files, about 3 GB, so the status reports not
-   ready until the download finishes. Wait for it to report ready.
-5. In the module's `config.yml`, set `chat_safety.enabled` to `true`, then run `/plex modules reload` or restart the
-   server.
-6. Run `/ecc status` in game to confirm the link to ECC-Server.
+4. Run `sudo ecc-server status`. On first start, ECC-Server downloads its model files, about 3 GB, so the status
+   reports not ready until the download finishes. Wait for it to report ready.
+5. If the game server runs in a Docker container, set `listen` in `/etc/ecc-server/config.toml` to the host's address
+   on the container's network, such as `listen = "172.17.0.1:8790"` for the default bridge, then run
+   `sudo systemctl restart ecc-server`. Keep that address off any network the game server does not need.
+6. Run `sudo ecc-server token` and copy what it prints.
+7. In the module's `config.yml`, set `chat_safety.token` to that token, set `chat_safety.model_host` if you changed
+   `listen`, and set `chat_safety.enabled` to `true`. Then run `/plex modules reload` or restart the server.
+8. Run `/ecc status` in game to confirm the link to ECC-Server.
 
 Bedrock API keys expire. When ECC-Server reports that Bedrock refuses its key, run `sudo ecc-server bedrock login` again.
 
@@ -180,8 +184,9 @@ Bedrock API keys expire. When ECC-Server reports that Bedrock refuses its key, r
 
 | Command | Use |
 |---------|-----|
-| `ecc-server status` | Shows whether the server is ready, the model download, Bedrock, and the players it is checking. |
-| `ecc-server update` | Checks for new model files now. ECC-Server also checks every 10 minutes. |
+| `sudo ecc-server status` | Shows whether the server is ready, the model download, Bedrock, and the players it is checking. |
+| `sudo ecc-server update` | Checks for new model files now. ECC-Server also checks every 10 minutes. |
+| `sudo ecc-server token` | Prints the token the module needs in `chat_safety.token`. |
 | `sudo -u ecc-server ecc-server rollback` | Switches back to the previous model files. |
 | `sudo apt update && sudo apt upgrade` | Upgrades ECC-Server. Your `config.toml` and keys stay. |
 
@@ -193,7 +198,8 @@ server, using only `a-z`, `0-9`, `-` and `_`. ECC-Server does not start without 
 | Key | Default | Description |
 |-----|---------|-------------|
 | chat_safety.enabled | false | Turns chat safety on. While false, the module reads no other chat safety setting. |
-| chat_safety.model_host | `http://127.0.0.1:8790` | The address of ECC-Server. Change it only if you changed `listen` in ECC-Server's config. |
+| chat_safety.model_host | `http://127.0.0.1:8790` | ECC-Server's address as the game server reaches it; it matches `listen` in ECC-Server's config. |
+| chat_safety.token | (empty) | The output of `sudo ecc-server token`. Chat safety stays off while it is empty. |
 
 ### /ecc status
 
