@@ -203,8 +203,9 @@ server, using only `a-z`, `0-9`, `-` and `_`. ECC-Server does not start without 
 
 ### /ecc status
 
-Shows whether ECC-Server is reachable, how many messages wait to be sent, how many actions it has not yet confirmed, and
-how many players are muted. It then lists what ECC-Server reports about itself. Requires `plex.ecc.status`.
+Shows whether the classifier is ready and how many messages wait to be scored; whether the Kimi review works and
+whom it is checking or still unsure about; how many players are muted, and whether model updates work. While
+ECC-Server is not answering, it shows for how long instead. Requires `plex.ecc.status`.
 
 ### Chat safety alerts
 
