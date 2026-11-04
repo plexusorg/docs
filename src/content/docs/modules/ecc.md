@@ -216,8 +216,7 @@ Every chat safety decision is shown as it happens, in the console and to online 
 - a player is banned, as an offender or at risk, with the cause and the minutes until the kick, or offline
 
 Run `/ecc alerts` to stop seeing alerts until you leave the server; run it again to see them. Staff given
-`plex.ecc.alerts` while online see alerts once they rejoin or run `/ecc alerts`. Requires `plex.ecc.status` and
-`plex.ecc.alerts`.
+`plex.ecc.alerts` while online see alerts once they rejoin or run `/ecc alerts`. Requires `plex.ecc.alerts`.
 
 On the ECC-Server machine, `journalctl -u ecc-server -f` shows each decision without the chat text.
 

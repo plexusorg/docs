@@ -179,7 +179,7 @@ The module also uses these permissions:
 | Command | Permission | Description |
 |---------|------------|-------------|
 | ecc status | `plex.ecc.status` | Show the state of chat safety and ECC-Server |
-| ecc alerts | `plex.ecc.alerts` | Stop or resume seeing chat safety alerts until you leave. Also requires `plex.ecc.status` |
+| ecc alerts | `plex.ecc.alerts` | Stop or resume seeing chat safety alerts until you leave |
 
 | Permission | Description |
 |------------|-------------|
